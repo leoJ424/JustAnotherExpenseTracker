@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JustAnotherExpenseTracker.Views"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Title="LoginView" Height="550" Width="800"
         WindowStyle="None"
@@ -18,7 +19,7 @@
     <!--We create and subscribe to the MouseDown Event for the functionality of being able to 
         move the winodow. This functonality was lost when we  removed the title bar. So a custom
         functionality is created-->
-    <Border CornerRadius="55">
+    <Border CornerRadius="23">
         <Border.Background>
             <ImageBrush ImageSource="/JustAnotherExpenseTracker;component/Images/background.jpg"/>
         </Border.Background>
@@ -28,7 +29,7 @@
 
         <!--https://stackoverflow.com/questions/12631199/imagesource-from-a-relative-resource-->
 
-        <Border CornerRadius="50"
+        <Border CornerRadius="20"
                 BorderThickness="3"
                 Opacity="0.93">
             <Border.BorderBrush>
@@ -45,6 +46,44 @@
                     <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75"/>
                 </LinearGradientBrush>
             </Border.Background>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel x:Name="pnlControlBar"
+                            Grid.Row="0"
+                            Orientation="Horizontal"
+                            FlowDirection="RightToLeft"
+                            Background="Transparent"
+                            Margin="0,4,9,0">
+
+                    <Button x:Name="btnClose"
+                            Style="{StaticResource controlButton}"
+                            Tag="{StaticResource color4}"
+                            Click="btnClose_Click">
+                        <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
+                    </Button>
+
+                    <Button x:Name="btnMinimise"
+                            Style="{StaticResource controlButton}"
+                            Tag="{StaticResource color4}"
+                            Click="btnMinimise_Click">
+                        <fa:IconImage Icon="Minus" Style="{StaticResource controlButtonIcon}"/>
+                    </Button>
+
+                    <TextBlock Text="LOG IN"
+                               Foreground="DarkGray"
+                               FontSize="15"
+                               FontFamily="Montserrat"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               Margin="670, 0,0,0"/>
+                </StackPanel>
+
+            </Grid>
 
         </Border>
     </Border>
