@@ -10,11 +10,11 @@
 
   <ItemGroup>
     <None Remove="Images\background.jpg" />
+    <None Remove="Images\new-logo.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Resource Include="Images\background.jpg" />
+    <Resource Include="Images\new-logo.png" />
   </ItemGroup>
 
 </Project>
