@@ -21,9 +21,22 @@ namespace JustAnotherExpenseTracker.Views.UserControls
     /// </summary>
     public partial class PlaceholderTextBox : UserControl
     {
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register("TextBinding", typeof(string), typeof(PlaceholderTextBox));
+
+        public string TextBinding
+        {
+            get {  return (string)GetValue(TextProperty); }
+            set { SetValue(TextProperty, value); }
+        }
         public PlaceholderTextBox()
         {
             InitializeComponent();
+            txtInput.TextChanged += OnTextChanged;
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBinding = txtInput.Text;
         }
 
         private string placeholder;
@@ -47,7 +60,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
 
         private void txtInput_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(string.IsNullOrEmpty(txtInput.Text)) 
+            if (string.IsNullOrEmpty(txtInput.Text)) 
             {
                 tbPlaceholder.Visibility = Visibility.Visible;
             }
