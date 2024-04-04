@@ -1,7 +1,11 @@
-﻿using System;
+﻿using JustAnotherExpenseTracker.Models;
+using JustAnotherExpenseTracker.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,6 +19,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         private SecureString _password;
         private string _errorMessage;
         private bool _isViewVisible = true;
+
+        private IUserRepository userRepository;
 
 
         //Property
@@ -77,6 +83,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         //Constructor
         public LoginViewModel()
         {
+            userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand); 
         }
 
@@ -97,7 +104,16 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            throw new NotImplementedException();
+            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential(UserName, Password));
+            if(isValidUser)
+            {
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(UserName), null);
+                IsViewVisible = false;
+            }
+            else
+            {
+                ErrorMessage = "* Invalid Username or Password";
+            }
         }
     }
 }

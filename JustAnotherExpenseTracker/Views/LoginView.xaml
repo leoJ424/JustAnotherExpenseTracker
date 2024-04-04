@@ -159,6 +159,15 @@
 
                     </StackPanel>
 
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="{StaticResource color4}"
+                               FontFamily="Times New Roman"
+                               FontSize="12"
+                               FontWeight="Medium"
+                               Margin="35,10,30,0"
+                               TextWrapping="Wrap">
+                    </TextBlock>
+
                     <Button x:Name="btnLogin"
                             BorderThickness="0"
                             Command="{Binding LoginCommand}"
@@ -167,7 +176,6 @@
                             FontSize="12"
                             FontFamily="Times New Roman"
                             Cursor="Hand"
-                            Click="btnLogin_Click"
                             Margin="0,50,0,0">
 
                         <Button.Style>
@@ -194,7 +202,11 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+
+                    
                 </StackPanel>
+                
+                
                 
                 <!--#endregion-->
 
