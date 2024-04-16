@@ -152,7 +152,7 @@
                                       Style="{StaticResource iconButtonIcon}"
                                       Margin="10,0,0,0"/>
 
-                        <userControls:BindablePasswordBox Password="{Binding Password, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                        <userControls:BindablePasswordBox PasswordBinding="{Binding Password, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
                                                           Height="40"
                                                           Width="250" 
                                                           Margin="10,0,0,0"/>

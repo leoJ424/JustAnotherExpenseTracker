@@ -21,9 +21,9 @@ namespace JustAnotherExpenseTracker.Views.UserControls
     /// </summary>
     public partial class BindablePasswordBox : UserControl
     {
-        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof(SecureString), typeof(BindablePasswordBox));
+        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("PasswordBinding", typeof(SecureString), typeof(BindablePasswordBox));
 
-        public SecureString Password
+        public SecureString PasswordBinding
         {
             get { return (SecureString)GetValue(PasswordProperty); }
             set { SetValue(PasswordProperty, value); }
@@ -36,7 +36,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            Password = txtPassword.SecurePassword;
+            PasswordBinding = txtPassword.SecurePassword;
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
