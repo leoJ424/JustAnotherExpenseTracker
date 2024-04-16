@@ -31,6 +31,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
         public PlaceholderTextBox()
         {
             InitializeComponent();
+            DataContext = this;
             txtInput.TextChanged += OnTextChanged;
         }
 
@@ -47,7 +48,6 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set 
             { 
                 placeholder = value;
-                tbPlaceholder.Text = placeholder; // Bad practice to do this...Will probably need to change it
             }
         }
 

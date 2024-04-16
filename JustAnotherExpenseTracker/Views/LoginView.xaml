@@ -136,8 +136,8 @@
                         <fa:IconImage Icon="User"
                                       Style="{StaticResource iconButtonIcon}"
                                       Margin="10,0,0,0"/>
-                        
-                        <userControls:PlaceholderTextBox TextBinding="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+
+                        <userControls:PlaceholderTextBox TextBinding="{Binding DataContext.UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
                                                          Height="40" 
                                                          Width="250" 
                                                          Placeholder="Username"

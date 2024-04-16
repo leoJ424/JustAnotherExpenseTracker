@@ -10,6 +10,7 @@
     
     <Grid>
         <TextBox x:Name="txtInput" 
+                 Text="{Binding TextBinding, Mode=TwoWay}"
                  VerticalContentAlignment="Center"
                  Background="Transparent"
                  FontSize="15" 
