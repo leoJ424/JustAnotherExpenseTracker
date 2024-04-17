@@ -42,6 +42,28 @@
                         <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
+
+                <StackPanel>
+                    <!--Logo-->
+                    <StackPanel Orientation="Horizontal"
+                                Height="35"
+                                Margin="15,30,0,40">
+                        <Image Source="/JustAnotherExpenseTracker;component/Images/new-logo.png"
+                               Height="30"/>
+                        <TextBlock Text="Another Expense Tracker"
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="18"
+                                   FontFamily="Times New Roman"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Center"
+                                   Margin="10,2,0,0"/>
+
+                    </StackPanel>
+                    
+                    <!--Menu Buttons-->
+                    
+                </StackPanel>
+                
             </Border>
 
             <!--Main Menu-->

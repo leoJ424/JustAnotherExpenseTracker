@@ -3,7 +3,7 @@
                     xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp">
     
     
-<!--#region A general style for the control buttons (close, minimise and maximise) -->
+    <!--#region A general style for the control buttons (close, minimise and maximise) -->
     
     <Style x:Key="controlButton" TargetType="Button">
         <Setter Property="Width" Value="25"/>
@@ -31,9 +31,9 @@
         </Style.Triggers>
     </Style>
     
-<!--#endregion-->
+    <!--#endregion-->
 
-<!--#region A general style for the control icons (close, minimise and maximise)-->
+    <!--#region A general style for the control icons (close, minimise and maximise)-->
     
     <Style x:Key="controlButtonIcon" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
@@ -41,18 +41,65 @@
         <Setter Property="Height" Value="10"/>
     </Style>
     
-<!--#endregion-->
+    <!--#endregion-->
 
-<!--#region General style for all icons-->
+    <!--#region A general style for the Menu buttons-->
+    <Style x:Key="menuButton" TargetType="RadioButton">
+        
+        <!--Regular Button Style-->
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Margin" Value="-5,0,0,5"/> <!--Negative value gives the effect of movement on hover / when it is selected-->
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource plainTextColor3}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderThickness="4,0,0,0"
+                            BorderBrush="{TemplateBinding BorderBrush}">
+
+                        <ContentPresenter HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+            
+        
+        <Style.Triggers>
+            <!--Button Style when mouse hovers over it-->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="Background" Value="{StaticResource panelOverColor}"/>
+                <Setter Property="Foreground" Value="{StaticResource titleColor3}"/>
+                <Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            </Trigger>
+            
+            <!--Button Selected Style-->
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="Background" Value="{StaticResource panelOverColor}"/>
+                <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+                <Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            </Trigger>
+            
+        </Style.Triggers>
+        
+
+    </Style>
+    <!--#endregion-->
+
+    <!--#region General style for all icons-->
     <Style x:Key="iconButtonIcon" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{StaticResource color1}"/>
         <Setter Property="Width" Value="16"/>
         <Setter Property="Height" Value="16"/>
     </Style>
     
-<!--#endregion-->
+    <!--#endregion-->
 
-<!--#region A general style for the buttons in a textbox -->
+    <!--#region A general style for the buttons in a textbox -->
 
     <Style x:Key="txtBoxButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -80,9 +127,9 @@
         </Style.Triggers>
     </Style>
 
-<!--#endregion-->
+    <!--#endregion-->
 
-<!--#region A general style for the icons in the textboxButton-->
+    <!--#region A general style for the icons in the textboxButton-->
 
     <Style x:Key="txtBoxButtonIcon" TargetType="fa:IconImage">
         <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
@@ -90,6 +137,6 @@
         <Setter Property="Height" Value="20"/>
     </Style>
 
-<!--#endregion-->
+    <!--#endregion-->
 
 </ResourceDictionary>
