@@ -86,6 +86,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand); 
         }
+        private void ExecuteLoginCommand(object obj)
+        {
+            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential(UserName, Password));
+            if (isValidUser)
+            {
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(UserName), null);
+                IsViewVisible = false;
+            }
+            else
+            {
+                ErrorMessage = "* Invalid Username or Password";
+            }
+        }
 
         private bool CanExecuteLoginCommand(object obj)
         {
@@ -102,18 +115,6 @@ namespace JustAnotherExpenseTracker.ViewModels
             return vaildData;
         }
 
-        private void ExecuteLoginCommand(object obj)
-        {
-            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential(UserName, Password));
-            if(isValidUser)
-            {
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(UserName), null);
-                IsViewVisible = false;
-            }
-            else
-            {
-                ErrorMessage = "* Invalid Username or Password";
-            }
-        }
+        
     }
 }

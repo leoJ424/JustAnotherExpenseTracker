@@ -37,7 +37,7 @@ namespace JustAnotherExpenseTracker.Repositories
                 }
             }
 
-                return validUser;
+            return validUser;
         }
 
         public void Edit(UserModel userModel)
