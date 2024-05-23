@@ -91,11 +91,12 @@
                         <!--Control Bar-->
                         <RowDefinition Height="30"/>
                         <!--Header/Caption-->
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="auto"/> <!--Was 35 now auto-->
                         <!--Content Section / Child View-->
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
+                    <!--#region Row 1 - Control Bar-->
                     <StackPanel x:Name="pnlControlBar"
                                 Grid.Row="0"
                                 Orientation="Horizontal"
@@ -120,6 +121,26 @@
                         </Button>
 
                     </StackPanel>
+                    <!--#endregion-->
+                    
+                    <!--#region Row 3 Main Content-->
+                    <Grid Grid.Row="2" Margin="20 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border>
+                                
+                            </Border>
+                        </Grid>
+                        
+                    </Grid>
+                    <!--#endregion-->
 
                 </Grid>
             </Border>
