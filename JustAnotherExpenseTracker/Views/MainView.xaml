@@ -85,6 +85,43 @@
                         <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!--Control Bar-->
+                        <RowDefinition Height="30"/>
+                        <!--Header/Caption-->
+                        <RowDefinition Height="35"/>
+                        <!--Content Section / Child View-->
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="pnlControlBar"
+                                Grid.Row="0"
+                                Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Background="Transparent"
+                                Margin="0,4,9,0"
+                                MouseLeftButtonDown="pnlControlBar_MouseLeftButtonDown"
+                                MouseEnter="pnlControlBar_MouseEnter">
+                        
+                        <Button x:Name="btnClose"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color4}"
+                                Click="btnClose_Click">
+                                <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
+                        <Button x:Name="btnMinimise"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color4}"
+                                Click="btnMinimise_Click">
+                                <fa:IconImage Icon="Minus" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
+                    </StackPanel>
+
+                </Grid>
             </Border>
 
         </Grid>

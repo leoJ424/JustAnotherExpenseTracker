@@ -32,7 +32,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
-            LoadCurrentUserData();
+            //LoadCurrentUserData();
         }
 
         private void LoadCurrentUserData()
