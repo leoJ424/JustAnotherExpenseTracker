@@ -64,5 +64,29 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             get { return (ImageSource)GetValue(NetworkImageProperty); }
             set { SetValue(NetworkImageProperty, value); }
         }
+
+        public static readonly DependencyProperty CardholderNameProperty = DependencyProperty.Register("cardholderName", typeof(string), typeof(CreditCard));
+
+        public string cardholderName
+        {
+            get { return (string)GetValue(CardholderNameProperty); }
+            set { SetValue(CardholderNameProperty, value); }
+        }
+
+        public static readonly DependencyProperty ExpDateProperty = DependencyProperty.Register("expDate", typeof(string), typeof(CreditCard));
+
+        public string expDate
+        {
+            get { return (string)GetValue(ExpDateProperty); }
+            set { SetValue(ExpDateProperty, value); }
+        }
+
+        public static readonly DependencyProperty CVCProperty = DependencyProperty.Register("cvc", typeof(string), typeof(CreditCard));
+
+        public string cvc
+        {
+            get { return (string)GetValue(CVCProperty); }
+            set { SetValue(CVCProperty, value); }
+        }
     }
 }

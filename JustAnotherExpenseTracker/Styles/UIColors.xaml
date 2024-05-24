@@ -6,6 +6,8 @@
     <Color x:Key="primaryBackColor2">#1C0E49</Color>
     <Color x:Key="secondaryBackColor1">#24105F</Color>
     <Color x:Key="secondaryBackColor2">#210F55</Color>
+    <Color x:Key="CreditBackColor1">#6F3BEC</Color>
+    <Color x:Key="CreditBackColor2">#471ECF</Color>
 
     <!--Window Border Colors-->
     <Color x:Key="winBorderColor1">#6D2FFF</Color>

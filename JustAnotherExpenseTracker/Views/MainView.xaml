@@ -136,14 +136,14 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!--<userControls:CreditCard Width="330" Height="210"
-                                                     first4Digits="1234"/>-->
-
                             <userControls:CreditCard Width="330" Height="210"
                                                      first4Digits=". . . ."
                                                      second4Digits=". . . ."
                                                      third4Digits=". . . ."
                                                      last4Digits="1 2 3 4"
+                                                     cardholderName="Jane Doe"
+                                                     expDate="01/28"
+                                                     cvc="123"
                                                      networkImage="/Images/visa_icon.png"/>
 
 
