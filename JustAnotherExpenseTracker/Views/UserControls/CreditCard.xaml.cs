@@ -88,5 +88,13 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             get { return (string)GetValue(CVCProperty); }
             set { SetValue(CVCProperty, value); }
         }
+
+        public static readonly DependencyProperty BalanceProperty = DependencyProperty.Register("balance", typeof(string), typeof(CreditCard));
+
+        public string balance
+        {
+            get { return (string)GetValue(BalanceProperty); }
+            set { SetValue(BalanceProperty, value); }
+        }
     }
 }

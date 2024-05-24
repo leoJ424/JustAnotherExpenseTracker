@@ -137,6 +137,7 @@
                             </Grid.ColumnDefinitions>
 
                             <userControls:CreditCard Width="330" Height="210"
+                                                     balance="$20,456" 
                                                      first4Digits=". . . ."
                                                      second4Digits=". . . ."
                                                      third4Digits=". . . ."

@@ -29,6 +29,28 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
+            <Grid Grid.Row="0" Grid.Column="0" Margin="15 20 0 0">
+                
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Available Balance" 
+                               FontFamily="Courier New"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="LimeGreen">
+
+                    </TextBlock>
+
+                    <TextBlock Text="{Binding ElementName=creditCard, Path=balance}" 
+                               FontFamily="Courier New"
+                               FontWeight="Bold"
+                               FontSize="20"
+                               Foreground="LimeGreen"
+                               Margin="0 5 0 0">
+
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+
             <Grid Grid.Row="1" Grid.Column="0"
                   Margin="15 5 0 10">
                 <Grid.RowDefinitions>
