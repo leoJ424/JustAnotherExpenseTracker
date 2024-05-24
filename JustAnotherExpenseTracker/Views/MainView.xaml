@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:JustAnotherExpenseTracker.Views"
         xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
         mc:Ignorable="d"
         Title="MainView" Height="700" Width="1300"
         WindowStyle="None"
@@ -134,9 +135,18 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Border>
-                                
-                            </Border>
+
+                            <!--<userControls:CreditCard Width="330" Height="210"
+                                                     first4Digits="1234"/>-->
+
+                            <userControls:CreditCard Width="330" Height="210"
+                                                     first4Digits=". . . ."
+                                                     second4Digits=". . . ."
+                                                     third4Digits=". . . ."
+                                                     last4Digits="1 2 3 4"
+                                                     networkImage="/Images/visa_icon.png"/>
+
+
                         </Grid>
                         
                     </Grid>
