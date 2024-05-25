@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JustAnotherExpenseTracker.Models
+{
+    public class CreditCardModel
+    {
+        public string First4Digits { get; set; }
+        public string Second4Digits {  get; set; }
+        public string Third4Digits {  get; set; }
+        public string Last4Digits {  get; set; }
+        public string CardholderName {  get; set; }
+        public string ExpDate {  get; set; }
+        public string Cvc {  get; set; }
+        public string Balance { get; set; }
+
+    }
+}
