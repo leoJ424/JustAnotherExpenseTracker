@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,7 +80,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             {
                                 Id = reader[0].ToString(),
                                 Username = reader[1].ToString(),
-                                Password = string.Empty,
+                                Password = new NetworkCredential("", reader[2].ToString()).SecurePassword, // Makesure it is encrypted
                                 Name = reader[3].ToString(),
                                 LastName = reader[4].ToString(),
                                 Email = reader[5].ToString(),

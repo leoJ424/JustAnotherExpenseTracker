@@ -13,7 +13,7 @@ namespace JustAnotherExpenseTracker.Repositories
 
         public RepositoryBase()
         {
-            _connectionString = "Server = LAPTOP-8U2JJ9D5\\SQLEXPRESS; DataBase = LoginDB; Integrated Security = true";
+            _connectionString = "Server = LAPTOP-8U2JJ9D5\\SQLEXPRESS; DataBase = ProjectDBMk1; Integrated Security = true";
         }
 
         protected SqlConnection GetConnection()

@@ -16,6 +16,8 @@ namespace JustAnotherExpenseTracker.Models
         public string ExpDate {  get; set; }
         public string Cvc {  get; set; }
         public string Balance { get; set; }
+        public string Network { get; set; }
+        public string Bank { get; set; }
 
     }
 }

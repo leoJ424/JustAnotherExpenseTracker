@@ -17,6 +17,7 @@ namespace JustAnotherExpenseTracker.ViewModels
     {
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
+        private ICardRepository cardRepository;
         private CreditCardModel _creditCard;
 
         private bool _isShowButtonVisible = true;
@@ -108,6 +109,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         public MainViewModel()
         {
             userRepository = new UserRepository();
+            cardRepository = new CardRepository();
             CurrentUserAccount = new UserAccountModel();
             //LoadCurrentUserData();
             createMaskedCreditCard(); //TBD
@@ -123,6 +125,9 @@ namespace JustAnotherExpenseTracker.ViewModels
                 CurrentUserAccount.Username = user.Username;
                 CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}.";
                 CurrentUserAccount.ProfilePicture = null;
+
+                var cardIDs = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
+
             }
             else
             {
