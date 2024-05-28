@@ -9,6 +9,6 @@ namespace JustAnotherExpenseTracker.Models
 {
     public interface ICardRepository
     {
-        IEnumerable<Guid> ReturnCardIDsofUser(NetworkCredential credential);
+        List<Guid> ReturnCardIDsofUser(NetworkCredential credential);
     }
 }

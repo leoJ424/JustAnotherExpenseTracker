@@ -22,8 +22,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private bool _isShowButtonVisible = true;
         private bool _isHideButtonVisible = false;
+        private List<Guid> _cards;
 
 
+        private List<Guid> _cards;
 
         public UserAccountModel CurrentUserAccount 
         {
@@ -126,7 +128,7 @@ namespace JustAnotherExpenseTracker.ViewModels
                 CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}.";
                 CurrentUserAccount.ProfilePicture = null;
 
-                var cardIDs = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
+                _cards = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
 
             }
             else

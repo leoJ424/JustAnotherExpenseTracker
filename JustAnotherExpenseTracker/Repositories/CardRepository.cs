@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -16,9 +17,9 @@ namespace JustAnotherExpenseTracker.Repositories
         /// <summary>
         /// Given the Username and Password, the function returns the list of all cards belonging to the user.
         /// </summary>
-        public IEnumerable<Guid> ReturnCardIDsofUser(NetworkCredential credential)
+        public List<Guid> ReturnCardIDsofUser(NetworkCredential credential)
         {
-            IEnumerable<Guid> cardIDs = Enumerable.Empty<Guid>();
+            List<Guid> cardIDs = new List<Guid>();
 
             using (var connection = GetConnection())
             {
@@ -37,7 +38,7 @@ namespace JustAnotherExpenseTracker.Repositories
                         while (reader.Read())
                         {
                             var guid = reader.GetGuid(0);
-                            cardIDs = cardIDs.Concat(new[] { guid });
+                            cardIDs.Add(guid);
                         }
                     }
                 }
