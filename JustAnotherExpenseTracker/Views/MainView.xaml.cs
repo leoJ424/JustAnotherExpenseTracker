@@ -50,5 +50,25 @@ namespace JustAnotherExpenseTracker.Views
         {
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight; //To prevent the maximised window from covering the entire screen
         }
+
+        private void btnMaximise_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.WindowState == WindowState.Normal)
+            {
+                this.WindowState = WindowState.Maximized;
+                btnMaximise.Visibility = Visibility.Collapsed;
+                btnRestore.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void btnRestore_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                btnMaximise.Visibility = Visibility.Visible;
+                btnRestore.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

@@ -146,7 +146,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             if(user != null)
             {
                 CurrentUserAccount.Username = user.Username;
-                CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}.";
+                CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}";
                 CurrentUserAccount.ProfilePicture = null;
 
                 cards = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
