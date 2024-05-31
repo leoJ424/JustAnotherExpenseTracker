@@ -10,5 +10,7 @@ namespace JustAnotherExpenseTracker.Models
     public interface ICardRepository
     {
         List<Guid> ReturnCardIDsofUser(NetworkCredential credential);
+        CreditCardModel ReturnCardDetails(Guid cardId);
+        CreditCardModel ReturnMaskedCardDetails(Guid cardId);
     }
 }

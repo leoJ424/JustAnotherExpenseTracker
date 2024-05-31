@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -45,6 +46,80 @@ namespace JustAnotherExpenseTracker.Repositories
             }
 
             return cardIDs;
+        }
+
+        public CreditCardModel ReturnCardDetails(Guid cardId)
+        {
+            CreditCardModel cardDetails = new CreditCardModel();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getCardDetails";
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = cardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            cardDetails.First4Digits = reader[2].ToString();
+                            cardDetails.Second4Digits = reader[3].ToString();
+                            cardDetails.Third4Digits = reader[4].ToString();
+                            cardDetails.Last4Digits = reader[5].ToString();
+                            cardDetails.CardholderName = reader[6].ToString();
+                            cardDetails.Network = reader[7].ToString();
+                            cardDetails.Bank = reader[8].ToString();
+                            cardDetails.ExpDate = Convert.ToDateTime(reader[9]).ToString("MM/yy", CultureInfo.InvariantCulture);
+                            cardDetails.Cvc = reader[10].ToString();
+                            cardDetails.Balance = "$" + reader[11].ToString();
+                        }
+                    }
+                }
+            }
+
+            return cardDetails;
+        }
+
+        public CreditCardModel ReturnMaskedCardDetails(Guid cardId)
+        {
+            CreditCardModel cardDetails = new CreditCardModel();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getCardDetails";
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = cardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            cardDetails.First4Digits = ". . . .";
+                            cardDetails.Second4Digits = ". . . .";
+                            cardDetails.Third4Digits = ". . . .";
+                            cardDetails.Last4Digits = reader[5].ToString();
+                            cardDetails.CardholderName = reader[6].ToString();
+                            cardDetails.Network = reader[7].ToString();
+                            cardDetails.Bank = reader[8].ToString();
+                            cardDetails.ExpDate = Convert.ToDateTime(reader[9]).ToString("MM/yy", CultureInfo.InvariantCulture);
+                            cardDetails.Cvc = "...";
+                            cardDetails.Balance = "$" + reader[11].ToString();
+                        }
+                    }
+                }
+            }
+
+            return cardDetails;
         }
     }
 }

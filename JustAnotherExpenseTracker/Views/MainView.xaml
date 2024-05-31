@@ -128,7 +128,43 @@
 
                     </StackPanel>
                     <!--#endregion-->
-                    
+
+                    <!--<Grid Grid.Row="1" Margin="20 20">
+
+                        
+                        
+                    </Grid>-->
+                    <StackPanel x:Name="pnlCardControlsBar"
+                                Grid.Row="1"
+                                Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Background="Transparent"
+                                Margin="20 20">
+                        
+
+                        <Button x:Name="btnNextCard"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color4}"
+                                Visibility="{Binding IsCardNextButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                                Command="{Binding ShowNextCardCommand}">
+                            <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Button>
+
+                        <Button x:Name="btnPreviousCard"
+                                Margin="20 0 20 0"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color4}"
+                                Visibility="{Binding IsCardPreviousButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                                Command="{Binding ShowPreviousCardCommand}">
+                            <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Button>
+
+
+
+
+
+                    </StackPanel>
+
                     <!--#region Row 3 Main Content-->
                     <Grid Grid.Row="2" Margin="20 10">
                         <Grid.RowDefinitions>
