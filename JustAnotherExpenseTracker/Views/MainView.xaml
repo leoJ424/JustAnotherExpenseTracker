@@ -7,6 +7,7 @@
         xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+        xmlns:userControlsMainViews="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
         mc:Ignorable="d"
         Title="MainView" Height="700" Width="1300"
         WindowStyle="None"
@@ -19,6 +20,9 @@
     
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
+            <userControlsMainViews:CardsView/>
+        </DataTemplate>
     </Window.Resources>
     
     
@@ -69,7 +73,7 @@
                     
                     <!--Menu Buttons-->
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color1}" >
+                                 Tag="{StaticResource color1}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"
@@ -78,7 +82,8 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color2}" >
+                                 Tag="{StaticResource color2}"
+                                 Command="{Binding ShowCardsViewCommand}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="CreditCard" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Cards" Style="{StaticResource menuButtonText}"
@@ -126,7 +131,6 @@
                         <!--Header/Caption-->
                         <RowDefinition Height="auto"/> <!--Was 35 now auto-->
                         <!--Content Section / Child View-->
-                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -186,11 +190,11 @@
                         <StackPanel Grid.Column="0"
                                     Orientation="Horizontal"
                                     VerticalAlignment="Center">
-                            <fa:IconImage Icon="Home" Height="20" Width="20"
+                            <fa:IconImage Icon="{Binding Icon}" Height="20" Width="20"
                                           Foreground="{StaticResource titleColor2}"
                                           Margin="20 0 10 0"/>
 
-                            <TextBlock Text="Dashboard"
+                            <TextBlock Text="{Binding Caption}"
                                        Foreground="{StaticResource titleColor2}"
                                        FontSize="16"
                                        FontFamily="Times New Roman"
@@ -251,97 +255,12 @@
                     </Grid>
                     
                     <!--#region Row 3 Main Content-->
-                    <ContentControl Content=""
+                    <ContentControl Content="{Binding CurrentChildView}"
                                     Grid.Row="2"
                                     Margin="20"/>
 
                     <!--#endregion-->
-
-
-                    <!--#region Row 3 Main Content-->
-                    <Grid Grid.Row="3" Margin="20 10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        
-                        
-                        <Grid Grid.Row="0">
-                            <StackPanel x:Name="pnlCardControlsBar"
-                                Orientation="Horizontal"
-                                FlowDirection="RightToLeft"
-                                Background="Transparent"
-                                Margin="10 10">
-
-
-                                <Button x:Name="btnNextCard"
-                                Style="{StaticResource creditCardButton}"
-                                Tag="{StaticResource color4}"
-                                Visibility="{Binding IsCardNextButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                Command="{Binding ShowNextCardCommand}">
-                                    <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
-                                </Button>
-
-                                <Button x:Name="btnPreviousCard"
-                                Margin="20 0 20 0"
-                                Style="{StaticResource creditCardButton}"
-                                Tag="{StaticResource color4}"
-                                Visibility="{Binding IsCardPreviousButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                Command="{Binding ShowPreviousCardCommand}">
-                                    <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
-                                </Button>
-                            </StackPanel>
-                        </Grid>
-                        
-                        <Grid Grid.Row="1" Margin="0 10 0 0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <!--#region Column 0 -> Credit Card Display Section-->
-                            <userControls:CreditCard Width="330" Height="210"
-                                                     balance="{Binding DataContext.CreditCard.Balance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}" 
-                                                     first4Digits="{Binding DataContext.CreditCard.First4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     second4Digits="{Binding DataContext.CreditCard.Second4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     third4Digits="{Binding DataContext.CreditCard.Third4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     last4Digits="{Binding DataContext.CreditCard.Last4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     cardholderName="{Binding DataContext.CreditCard.CardholderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     expDate="{Binding DataContext.CreditCard.ExpDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=Window}}"
-                                                     networkImage="/Images/visa_icon.png"/>
-
-                            <Button x:Name="btnViewDetails"
-                                    Height="30"
-                                    Width="20"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Margin="0 15 20 0"
-                                    Style="{StaticResource creditCardButton}"
-                                    Tag="{StaticResource color11}"
-                                    Visibility="{Binding IsShowButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                    Command="{Binding ShowCardDetailsCommand}">
-                                <fa:IconImage Icon="Eye" Style="{StaticResource creditCardButtonIcon}"/>
-                            </Button>
-                            
-                            <Button x:Name="btnHideDetails"
-                                    Height="30"
-                                    Width="20"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Margin="0 15 20 0"
-                                    Style="{StaticResource creditCardButton}"
-                                    Tag="{StaticResource color12}"
-                                    Visibility="{Binding IsHideButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                    Command="{Binding HideCardDetailsCommand}">
-                                <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
-                            </Button>
-                            
-                            <!--#endregion-->
-                            
-                        </Grid>
-                        
-                    </Grid>
-                    <!--#endregion-->
-
+                    
                 </Grid>
             </Border>
 
