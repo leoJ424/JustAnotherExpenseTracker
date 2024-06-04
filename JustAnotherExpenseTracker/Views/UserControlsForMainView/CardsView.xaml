@@ -28,26 +28,26 @@
 
         <Grid Grid.Row="0">
             <StackPanel x:Name="pnlCardControlsBar"
-                                Orientation="Horizontal"
-                                FlowDirection="RightToLeft"
-                                Background="Transparent"
-                                Margin="10 10">
+                        Orientation="Horizontal"
+                        FlowDirection="RightToLeft"
+                        Background="Transparent"
+                        Margin="10 10">
 
 
                 <Button x:Name="btnNextCard"
-                                Style="{StaticResource creditCardButton}"
-                                Tag="{StaticResource color4}"
-                                Visibility="{Binding IsCardNextButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                Command="{Binding ShowNextCardCommand}">
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color4}"
+                        Visibility="{Binding IsCardNextButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                        Command="{Binding ShowNextCardCommand}">
                     <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
                 </Button>
 
                 <Button x:Name="btnPreviousCard"
-                                Margin="20 0 20 0"
-                                Style="{StaticResource creditCardButton}"
-                                Tag="{StaticResource color4}"
-                                Visibility="{Binding IsCardPreviousButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                Command="{Binding ShowPreviousCardCommand}">
+                        Margin="20 0 20 0"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color4}"
+                        Visibility="{Binding IsCardPreviousButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                        Command="{Binding ShowPreviousCardCommand}">
                     <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
                 </Button>
             </StackPanel>
@@ -60,37 +60,37 @@
             </Grid.ColumnDefinitions>
             <!--#region Column 0 -> Credit Card Display Section-->
             <userControls:CreditCard Width="330" Height="210"
-                                                     balance="{Binding DataContext.CreditCard.Balance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
-                                                     first4Digits="{Binding DataContext.CreditCard.First4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     second4Digits="{Binding DataContext.CreditCard.Second4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     third4Digits="{Binding DataContext.CreditCard.Third4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     last4Digits="{Binding DataContext.CreditCard.Last4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     cardholderName="{Binding DataContext.CreditCard.CardholderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     expDate="{Binding DataContext.CreditCard.ExpDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                                     networkImage="/Images/visa_icon.png"/>
+                                     balance="{Binding DataContext.CreditCard.Balance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
+                                     first4Digits="{Binding DataContext.CreditCard.First4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     second4Digits="{Binding DataContext.CreditCard.Second4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     third4Digits="{Binding DataContext.CreditCard.Third4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     last4Digits="{Binding DataContext.CreditCard.Last4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     cardholderName="{Binding DataContext.CreditCard.CardholderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     expDate="{Binding DataContext.CreditCard.ExpDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     networkImage="/Images/visa_icon.png"/>
 
             <Button x:Name="btnViewDetails"
-                                    Height="30"
-                                    Width="20"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Margin="0 15 20 0"
-                                    Style="{StaticResource creditCardButton}"
-                                    Tag="{StaticResource color11}"
-                                    Visibility="{Binding IsShowButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                    Command="{Binding ShowCardDetailsCommand}">
+                    Height="30"
+                    Width="20"
+                    VerticalAlignment="Top" HorizontalAlignment="Right"
+                    Margin="0 15 20 0"
+                    Style="{StaticResource creditCardButton}"
+                    Tag="{StaticResource color11}"
+                    Visibility="{Binding IsShowButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                    Command="{Binding ShowCardDetailsCommand}">
                 <fa:IconImage Icon="Eye" Style="{StaticResource creditCardButtonIcon}"/>
             </Button>
 
             <Button x:Name="btnHideDetails"
-                                    Height="30"
-                                    Width="20"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Margin="0 15 20 0"
-                                    Style="{StaticResource creditCardButton}"
-                                    Tag="{StaticResource color12}"
-                                    Visibility="{Binding IsHideButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                                    Command="{Binding HideCardDetailsCommand}">
+                    Height="30"
+                    Width="20"
+                    VerticalAlignment="Top" HorizontalAlignment="Right"
+                    Margin="0 15 20 0"
+                    Style="{StaticResource creditCardButton}"
+                    Tag="{StaticResource color12}"
+                    Visibility="{Binding IsHideButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                    Command="{Binding HideCardDetailsCommand}">
                 <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
             </Button>
 
