@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace JustAnotherExpenseTracker.ViewModels
 {
@@ -20,11 +21,15 @@ namespace JustAnotherExpenseTracker.ViewModels
     {
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
+        private ICardRepository cardRepository;
+        private CreditCardModel _creditCard;
 
 
         private ViewModelBase _currentChildView;
         private string _caption;
         private IconChar _icon;
+
+        private List<Guid> cards;
 
         //Properties
         public UserAccountModel CurrentUserAccount 
@@ -104,6 +109,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             //END
 
             CurrentUserAccount = new UserAccountModel();
+            cardRepository = new CardRepository();
             LoadCurrentUserData();
             ShowCardsViewCommand = new ViewModelCommand(ExecuteShowCardsViewCommand);
             //createMaskedCreditCard(); //TBD
@@ -118,6 +124,8 @@ namespace JustAnotherExpenseTracker.ViewModels
                 CurrentUserAccount.Username = user.Username;
                 CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}";
                 CurrentUserAccount.ProfilePicture = null;
+
+                cards = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
             }
             else
             {
@@ -127,9 +135,18 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void ExecuteShowCardsViewCommand(object obj)
         {
-            CurrentChildView = new CardsViewModel();
-            Caption = "Cards";
-            Icon = IconChar.CreditCard;
+            if(cards.Count == 0)
+            {
+                CurrentChildView = new CardsNotAvailableViewModel();
+                Caption = "Cards";
+                Icon = IconChar.CreditCard;
+            }
+            else
+            {
+                CurrentChildView = new CardsViewModel();
+                Caption = "Cards";
+                Icon = IconChar.CreditCard;
+            }
         }
 
         //-> Commands

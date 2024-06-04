@@ -20,8 +20,13 @@
     
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        
         <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
             <userControlsMainViews:CardsView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:CardsNotAvailableViewModel}">
+            <userControlsMainViews:CardsNotAvailableView/>
         </DataTemplate>
     </Window.Resources>
     
