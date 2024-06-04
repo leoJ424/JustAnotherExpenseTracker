@@ -25,8 +25,6 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
-        private List<Guid> cards;
-
         public UserAccountModel CurrentUserAccount
         {
             get
@@ -127,36 +125,19 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             cardRepository = new CardRepository();
             CurrentUserAccount = new UserAccountModel();
-            LoadCurrentUserData();
+
+            CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
+            if(CurrentUserAccount.CreditCards.Count > 1)
+            {
+                IsCardNextButtonVisible = true;
+            }
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
 
             HideCardDetailsCommand = new ViewModelCommand(ExecuteHideCardDetailsCommand);
             ShowCardDetailsCommand = new ViewModelCommand(ExecuteShowCardDetailsCommand);
 
             ShowNextCardCommand = new ViewModelCommand(ExecuteShowNextCardCommand);
             ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
-        }
-
-        private void LoadCurrentUserData()
-        {
-            var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
-            if (user != null)
-            {
-                CurrentUserAccount.Username = user.Username;
-                CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}";
-                CurrentUserAccount.ProfilePicture = null;
-
-                cards = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
-                if (cards.Count > 1)
-                {
-                    IsCardNextButtonVisible = true;
-                    OnPropertyChanged(nameof(IsCardNextButtonVisible));
-                }
-                displayMaskedCard(cards[currentCardBeingViewed]);
-            }
-            else
-            {
-                CurrentUserAccount.DisplayName = "Invalid User, not logged in";
-            }
         }
 
         //-> Commands
@@ -167,7 +148,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void ExecuteHideCardDetailsCommand(object obj)
         {
-            displayMaskedCard(cards[currentCardBeingViewed]);
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
 
             IsShowButtonVisible = true;
             IsHideButtonVisible = false;
@@ -176,7 +157,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void ExecuteShowCardDetailsCommand(object obj)
         {
-            displayCard(cards[currentCardBeingViewed]);
+            displayCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
 
             IsShowButtonVisible = false;
             IsHideButtonVisible = true;
@@ -185,12 +166,12 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void ExecuteShowNextCardCommand(object obj)
         {
 
-            if (currentCardBeingViewed + 1 < cards.Count)
+            if (currentCardBeingViewed + 1 < CurrentUserAccount.CreditCards.Count)
             {
                 ++currentCardBeingViewed;
-                displayMaskedCard(cards[currentCardBeingViewed]);
+                displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
             }
-            if (currentCardBeingViewed == cards.Count - 1)
+            if (currentCardBeingViewed == CurrentUserAccount.CreditCards.Count - 1)
             {
                 IsCardNextButtonVisible = false;
             }
@@ -206,13 +187,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             if (currentCardBeingViewed - 1 >= 0)
             {
                 --currentCardBeingViewed;
-                displayMaskedCard(cards[currentCardBeingViewed]);
+                displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
             }
             if (currentCardBeingViewed == 0)
             {
                 IsCardPreviousButtonVisible = false;
             }
-            if (cards.Count > 1 && currentCardBeingViewed != cards.Count - 1)
+            if (CurrentUserAccount.CreditCards.Count > 1 && currentCardBeingViewed != CurrentUserAccount.CreditCards.Count - 1)
             {
                 IsCardNextButtonVisible = true;
             }

@@ -21,15 +21,10 @@ namespace JustAnotherExpenseTracker.ViewModels
     {
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
-        private ICardRepository cardRepository;
-        private CreditCardModel _creditCard;
-
 
         private ViewModelBase _currentChildView;
         private string _caption;
         private IconChar _icon;
-
-        private List<Guid> cards;
 
         //Properties
         public UserAccountModel CurrentUserAccount 
@@ -109,33 +104,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             //END
 
             CurrentUserAccount = new UserAccountModel();
-            cardRepository = new CardRepository();
-            LoadCurrentUserData();
+            CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
             ShowCardsViewCommand = new ViewModelCommand(ExecuteShowCardsViewCommand);
-            //createMaskedCreditCard(); //TBD
-
-        }
-
-        private void LoadCurrentUserData()
-        {
-            var user = userRepository.GetByUsername(Thread.CurrentPrincipal.Identity.Name);
-            if(user != null)
-            {
-                CurrentUserAccount.Username = user.Username;
-                CurrentUserAccount.DisplayName = $"Welcome {user.Name} {user.LastName}";
-                CurrentUserAccount.ProfilePicture = null;
-
-                cards = cardRepository.ReturnCardIDsofUser(new NetworkCredential(user.Username, user.Password));
-            }
-            else
-            {
-                CurrentUserAccount.DisplayName = "Invalid User, not logged in";
-            }
         }
 
         private void ExecuteShowCardsViewCommand(object obj)
         {
-            if(cards.Count == 0)
+            if(CurrentUserAccount.CreditCards.Count == 0)
             {
                 CurrentChildView = new CardsNotAvailableViewModel();
                 Caption = "Cards";
