@@ -89,12 +89,12 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(CVCProperty, value); }
         }
 
-        public static readonly DependencyProperty AmountUsedProperty = DependencyProperty.Register("amountUsed", typeof(string), typeof(CreditCard));
+        public static readonly DependencyProperty CreditLimitProperty = DependencyProperty.Register("creditLimit", typeof(string), typeof(CreditCard));
 
-        public string amountUsed
+        public string creditLimit
         {
-            get { return (string)GetValue(AmountUsedProperty); }
-            set { SetValue(AmountUsedProperty, value); }
+            get { return (string)GetValue(CreditLimitProperty); }
+            set { SetValue(CreditLimitProperty, value); }
         }
     }
 }

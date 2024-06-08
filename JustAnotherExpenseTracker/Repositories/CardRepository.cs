@@ -76,8 +76,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             cardDetails.Bank = reader[8].ToString();
                             cardDetails.ExpDate = Convert.ToDateTime(reader[9]).ToString("MM/yy", CultureInfo.InvariantCulture);
                             cardDetails.Cvc = reader[10].ToString();
-                            cardDetails.AmountUsed = "$" + reader[11].ToString();
-                            cardDetails.CreditLimit = reader[12].ToString();
+                            cardDetails.CreditLimit = "$" + reader[11].ToString();
                         }
                     }
                 }
@@ -114,8 +113,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             cardDetails.Bank = reader[8].ToString();
                             cardDetails.ExpDate = Convert.ToDateTime(reader[9]).ToString("MM/yy", CultureInfo.InvariantCulture);
                             cardDetails.Cvc = "...";
-                            cardDetails.AmountUsed = "$" + reader[11].ToString();
-                            cardDetails.CreditLimit = reader[12].ToString();
+                            cardDetails.CreditLimit = "$" + reader[11].ToString();
                         }
                     }
                 }

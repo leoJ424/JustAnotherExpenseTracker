@@ -60,7 +60,7 @@
             </Grid.ColumnDefinitions>
             <!--#region Column 0 -> Credit Card Display Section-->
             <userControls:CreditCard Width="330" Height="210"
-                                     amountUsed="{Binding DataContext.CreditCard.AmountUsed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
+                                     creditLimit="{Binding DataContext.CreditCard.CreditLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
                                      first4Digits="{Binding DataContext.CreditCard.First4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      second4Digits="{Binding DataContext.CreditCard.Second4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      third4Digits="{Binding DataContext.CreditCard.Third4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
@@ -94,9 +94,9 @@
                 <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
             </Button>
 
-            <!--#endregion-->
+            <!--#endregion-->                
+            </Grid>
+        
         </Grid>
-
-    </Grid>
 
 </UserControl>

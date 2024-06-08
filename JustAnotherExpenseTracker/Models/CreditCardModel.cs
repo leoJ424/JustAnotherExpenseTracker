@@ -15,7 +15,6 @@ namespace JustAnotherExpenseTracker.Models
         public string CardholderName {  get; set; }
         public string ExpDate {  get; set; }
         public string Cvc {  get; set; }
-        public string AmountUsed { get; set; }
         public string Network { get; set; }
         public string Bank { get; set; }
         public string CreditLimit { get; set; }
