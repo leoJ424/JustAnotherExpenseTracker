@@ -8,6 +8,7 @@ namespace JustAnotherExpenseTracker.Models
 {
     public class CreditCardModel
     {
+        public Guid CardID { get; set; }
         public string First4Digits { get; set; }
         public string Second4Digits {  get; set; }
         public string Third4Digits {  get; set; }

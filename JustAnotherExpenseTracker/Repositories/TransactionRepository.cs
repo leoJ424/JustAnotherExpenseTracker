@@ -119,5 +119,57 @@ namespace JustAnotherExpenseTracker.Repositories
             return returnList;
 
         }
+
+        public DateTime ReturnEarliestTransactionDateOnCard(Guid CardID)
+        {
+            var earliestDate = new DateTime();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getEarliestTransactionDateonCard";
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardID;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            earliestDate = Convert.ToDateTime(reader[0]);
+                        }
+                    }
+                }
+            }
+            return earliestDate;
+        }
+
+        public DateTime ReturnLatestTransactionDateOnCard(Guid CardID)
+        {
+            var latestDate = new DateTime();
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getLatestTransactionDateonCard";
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardID;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            latestDate = Convert.ToDateTime(reader[0]);
+                        }
+                    }
+                }
+            }
+            return latestDate;
+        }
     }
 }

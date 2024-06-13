@@ -67,6 +67,7 @@ namespace JustAnotherExpenseTracker.Repositories
                     {
                         if (reader.Read())
                         {
+                            cardDetails.CardID = reader.GetGuid(0);
                             cardDetails.First4Digits = reader[2].ToString();
                             cardDetails.Second4Digits = reader[3].ToString();
                             cardDetails.Third4Digits = reader[4].ToString();
@@ -106,6 +107,7 @@ namespace JustAnotherExpenseTracker.Repositories
                     {
                         if (reader.Read())
                         {
+                            cardDetails.CardID = reader.GetGuid(0);
                             cardDetails.First4Digits = ". . . .";
                             cardDetails.Second4Digits = ". . . .";
                             cardDetails.Third4Digits = ". . . .";

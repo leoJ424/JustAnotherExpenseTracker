@@ -1,9 +1,13 @@
 ﻿using JustAnotherExpenseTracker.Models;
 using JustAnotherExpenseTracker.Repositories;
+using LiveCharts.Defaults;
+using LiveCharts;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Numerics;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +20,39 @@ namespace JustAnotherExpenseTracker.ViewModels
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
         private ICardRepository cardRepository;
+        private ITransactionRepository transactionRepository;
         private CreditCardModel _creditCard;
 
         private bool _isShowButtonVisible = true;
         private bool _isHideButtonVisible = false;
         private bool _isCardNextButtonVisible = false; //By Default false
         private bool _isCardPreviousButtonVisible = false; //By Default false
+        
+        private bool _isMonthlyButtonChecked = true;//By Default true
+        private bool _isYearlyButtonChecked = false;//By Default False
+        private bool _isNextStatementButtonVisible = true; //By Default false
+        private bool _isPreviousStatementButtonVisible = true; //By Default false
+
+        private string _statementTextToBeDisplayed;
+
+        private List<string> _xAxisLabels;
+        private ChartValues<double> _seriesData;
+
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
+
+        private DateTime firstStatementDate1; //To get transaction data;
+        private DateTime firstStatementDate2;
+
+        List<Tuple<DateTime, DateTime>> statementDates;
+
+        private DateTime statementDate1;
+        private DateTime statementDate2;
+
+        private DateTime earliestTransactionDate;
+        private DateTime latestTransactionDate;
+
+        private int currentStatementView;
 
         public UserAccountModel CurrentUserAccount
         {
@@ -109,6 +138,112 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// To show the credit card usage data in a statement month
+        /// </summary>
+        public bool IsMonthlyButtonChecked
+        {
+            get
+            {
+                return _isMonthlyButtonChecked;
+            }
+            set
+            {
+                _isMonthlyButtonChecked = value;
+                OnPropertyChanged(nameof(IsMonthlyButtonChecked));
+            }
+        }
+
+        /// <summary>
+        /// To show the credit card usage data in a year
+        /// </summary>
+        public bool IsYearlyButtonChecked
+        {
+            get
+            {
+                return _isYearlyButtonChecked;
+            }
+            set
+            {
+                _isYearlyButtonChecked = value;
+                OnPropertyChanged(nameof(IsYearlyButtonChecked));
+            }
+        }
+
+        /// <summary>
+        /// To show the credit card usage data in a different statement months, years, etc, set based on available data
+        /// </summary>
+        public bool IsNextStatementButtonVisible
+        {
+            get
+            {
+                return _isNextStatementButtonVisible;
+            }
+            set
+            {
+                _isNextStatementButtonVisible = value;
+                OnPropertyChanged(nameof(IsNextStatementButtonVisible));
+            }
+        }
+
+        /// <summary>
+        /// To show the credit card usage data in a different statement months, years, etc, set based on available data
+        /// </summary>
+        public bool IsPreviousStatementButtonVisible
+        {
+            get
+            {
+                return _isPreviousStatementButtonVisible;
+            }
+            set
+            {
+                _isPreviousStatementButtonVisible = value;
+                OnPropertyChanged(nameof(IsPreviousStatementButtonVisible));
+            }
+        }
+
+        /// <summary>
+        /// Text to show which statement is being printed. Eg. Statement for June 2024 or Entire usage for year 2023 etc etc
+        /// </summary>
+        public string StatementTextToBeDisplayed
+        {
+            get
+            {
+                return _statementTextToBeDisplayed;
+            }
+            set
+            {
+                _statementTextToBeDisplayed = value;
+                OnPropertyChanged(nameof(StatementTextToBeDisplayed));
+            }
+        }
+
+        public List<string> XAxisLabels
+        {
+            get
+            {
+                return _xAxisLabels;
+            }
+            set
+            {
+                _xAxisLabels = value;
+                OnPropertyChanged(nameof(XAxisLabels));
+            }
+        }
+
+        public ChartValues<double> SeriesData
+        {
+            get
+            {
+                return _seriesData;
+            }
+            set
+            {
+                _seriesData = value;
+                OnPropertyChanged(nameof(SeriesData));
+            }
+        }
+
         public CardsViewModel()
         {
             userRepository = new UserRepository();
@@ -125,6 +260,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             cardRepository = new CardRepository();
             CurrentUserAccount = new UserAccountModel();
+            statementDates = new List<Tuple<DateTime, DateTime>>();
 
             CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
             if(CurrentUserAccount.CreditCards.Count > 1)
@@ -138,6 +274,14 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             ShowNextCardCommand = new ViewModelCommand(ExecuteShowNextCardCommand);
             ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
+
+            transactionRepository = new TransactionRepository();
+            fillPreRequisiteData();
+
+            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+
+            ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
+            ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
         }
 
         //-> Commands
@@ -145,6 +289,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         public ICommand ShowCardDetailsCommand { get; }
         public ICommand ShowNextCardCommand { get; }
         public ICommand ShowPreviousCardCommand { get; }
+        public ICommand ShowNextCardStatementCommand { get; }
+        public ICommand ShowPreviousCardStatementCommand { get; }
 
         private void ExecuteHideCardDetailsCommand(object obj)
         {
@@ -179,6 +325,9 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsCardPreviousButtonVisible = true;
             }
+            fillPreRequisiteData();
+
+            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
         }
 
         private void ExecuteShowPreviousCardCommand(object obj)
@@ -197,6 +346,50 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsCardNextButtonVisible = true;
             }
+            fillPreRequisiteData();
+
+            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+        }
+
+        private void ExecuteShowNextCardStatementCommand(object obj)
+        {
+            if(currentStatementView + 1 < statementDates.Count())
+            {
+                ++currentStatementView;
+            }
+            
+            if(currentStatementView == statementDates.Count() - 1)
+            {
+                IsNextStatementButtonVisible = false;
+            }
+
+            if(currentStatementView > 0)
+            {
+                IsPreviousStatementButtonVisible = true;
+            }
+            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM");
+            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+        }
+
+        private void ExecuteShowPreviousCardStatementCommand(object obj)
+        {
+            if(currentStatementView - 1 >= 0)
+            {
+                --currentStatementView;
+            }
+
+            if(currentStatementView == 0)
+            {
+                IsPreviousStatementButtonVisible = false;
+            }
+
+            if(statementDates.Count() > 1 && currentStatementView != statementDates.Count() - 1)
+            {
+                IsNextStatementButtonVisible = true;
+            }
+            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM");
+            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+
         }
 
         //-> Functions User Defined
@@ -210,6 +403,69 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             CreditCard = cardRepository.ReturnMaskedCardDetails(id);
             OnPropertyChanged(nameof(CreditCard));
+        }
+
+        private void generateDataForGraphDaywise(DateTime date1, DateTime date2, Guid id)
+        {
+            XAxisLabels = new List<string>();
+            SeriesData = new ChartValues<double>();
+
+            var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
+
+            for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
+            {
+                XAxisLabels.Add(Convert.ToDateTime(day).ToString("dd-MMM", CultureInfo.InvariantCulture));
+                SeriesData.Add(0);
+            }
+
+            amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
+            foreach (var item in amountsByDateList)
+            {
+                int index = (item.Key - date1).Days;
+                SeriesData[index] = Convert.ToDouble(item.Value);
+            }
+        }
+
+        private void fillPreRequisiteData()
+        {
+            //Billing Cycle is taken as 30 days
+            var statementDay = CreditCard.StatementGenDate;
+
+            earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
+            latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
+
+
+            if(earliestTransactionDate.Day < statementDay)
+            {
+                firstStatementDate2 = new DateTime(earliestTransactionDate.Year, earliestTransactionDate.Month, statementDay).AddDays(-1);
+                firstStatementDate1 = firstStatementDate2.AddDays(-30);
+            }
+            else
+            {
+                firstStatementDate1 = new DateTime(earliestTransactionDate.Year, earliestTransactionDate.Month, statementDay);
+                firstStatementDate2 = firstStatementDate1.AddDays(30);
+            }
+            statementDates = new List<Tuple<DateTime, DateTime>>();
+
+            statementDates.Add(Tuple.Create(firstStatementDate1, firstStatementDate2));
+            statementDate1 = firstStatementDate1;
+            statementDate2 = firstStatementDate2;
+            while(statementDate2 < latestTransactionDate)
+            {
+                statementDate1 = statementDate2.AddDays(1);
+                statementDate2 = statementDate1.AddDays(30);
+
+                statementDates.Add(Tuple.Create(statementDate1,statementDate2));
+            }
+            currentStatementView = statementDates.Count() - 1;
+            IsNextStatementButtonVisible = false;
+            if(currentStatementView > 0)
+            {
+                IsPreviousStatementButtonVisible = true;
+            }
+
+            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM");
+
         }
     }
 }

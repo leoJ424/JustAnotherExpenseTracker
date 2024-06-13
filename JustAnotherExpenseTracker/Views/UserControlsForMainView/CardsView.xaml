@@ -7,8 +7,9 @@
              xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="650" d:DesignWidth="800">
     
     <UserControl.DataContext>
         <viewModel:CardsViewModel/>
@@ -95,8 +96,126 @@
             </Button>
 
             <!--#endregion-->                
-            </Grid>
-        
         </Grid>
+
+        <Grid Grid.Row="2" Margin="0 10">
+            <!--Title-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"
+                  Margin="10 10">
+
+                <TextBlock Text="Debits and Credits" 
+                           Style="{StaticResource titleText}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"/>
+
+                <Button x:Name="btnPreviousStatement"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color4}"
+                        Visibility="{Binding IsPreviousStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="0 0 200 0"
+                        Command="{Binding ShowPreviousCardStatementCommand}">
+                    <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
+                </Button>
+
+                <TextBlock Text="{Binding StatementTextToBeDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                           Style="{StaticResource titleText}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+
+
+
+                <Button x:Name="btnNextStatement"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color4}"
+                        Visibility="{Binding IsNextStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Margin="200 0 0 0"
+                        Command="{Binding ShowNextCardStatementCommand}">
+                    <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
+                </Button>
+
+                <RadioButton x:Name="btnYearly" 
+                             Style="{StaticResource cardsViewPannelBtn}"
+                             BorderBrush="{StaticResource titleColor2}"
+                             BorderThickness="0 1 1 1"
+                             Width="55"
+                             IsChecked="{Binding IsYearlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Right">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Year" Style="{StaticResource cardsViewPannelText}"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton x:Name="btnMonthly" 
+                             Style="{StaticResource cardsViewPannelBtn}"
+                             BorderBrush="{StaticResource titleColor2}"
+                             BorderThickness="1 1 1 1"
+                             IsChecked="{Binding IsMonthlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Right"
+                             Margin="0 0 55 0">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Month" Style="{StaticResource cardsViewPannelText}"/>
+                    </StackPanel>
+
+                </RadioButton>
+
+
+            </Grid>
+
+            <lvc:CartesianChart Grid.Row="1" LegendLocation="None" Margin="0 50 0 0">
+                <lvc:CartesianChart.DataTooltip>
+                    <lvc:DefaultTooltip Background="#101a28"
+                       Foreground="#d5e2ff"/>
+                </lvc:CartesianChart.DataTooltip>
+
+                <lvc:CartesianChart.Series>
+                    <lvc:LineSeries Values="{Binding SeriesData}"
+                                    StrokeThickness="2" 
+                                    Stroke="#6860e6" 
+                                    PointGeometrySize="0">
+                        <lvc:LineSeries.Fill>
+                            <LinearGradientBrush>
+                                <GradientStop Color="#2e3966" Offset="0.4"/>
+                                <GradientStop Color="#21304a" Offset="1.2"/>
+                            </LinearGradientBrush>
+                        </lvc:LineSeries.Fill>
+                    </lvc:LineSeries>
+                </lvc:CartesianChart.Series>
+                
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Foreground="#bcc0c6" ShowLabels="True" Labels="{Binding XAxisLabels}">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator StrokeThickness="0" Step="6"/>
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+                
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Amount Spent" 
+                              Foreground="#bcc0c6" 
+                              ShowLabels="True"
+                              MinValue="0">
+                        <lvc:Axis.Separator>
+                            <lvc:Separator StrokeThickness="1" Stroke="#2c3a54"/>
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisY>
+
+
+            </lvc:CartesianChart>
+        </Grid> 
+        
+    </Grid>
 
 </UserControl>
