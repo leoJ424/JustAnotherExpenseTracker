@@ -118,7 +118,7 @@
                         Visibility="{Binding IsPreviousStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Margin="0 0 200 0"
+                        Margin="0 0 250 0"
                         Command="{Binding ShowPreviousCardStatementCommand}">
                     <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
                 </Button>
@@ -136,7 +136,7 @@
                         Visibility="{Binding IsNextStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"
-                        Margin="200 0 0 0"
+                        Margin="250 0 0 0"
                         Command="{Binding ShowNextCardStatementCommand}">
                     <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
                 </Button>
