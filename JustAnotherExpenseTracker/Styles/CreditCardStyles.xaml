@@ -28,9 +28,9 @@
     </Style>
 
     <Style x:Key="titleText" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource creditCardFont}"/>
+        <Setter Property="Foreground" Value="{StaticResource creditCardPageTextColor}"/>
         <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontFamily" Value="Times New Roman"/>
+        <Setter Property="FontFamily" Value="Microsoft Sans Serif"/>
 
     </Style>
 

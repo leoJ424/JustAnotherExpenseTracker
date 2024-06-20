@@ -411,7 +411,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             SeriesData = new ChartValues<double>();
 
             var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
-
+            
             for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
             {
                 XAxisLabels.Add(Convert.ToDateTime(day).ToString("dd-MMM", CultureInfo.InvariantCulture));

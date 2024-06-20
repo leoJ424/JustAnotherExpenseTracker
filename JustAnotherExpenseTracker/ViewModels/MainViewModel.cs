@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
@@ -25,6 +26,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private ViewModelBase _currentChildView;
         private string _caption;
         private IconChar _icon;
+        private SolidColorBrush _captionColor;
 
         //Properties
         public UserAccountModel CurrentUserAccount 
@@ -90,6 +92,22 @@ namespace JustAnotherExpenseTracker.ViewModels
             } 
         }
 
+        /// <summary>
+        /// Color to go along with the above caption/title
+        /// </summary>
+        public SolidColorBrush CaptionColor
+        {
+            get
+            {
+                return _captionColor;
+            }
+            set
+            {
+                _captionColor = value;
+                OnPropertyChanged(nameof(CaptionColor));
+            }
+        }
+
         public MainViewModel()
         {
             userRepository = new UserRepository();
@@ -115,12 +133,14 @@ namespace JustAnotherExpenseTracker.ViewModels
                 CurrentChildView = new CardsNotAvailableViewModel();
                 Caption = "Cards";
                 Icon = IconChar.CreditCard;
+                CaptionColor = (SolidColorBrush) obj;
             }
             else
             {
                 CurrentChildView = new CardsViewModel();
                 Caption = "Cards";
                 Icon = IconChar.CreditCard;
+                CaptionColor = (SolidColorBrush)obj;
             }
         }
 
