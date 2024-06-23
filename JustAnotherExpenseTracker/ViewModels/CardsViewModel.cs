@@ -21,6 +21,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private IUserRepository userRepository;
         private ICardRepository cardRepository;
         private ITransactionRepository transactionRepository;
+        private ICategoryRepository categoryRepository;
         private CreditCardModel _creditCard;
 
         private bool _isShowButtonVisible = true;
@@ -276,6 +277,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
 
             transactionRepository = new TransactionRepository();
+            categoryRepository = new CategoryRepository();
             fillPreRequisiteData();
 
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
@@ -407,6 +409,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void generateDataForGraphDaywise(DateTime date1, DateTime date2, Guid id)
         {
+            #region Cartesian Chart Values
+
             XAxisLabels = new List<string>();
             SeriesData = new ChartValues<double>();
 
@@ -424,6 +428,27 @@ namespace JustAnotherExpenseTracker.ViewModels
                 int index = (item.Key - date1).Days;
                 SeriesData[index] = Convert.ToDouble(item.Value);
             }
+
+            #endregion
+
+            #region PieChart Values
+
+            var amountsByCategory = new List<KeyValuePair<Guid, decimal>>();
+            amountsByCategory = transactionRepository.ReturnCardTransactionAmountsGroupByCategory(date1, date2, id);
+
+            var categoryNames = new List<string>();
+            var categoryValues = new List<double>();
+
+
+            foreach (var item in amountsByCategory)
+            {
+                var catName = categoryRepository.GetCategoryName(item.Key);
+                categoryNames.Add(catName);
+
+                categoryValues.Add(Convert.ToDouble(item.Value));
+            }
+
+            #endregion
         }
 
         private void fillPreRequisiteData()

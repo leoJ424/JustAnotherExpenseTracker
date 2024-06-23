@@ -14,6 +14,7 @@ namespace JustAnotherExpenseTracker.Models
         List<KeyValuePair<DateTime, decimal>> ReturnCardTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId);
         DateTime ReturnEarliestTransactionDateOnCard(Guid CardID);
         DateTime ReturnLatestTransactionDateOnCard(Guid CardID);
+        List<KeyValuePair<Guid, decimal>> ReturnCardTransactionAmountsGroupByCategory(DateTime date1, DateTime date2, Guid CardId);
 
 
     }

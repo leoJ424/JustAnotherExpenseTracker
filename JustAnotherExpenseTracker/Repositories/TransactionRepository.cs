@@ -171,5 +171,36 @@ namespace JustAnotherExpenseTracker.Repositories
             }
             return latestDate;
         }
+
+        public List<KeyValuePair<Guid, decimal>> ReturnCardTransactionAmountsGroupByCategory(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var returnList = new List<KeyValuePair<Guid, decimal>>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getTransactionDetailsBetweenDatesBasedOnCardIDGroupByCategory";
+                    command.Parameters.Add("@Date1", System.Data.SqlDbType.Date).Value = date1;
+                    command.Parameters.Add("@Date2", System.Data.SqlDbType.Date).Value = date2;
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            returnList.Add(new KeyValuePair<Guid, decimal>(reader.GetGuid(1), Convert.ToDecimal(reader[0])));
+                        }
+                    }
+                }
+            }
+
+            return returnList;
+
+        }
     }
 }
