@@ -55,6 +55,9 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private int currentStatementView;
 
+
+        #region Properties
+
         public UserAccountModel CurrentUserAccount
         {
             get
@@ -245,6 +248,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        #endregion
+
         public CardsViewModel()
         {
             userRepository = new UserRepository();
@@ -287,6 +292,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         }
 
         //-> Commands
+        #region Commands
         public ICommand HideCardDetailsCommand { get; }
         public ICommand ShowCardDetailsCommand { get; }
         public ICommand ShowNextCardCommand { get; }
@@ -394,8 +400,11 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         }
 
+        #endregion
+
         //-> Functions User Defined
 
+        #region User Defined Functions
         private void displayCard(Guid id)
         {
             CreditCard = cardRepository.ReturnCardDetails(id);
@@ -492,5 +501,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
 
         }
+
+        #endregion
     }
 }
