@@ -70,6 +70,14 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(GradientStopsProperty4, value); }
         }
 
+        public static readonly DependencyProperty HoveredSegmentIndexProperty = DependencyProperty.Register("HoveredSegmentIndex", typeof(int), typeof(CustomDoughnutChart), new PropertyMetadata(-1));
+
+        public int HoveredSegmentIndex
+        {
+            get { return (int)GetValue(HoveredSegmentIndexProperty); }
+            set { SetValue(HoveredSegmentIndexProperty, value); }
+        }
+
 
         private void createBrushes()
         {
@@ -105,7 +113,11 @@ namespace JustAnotherExpenseTracker.Views.UserControls
                 }
                 else
                 {
-                    DrawSegment(dc, startAngle, sweepAngle, innerRadius, outerRadius, fillBrushes[i]);
+                    bool isHovered = (HoveredSegmentIndex == i);
+
+                    double explodedOffset = isHovered ? 20 : 0;
+
+                    DrawSegment(dc, startAngle, sweepAngle, innerRadius + explodedOffset, outerRadius + explodedOffset, fillBrushes[i]);
                     startAngle += sweepAngle;
                     outerRadius -= 5;
                 }
@@ -135,6 +147,68 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             geometry.Freeze();
             dc.DrawGeometry(fill, null, geometry);
         }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            // Determine which segment the mouse is over
+            Point mousePos = e.GetPosition(this);
+            double angle = CalculateAngleFromPoint(mousePos);
+
+            int hoveredIndex = -1;
+            double startAngle = 0;
+            double totalValue = values.Sum();
+
+
+            for (int i = 0; i < values.Count; i++)
+            {
+                double sweepAngle = (values[i] / totalValue) * 360;
+
+                if (angle >= startAngle && angle < startAngle + sweepAngle)
+                {
+                    hoveredIndex = i;
+                    break;
+                }
+
+                startAngle += sweepAngle;
+            }
+
+            HoveredSegmentIndex = hoveredIndex;
+
+            //To call rerender again - There must me some better approach TBD
+            var values1 = values.ToList();
+            values.Clear();
+            values = values1;
+        }
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            base.OnMouseLeave(e);
+            HoveredSegmentIndex = -1; // Reset hovered segment index
+
+            //To call rerender again - There must me some better approach TBD
+            var values1 = values.ToList();
+            values.Clear();
+            values = values1;
+        }
+
+        private double CalculateAngleFromPoint(Point point)
+        {
+            Point center = new Point(ActualWidth / 2, ActualHeight / 2);
+            Vector vector = point - center;
+            double angle = Vector.AngleBetween(new Vector(1, 0), vector);
+
+            // Ensure angle is within 0 to 360 degrees
+            if (angle < 0)
+            {
+                angle += 360;
+            }
+
+            return angle;
+        }
+
+
 
 
 
