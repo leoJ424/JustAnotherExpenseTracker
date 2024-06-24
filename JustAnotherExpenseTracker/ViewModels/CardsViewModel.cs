@@ -39,6 +39,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         private List<string> _xAxisLabels;
         private ChartValues<double> _seriesData;
 
+        private List<double> _doughnutChartValues;
+
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
@@ -245,6 +247,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 _seriesData = value;
                 OnPropertyChanged(nameof(SeriesData));
+            }
+        }
+
+        public List<double> DoughnutChartValues
+        {
+            get
+            {
+                return _doughnutChartValues;
+            }
+            set
+            {
+                _doughnutChartValues = value;
+                OnPropertyChanged(nameof(DoughnutChartValues));
             }
         }
 
@@ -456,6 +471,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
                 categoryValues.Add(Convert.ToDouble(item.Value));
             }
+
+            DoughnutChartValues = categoryValues;
 
             #endregion
         }
