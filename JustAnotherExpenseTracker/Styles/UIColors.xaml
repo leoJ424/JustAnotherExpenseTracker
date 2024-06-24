@@ -117,4 +117,9 @@
         <GradientStop Color="{StaticResource doughnutColor8}" Offset="0.25"/>
     </GradientStopCollection>
 
+    <GradientStopCollection x:Key="TransparentFill">
+        <GradientStop Color="Transparent" Offset="0.0"/>
+        <GradientStop Color="Transparent" Offset="0.25"/>
+    </GradientStopCollection>
+    
 </ResourceDictionary>

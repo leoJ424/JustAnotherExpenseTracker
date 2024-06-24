@@ -29,6 +29,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
         private int outerRadius;
 
         private List<LinearGradientBrush> fillBrushes;
+        private LinearGradientBrush transparentBursh;
 
         public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register("values", typeof(List<double>), typeof(CustomDoughnutChart), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
@@ -70,6 +71,15 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(GradientStopsProperty4, value); }
         }
 
+        public static readonly DependencyProperty TransparentGradientProperty = DependencyProperty.Register("transparentGradient", typeof(GradientStopCollection), typeof(CustomDoughnutChart));
+
+        public GradientStopCollection transparentGradient
+        {
+            get { return (GradientStopCollection)GetValue(TransparentGradientProperty); }
+            set { SetValue(TransparentGradientProperty, value); }
+        }
+
+
         public static readonly DependencyProperty HoveredSegmentIndexProperty = DependencyProperty.Register("HoveredSegmentIndex", typeof(int), typeof(CustomDoughnutChart), new PropertyMetadata(-1));
 
         public int HoveredSegmentIndex
@@ -86,6 +96,8 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             fillBrushes.Add(new LinearGradientBrush(gradientStops2));
             fillBrushes.Add(new LinearGradientBrush(gradientStops3));
             fillBrushes.Add(new LinearGradientBrush(gradientStops4));
+
+            transparentBursh = new LinearGradientBrush(transparentGradient); // Later if some other color instead of transparent is to be used we can use this property
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -117,7 +129,13 @@ namespace JustAnotherExpenseTracker.Views.UserControls
 
                     double explodedOffset = isHovered ? 20 : 0;
 
+                    if(isHovered)
+                    {
+                        DrawSegment(dc, startAngle, sweepAngle, innerRadius, outerRadius, transparentBursh);
+                    }
+
                     DrawSegment(dc, startAngle, sweepAngle, innerRadius + explodedOffset, outerRadius + explodedOffset, fillBrushes[i]);
+
                     startAngle += sweepAngle;
                     outerRadius -= 5;
                 }
@@ -139,7 +157,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             {
                 ctx.BeginFigure(innerStart, true, true);
                 ctx.ArcTo(new Point(center.X + innerRadius * Math.Cos(startAngleRad + sweepAngleRad), center.Y + innerRadius * Math.Sin(startAngleRad + sweepAngleRad)),
-                          new Size(innerRadius, innerRadius), 0, sweepAngle > 180, SweepDirection.Clockwise, true, true);
+                            new Size(innerRadius, innerRadius), 0, sweepAngle > 180, SweepDirection.Clockwise, true, true);
                 ctx.LineTo(new Point(center.X + outerRadius * Math.Cos(startAngleRad + sweepAngleRad), center.Y + outerRadius * Math.Sin(startAngleRad + sweepAngleRad)), true, false);
                 ctx.ArcTo(outerStart, new Size(outerRadius, outerRadius), 0, sweepAngle > 180, SweepDirection.Counterclockwise, true, true);
             }
@@ -147,7 +165,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             geometry.Freeze();
             dc.DrawGeometry(fill, null, geometry);
         }
-
+            
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);

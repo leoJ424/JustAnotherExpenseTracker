@@ -99,6 +99,7 @@
                                               gradientStops2="{StaticResource GradientFill2}"
                                               gradientStops3="{StaticResource GradientFill3}"
                                               gradientStops4="{StaticResource GradientFill4}"
+                                              transparentGradient="{StaticResource TransparentFill}"
                                               values="{Binding DataContext.DoughnutChartValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                               
                                               Grid.Column="1"/>
