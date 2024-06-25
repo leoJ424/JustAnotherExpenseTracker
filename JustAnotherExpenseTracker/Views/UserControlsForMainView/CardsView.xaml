@@ -103,7 +103,7 @@
                                               transparentGradient="{StaticResource TransparentFill}"
                                               values="{Binding DataContext.DoughnutChartValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                               categoryNames="{Binding DataContext.DoughnutChartCategoryNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                              />
+                                              totalAmountSpent="{Binding DataContext.TotalAmounntSpentOnCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"/>
 
             <!--#endregion-->
         </Grid>

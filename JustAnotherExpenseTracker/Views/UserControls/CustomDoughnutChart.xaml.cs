@@ -39,6 +39,14 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(ValuesProperty, value); }
         }
 
+        public static readonly DependencyProperty TotalAmountSpentProperty = DependencyProperty.Register("totalAmountSpent", typeof(double), typeof(CustomDoughnutChart));
+
+        public double totalAmountSpent
+        {
+            get { return (double)GetValue(TotalAmountSpentProperty); }
+            set { SetValue(TotalAmountSpentProperty, value); }
+        }
+
         public static readonly DependencyProperty CategoryNamesProperty = DependencyProperty.Register("categoryNames", typeof(List<string>), typeof(CustomDoughnutChart));
 
         public List<string> categoryNames
@@ -246,7 +254,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
 
         private void ResetValuesDisplayedInDoughnut()
         {
-            displayValue = "$ " + values.Sum().ToString();
+            displayValue = "$ " + totalAmountSpent.ToString(); //Displays the whole amount spent on the card
             displayText = "Total";
             displayTextColor = (Brush)FindResource("creditCardPageTextColor");
         }

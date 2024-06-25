@@ -14,6 +14,14 @@ namespace JustAnotherExpenseTracker.Models
         List<KeyValuePair<DateTime, decimal>> ReturnCardTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId);
         DateTime ReturnEarliestTransactionDateOnCard(Guid CardID);
         DateTime ReturnLatestTransactionDateOnCard(Guid CardID);
+
+        /// <summary>
+        /// Returns the top (max - 4) categories where money has been spent
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"></param>
+        /// <param name="CardId"></param>
+        /// <returns></returns>
         List<KeyValuePair<Guid, decimal>> ReturnCardTransactionAmountsGroupByCategory(DateTime date1, DateTime date2, Guid CardId);
 
 

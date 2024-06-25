@@ -41,6 +41,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private List<double> _doughnutChartValues;
         private List<string> _doughnutChartCategoryNames;
+        private double _totalAmountSpentOnCard;
 
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
@@ -277,6 +278,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        public double TotalAmounntSpentOnCard
+        {
+            get
+            {
+                return _totalAmountSpentOnCard;
+            }
+            set
+            {
+                _totalAmountSpentOnCard = value;
+                OnPropertyChanged(nameof(TotalAmounntSpentOnCard));
+            }
+        }
+
         #endregion
 
         public CardsViewModel()
@@ -451,6 +465,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             XAxisLabels = new List<string>();
             SeriesData = new ChartValues<double>();
+            TotalAmounntSpentOnCard = 0; // To be passed to the doughnut chart.
 
             var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
             
@@ -465,6 +480,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 int index = (item.Key - date1).Days;
                 SeriesData[index] = Convert.ToDouble(item.Value);
+                TotalAmounntSpentOnCard += Convert.ToDouble(item.Value);
             }
 
             #endregion
