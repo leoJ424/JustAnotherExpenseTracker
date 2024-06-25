@@ -80,7 +80,7 @@ namespace JustAnotherExpenseTracker.Views.UserControls
         }
 
 
-        public static readonly DependencyProperty HoveredSegmentIndexProperty = DependencyProperty.Register("HoveredSegmentIndex", typeof(int), typeof(CustomDoughnutChart), new PropertyMetadata(-1));
+        public static readonly DependencyProperty HoveredSegmentIndexProperty = DependencyProperty.Register("HoveredSegmentIndex", typeof(int), typeof(CustomDoughnutChart), new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public int HoveredSegmentIndex
         {
@@ -193,22 +193,12 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             }
 
             HoveredSegmentIndex = hoveredIndex;
-
-            //To call rerender again - There must me some better approach TBD
-            var values1 = values.ToList();
-            values.Clear();
-            values = values1;
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             base.OnMouseLeave(e);
             HoveredSegmentIndex = -1; // Reset hovered segment index
-
-            //To call rerender again - There must me some better approach TBD
-            var values1 = values.ToList();
-            values.Clear();
-            values = values1;
         }
 
         private double CalculateAngleFromPoint(Point point)
