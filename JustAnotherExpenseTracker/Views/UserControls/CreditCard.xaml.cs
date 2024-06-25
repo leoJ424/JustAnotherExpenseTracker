@@ -89,12 +89,20 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(CVCProperty, value); }
         }
 
-        public static readonly DependencyProperty CreditLimitProperty = DependencyProperty.Register("creditLimit", typeof(string), typeof(CreditCard));
+        public static readonly DependencyProperty AmountShownProperty = DependencyProperty.Register("amountShown", typeof(string), typeof(CreditCard)); //Amount to be shown on the credit card can be the credit limit or the balance
 
-        public string creditLimit
+        public string amountShown
         {
-            get { return (string)GetValue(CreditLimitProperty); }
-            set { SetValue(CreditLimitProperty, value); }
+            get { return (string)GetValue(AmountShownProperty); }
+            set { SetValue(AmountShownProperty, value); }
+        }
+
+        public static readonly DependencyProperty TextDisplayedProperty = DependencyProperty.Register("textDisplayed", typeof(string), typeof(CreditCard)); 
+
+        public string textDisplayed
+        {
+            get { return (string)GetValue(TextDisplayedProperty); }
+            set { SetValue(TextDisplayedProperty, value); }
         }
     }
 }

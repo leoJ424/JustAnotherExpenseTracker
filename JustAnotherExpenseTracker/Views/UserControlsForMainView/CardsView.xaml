@@ -61,14 +61,15 @@
             </Grid.ColumnDefinitions>
             <!--#region Column 0 -> Credit Card Display Section-->
             <userControls:CreditCard Width="330" Height="210"
-                                     creditLimit="{Binding DataContext.CreditCard.CreditLimit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
+                                     textDisplayed="{Binding DataContext.CardDisplayText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     amountShown="{Binding DataContext.CardDisplayAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}" 
                                      first4Digits="{Binding DataContext.CreditCard.First4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      second4Digits="{Binding DataContext.CreditCard.Second4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      third4Digits="{Binding DataContext.CreditCard.Third4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      last4Digits="{Binding DataContext.CreditCard.Last4Digits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      cardholderName="{Binding DataContext.CreditCard.CardholderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      expDate="{Binding DataContext.CreditCard.ExpDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                     cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"                                
                                      networkImage="/Images/visa_icon.png"/>
 
             <Button x:Name="btnViewDetails"

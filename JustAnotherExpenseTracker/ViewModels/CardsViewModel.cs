@@ -28,6 +28,9 @@ namespace JustAnotherExpenseTracker.ViewModels
         private bool _isHideButtonVisible = false;
         private bool _isCardNextButtonVisible = false; //By Default false
         private bool _isCardPreviousButtonVisible = false; //By Default false
+
+        private string _cardDisplayAmount;
+        private string _cardDisplayText;
         
         private bool _isMonthlyButtonChecked = true;//By Default true
         private bool _isYearlyButtonChecked = false;//By Default False
@@ -111,6 +114,38 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 _creditCard = value;
                 OnPropertyChanged(nameof(CreditCard));
+            }
+        }
+
+        /// <summary>
+        /// Amount to be shown on the credit card. When masked shows the credit limit, when unmasked shows the balance available
+        /// </summary>
+        public string CardDisplayAmount
+        {
+            get
+            {
+                return _cardDisplayAmount;
+            }
+            set
+            {
+                _cardDisplayAmount = value;
+                OnPropertyChanged(nameof(CardDisplayAmount));
+            }
+        }
+
+        /// <summary>
+        /// Text indicating what amount is being displayed. 'Credit Limit' or 'Available Balance'
+        /// </summary>
+        public string CardDisplayText
+        {
+            get
+            {
+                return _cardDisplayText;
+            }
+            set
+            {
+                _cardDisplayText = value;
+                OnPropertyChanged(nameof(CardDisplayText));
             }
         }
 
@@ -346,18 +381,11 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void ExecuteHideCardDetailsCommand(object obj)
         {
             displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
-
-            IsShowButtonVisible = true;
-            IsHideButtonVisible = false;
-
         }
 
         private void ExecuteShowCardDetailsCommand(object obj)
         {
             displayCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
-
-            IsShowButtonVisible = false;
-            IsHideButtonVisible = true;
         }
 
         private void ExecuteShowNextCardCommand(object obj)
@@ -420,6 +448,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         private void ExecuteShowPreviousCardStatementCommand(object obj)
@@ -440,7 +469,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
-
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         #endregion
@@ -451,12 +480,21 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void displayCard(Guid id)
         {
             CreditCard = cardRepository.ReturnCardDetails(id);
+            CardDisplayAmount = "$" + (CreditCard.CreditLimit - TotalAmounntSpentOnCard).ToString();
+            CardDisplayText = "Available Balance";
+
+            IsShowButtonVisible = false;
+            IsHideButtonVisible = true;
         }
 
         private void displayMaskedCard(Guid id)
         {
             CreditCard = cardRepository.ReturnMaskedCardDetails(id);
-            OnPropertyChanged(nameof(CreditCard));
+            CardDisplayAmount = "$" + CreditCard.CreditLimit.ToString();
+            CardDisplayText = "Credit Limit";
+
+            IsShowButtonVisible = true;
+            IsHideButtonVisible = false;
         }
 
         private void generateDataForGraphDaywise(DateTime date1, DateTime date2, Guid id)

@@ -18,7 +18,7 @@ namespace JustAnotherExpenseTracker.Models
         public string Cvc {  get; set; }
         public string Network { get; set; }
         public string Bank { get; set; }
-        public string CreditLimit { get; set; }
+        public double CreditLimit { get; set; }
         public int StatementGenDate { get; set; }
         public int PaymentIn { get; set; }
 
