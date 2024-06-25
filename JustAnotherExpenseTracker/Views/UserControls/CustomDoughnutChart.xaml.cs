@@ -39,6 +39,14 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(ValuesProperty, value); }
         }
 
+        public static readonly DependencyProperty CategoryNamesProperty = DependencyProperty.Register("categoryNames", typeof(List<string>), typeof(CustomDoughnutChart));
+
+        public List<string> categoryNames
+        {
+            get { return (List<string>)GetValue(CategoryNamesProperty); }
+            set { SetValue(CategoryNamesProperty, value); }
+        }
+
         public static readonly DependencyProperty GradientStopsProperty1 = DependencyProperty.Register("gradientStops1", typeof(GradientStopCollection), typeof(CustomDoughnutChart));
 
         public GradientStopCollection gradientStops1
@@ -88,6 +96,30 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             set { SetValue(HoveredSegmentIndexProperty, value); }
         }
 
+        public static readonly DependencyProperty DisplayValueProperty = DependencyProperty.Register("displayValue", typeof(string), typeof(CustomDoughnutChart));
+
+        public string displayValue
+        {
+            get { return (string)GetValue(DisplayValueProperty); }
+            set { SetValue(DisplayValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayTextProperty = DependencyProperty.Register("displayText", typeof(string), typeof(CustomDoughnutChart));
+
+        public string displayText
+        {
+            get { return (string)GetValue(DisplayTextProperty); }
+            set { SetValue(DisplayTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisplayTextColorProperty = DependencyProperty.Register("displayTextColor", typeof(Brush), typeof(CustomDoughnutChart));
+
+        public Brush displayTextColor
+        {
+            get { return (Brush)GetValue(DisplayTextColorProperty); }
+            set { SetValue(DisplayTextColorProperty, value); }
+        }
+
 
         private void createBrushes()
         {
@@ -113,14 +145,19 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             double totalValue = values.Sum();
             double startAngle = 0;
             createBrushes();
+            ResetValuesDisplayedInDoughnut();
 
-            for(int i = 0; i < values.Count; ++i)
+            for (int i = 0; i < values.Count; ++i)
             {
                 double sweepAngle = (values[i] / totalValue) * 360;
                 if(sweepAngle == 360)
                 {
                     DrawSegment(dc, 0, 180, innerRadius, outerRadius, fillBrushes[0]);
                     DrawSegment(dc, 180, 180, innerRadius, outerRadius, fillBrushes[0]);
+
+                    displayText = categoryNames[0];
+                    displayTextColor = fillBrushes[0];
+
                     return;
                 }
                 else
@@ -132,6 +169,11 @@ namespace JustAnotherExpenseTracker.Views.UserControls
                     if(isHovered)
                     {
                         DrawSegment(dc, startAngle, sweepAngle, innerRadius, outerRadius, transparentBursh);
+
+                        // Setting the value, text and its color to be displayed inside the doughnut
+                        displayValue = "$ " + values[i].ToString();
+                        displayText = categoryNames[i];
+                        displayTextColor = fillBrushes[i];
                     }
 
                     DrawSegment(dc, startAngle, sweepAngle, innerRadius + explodedOffset, outerRadius + explodedOffset, fillBrushes[i]);
@@ -199,6 +241,14 @@ namespace JustAnotherExpenseTracker.Views.UserControls
         {
             base.OnMouseLeave(e);
             HoveredSegmentIndex = -1; // Reset hovered segment index
+            ResetValuesDisplayedInDoughnut();
+        }
+
+        private void ResetValuesDisplayedInDoughnut()
+        {
+            displayValue = "$ " + values.Sum().ToString();
+            displayText = "Total";
+            displayTextColor = (Brush)FindResource("creditCardPageTextColor");
         }
 
         private double CalculateAngleFromPoint(Point point)

@@ -95,14 +95,15 @@
                 <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
             </Button>
 
-            <userControls:CustomDoughnutChart gradientStops1="{StaticResource GradientFill1}"
+            <userControls:CustomDoughnutChart Grid.Column="1"
+                                              gradientStops1="{StaticResource GradientFill1}"
                                               gradientStops2="{StaticResource GradientFill2}"
                                               gradientStops3="{StaticResource GradientFill3}"
                                               gradientStops4="{StaticResource GradientFill4}"
                                               transparentGradient="{StaticResource TransparentFill}"
                                               values="{Binding DataContext.DoughnutChartValues, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
-                                              
-                                              Grid.Column="1"/>
+                                              categoryNames="{Binding DataContext.DoughnutChartCategoryNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                              />
 
             <!--#endregion-->
         </Grid>

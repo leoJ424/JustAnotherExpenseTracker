@@ -80,8 +80,8 @@
     
     <Color x:Key="doughnutColor5">#528CAF</Color>
     <Color x:Key="doughnutColor6">#39627A</Color>
-    
-    <Color x:Key="doughnutColor7">#222D33</Color>
+
+    <Color x:Key="doughnutColor7">#999ea0</Color>
     <Color x:Key="doughnutColor8">#7A8184</Color>
     
     

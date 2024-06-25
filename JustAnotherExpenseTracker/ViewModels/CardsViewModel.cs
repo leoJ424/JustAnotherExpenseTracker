@@ -40,6 +40,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private ChartValues<double> _seriesData;
 
         private List<double> _doughnutChartValues;
+        private List<string> _doughnutChartCategoryNames;
 
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
@@ -263,6 +264,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        public List<string> DoughnutChartCategoryNames
+        {
+            get
+            {
+                return _doughnutChartCategoryNames;
+            }
+            set
+            {
+                _doughnutChartCategoryNames = value;
+                OnPropertyChanged(nameof(DoughnutChartCategoryNames));
+            }
+        }
+
         #endregion
 
         public CardsViewModel()
@@ -473,6 +487,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
 
             DoughnutChartValues = categoryValues;
+            DoughnutChartCategoryNames = categoryNames;
 
             #endregion
         }
