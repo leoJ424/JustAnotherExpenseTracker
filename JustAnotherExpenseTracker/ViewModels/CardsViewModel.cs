@@ -42,6 +42,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private ChartValues<DateTimePoint> _seriesValues;
 
+        private ZoomingOptions _zoomingMode;
+
         private List<double> _doughnutChartValues;
         private List<string> _doughnutChartCategoryNames;
         private double _totalAmountSpentOnCard;
@@ -61,6 +63,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         private DateTime latestTransactionDate;
 
         private int currentStatementView;
+
+        private int timesClickedOnZoomToggle;
 
         public Func<double, string> XFormatter { get; set; }
         public Func<double, string> YFormatter { get; set; }
@@ -316,6 +320,16 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        public ZoomingOptions ZoomingMode
+        {
+            get { return _zoomingMode; }
+            set
+            {
+                _zoomingMode = value;
+                OnPropertyChanged(nameof(ZoomingMode));
+            }
+        }
+
         #endregion
 
         public CardsViewModel()
@@ -335,6 +349,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             cardRepository = new CardRepository();
             CurrentUserAccount = new UserAccountModel();
             statementDates = new List<Tuple<DateTime, DateTime>>();
+
+            timesClickedOnZoomToggle = 0; // Based on the number of times this button is clicked we set a particular zoom mode
 
             CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
             if(CurrentUserAccount.CreditCards.Count > 1)
@@ -357,6 +373,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
             ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
+            ToggleZoomModeForGraphCommand = new ViewModelCommand(ExecuteToggleZoomModeForGraphCommand);
 
             XFormatter = val => new DateTime((long)val).ToString("dd MMM");
             YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
@@ -370,6 +387,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         public ICommand ShowPreviousCardCommand { get; }
         public ICommand ShowNextCardStatementCommand { get; }
         public ICommand ShowPreviousCardStatementCommand { get; }
+        public ICommand ToggleZoomModeForGraphCommand { get; }
 
         private void ExecuteHideCardDetailsCommand(object obj)
         {
@@ -463,6 +481,17 @@ namespace JustAnotherExpenseTracker.ViewModels
             StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
             displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+        }
+
+        private void ExecuteToggleZoomModeForGraphCommand(object obj)
+        {
+            ++timesClickedOnZoomToggle;
+            timesClickedOnZoomToggle %= 4;
+
+            if (timesClickedOnZoomToggle == 0) ZoomingMode = ZoomingOptions.None;
+            else if (timesClickedOnZoomToggle == 1) ZoomingMode = ZoomingOptions.X;
+            else if (timesClickedOnZoomToggle == 2) ZoomingMode = ZoomingOptions.Y;
+            else if (timesClickedOnZoomToggle == 3) ZoomingMode = ZoomingOptions.Xy;
         }
 
         #endregion

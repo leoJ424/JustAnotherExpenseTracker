@@ -7,6 +7,7 @@
              xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+             xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000">
@@ -17,6 +18,7 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <converters:ZoomingModeCoverter x:Key="ZoomingModeCoverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -170,12 +172,14 @@
                                 Style="{StaticResource creditCardStatementZoomModeButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Margin="0 0 0 0"
-                                Width="50">
+                                Width="50"
+                                Command="{Binding ToggleZoomModeForGraphCommand}">
                             <StackPanel Orientation="Vertical">
                                 <fa:IconImage Icon="MagnifyingGlassDollar" Style="{StaticResource creditCardButtonIcon}"/>
-                                <TextBlock Text="ZoomMode"
+                                <TextBlock Text="{Binding ZoomingMode, Converter={StaticResource ZoomingModeCoverter}}"
                                            Margin="0 0 0 0"
                                            VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
                                            FontFamily="Microsoft Sans Serif"
                                            FontSize="10"/>
                             </StackPanel>
@@ -185,7 +189,8 @@
                                 Style="{StaticResource creditCardStatementZoomModeButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Margin="0 0 0 0"
-                                Width="50">
+                                Width="50"
+                                Click="btnResetZoomMode_Click">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Refresh" Style="{StaticResource creditCardButtonIcon}"/>
                             </StackPanel>
@@ -229,7 +234,7 @@
                     </StackPanel>
                 </Grid>
 
-                <lvc:CartesianChart Grid.Row="1" LegendLocation="None" Margin="0 25 0 0">
+                <lvc:CartesianChart Grid.Row="1" LegendLocation="None" Margin="0 25 0 0" Zoom="{Binding ZoomingMode}">
                     <lvc:CartesianChart.DataTooltip>
                         <lvc:DefaultTooltip Background="#101a28"
                                             Foreground="#d5e2ff"/>
@@ -258,7 +263,8 @@
                     </lvc:CartesianChart.Series>
                 
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Foreground="{StaticResource creditCardPageTextColor}" 
+                        <lvc:Axis x:Name="X" 
+                                  Foreground="{StaticResource creditCardPageTextColor}" 
                                   LabelFormatter="{Binding XFormatter}"
                                   FontSize="15"
                                   FontFamily="Microsoft Sans Serif">
@@ -269,7 +275,8 @@
                     </lvc:CartesianChart.AxisX>
 
                     <lvc:CartesianChart.AxisY>
-                        <lvc:Axis Foreground="{StaticResource creditCardPageTextColor}" 
+                        <lvc:Axis x:Name="Y" 
+                                  Foreground="{StaticResource creditCardPageTextColor}" 
                                   LabelFormatter="{Binding YFormatter}"
                                   MinValue="0"
                                   FontSize="15"

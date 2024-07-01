@@ -24,5 +24,13 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
         {
             InitializeComponent();
         }
+
+        private void btnResetZoomMode_Click(object sender, RoutedEventArgs e)
+        {
+            X.MinValue = double.NaN;
+            X.MaxValue = double.NaN;
+            Y.MinValue = 0;
+            Y.MaxValue = double.NaN;
+        }
     }
 }
