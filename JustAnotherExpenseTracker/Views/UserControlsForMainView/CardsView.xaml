@@ -117,76 +117,116 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0"
-                      Margin="10 10">
+                      Margin="10 5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Debits and Credits" 
+                    <TextBlock Grid.Column="0"
+                               Text="Debits and Credits" 
                                Style="{StaticResource titleText}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"/>
 
-                    <Button x:Name="btnPreviousStatement"
-                            Style="{StaticResource creditCardStatementNavigationButton}"
-                            Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
-                            Visibility="{Binding IsPreviousStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Margin="0 0 250 0"
-                            Command="{Binding ShowPreviousCardStatementCommand}">
-                        <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
-                    </Button>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal">
 
-                    <TextBlock Text="{Binding StatementTextToBeDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        <Button x:Name="btnPreviousStatement"
+                                Style="{StaticResource creditCardStatementNavigationButton}"
+                                Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                                Visibility="{Binding IsPreviousStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Margin="0 0 20 0"
+                                Command="{Binding ShowPreviousCardStatementCommand}">
+                            <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Button>
+
+                        <TextBlock Text="{Binding StatementTextToBeDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                Style="{StaticResource titleText}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"/>
 
+                        <Button x:Name="btnNextStatement"
+                                Style="{StaticResource creditCardStatementNavigationButton}"
+                                Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                                Visibility="{Binding IsNextStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Margin="20 0 0 0"
+                                Command="{Binding ShowNextCardStatementCommand}">
+                            <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Button>
 
+                    </StackPanel>
 
-                    <Button x:Name="btnNextStatement"
-                            Style="{StaticResource creditCardStatementNavigationButton}"
-                            Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
-                            Visibility="{Binding IsNextStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Center"
-                            Margin="250 0 0 0"
-                            Command="{Binding ShowNextCardStatementCommand}">
-                        <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
-                    </Button>
+                    <StackPanel Grid.Column="2"
+                                Orientation="Horizontal"
+                                Margin="10 0 0 0">
 
-                    <Border Background="{StaticResource solidBlackColor}"
-                            Width="200"
-                            Height="50"
-                            CornerRadius="25"
-                            HorizontalAlignment="Right">
-                    </Border>
+                        <Button x:Name="btnZoomMode"
+                                Style="{StaticResource creditCardStatementZoomModeButton}"
+                                Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                                Margin="0 0 0 0"
+                                Width="50">
+                            <StackPanel Orientation="Vertical">
+                                <fa:IconImage Icon="MagnifyingGlassDollar" Style="{StaticResource creditCardButtonIcon}"/>
+                                <TextBlock Text="ZoomMode"
+                                           Margin="0 0 0 0"
+                                           VerticalAlignment="Center"
+                                           FontFamily="Microsoft Sans Serif"
+                                           FontSize="10"/>
+                            </StackPanel>
+                        </Button>
 
-                    <RadioButton x:Name="btnYearly" 
-                                 Style="{StaticResource cardsViewPannelBtn}"
-                                 Width="70"
-                                 IsChecked="{Binding IsYearlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Right"
-                                 Margin="0 0 15 0">
+                        <Button x:Name="btnResetZoomMode"
+                                Style="{StaticResource creditCardStatementZoomModeButton}"
+                                Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                                Margin="0 0 0 0"
+                                Width="50">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Refresh" Style="{StaticResource creditCardButtonIcon}"/>
+                            </StackPanel>
+                        </Button>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Yearly" Style="{StaticResource cardsViewPannelText}"/>
-                        </StackPanel>
-                    </RadioButton>
+                        <Border Background="{StaticResource solidBlackColor}"
+                                Width="200"
+                                Height="50"
+                                CornerRadius="25"
+                                HorizontalAlignment="Right">
 
-                    <RadioButton x:Name="btnMonthly" 
-                                 Style="{StaticResource cardsViewPannelBtn}"
-                                 IsChecked="{Binding IsMonthlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Right"
-                                 Margin="0 0 100 0">
+                            <StackPanel Orientation="Horizontal">
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Monthly" Style="{StaticResource cardsViewPannelText}"/>
-                        </StackPanel>
+                                <RadioButton x:Name="btnMonthly" 
+                                             Style="{StaticResource cardsViewPannelBtn}"
+                                             IsChecked="{Binding IsMonthlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"
+                                             Margin="10 0 0 0">
 
-                    </RadioButton>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Monthly" Style="{StaticResource cardsViewPannelText}"/>
+                                    </StackPanel>
 
+                                </RadioButton>
 
+                                <RadioButton x:Name="btnYearly" 
+                                             Style="{StaticResource cardsViewPannelBtn}"
+                                             Width="70"
+                                             IsChecked="{Binding IsYearlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             VerticalAlignment="Center"
+                                             Margin="25 0 0 0">
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Yearly" Style="{StaticResource cardsViewPannelText}"/>
+                                    </StackPanel>
+                                </RadioButton>
+                            </StackPanel>
+
+                        </Border>
+                    </StackPanel>
                 </Grid>
 
                 <lvc:CartesianChart Grid.Row="1" LegendLocation="None" Margin="0 25 0 0">
@@ -196,7 +236,7 @@
                     </lvc:CartesianChart.DataTooltip>
 
                     <lvc:CartesianChart.Series>
-                        <lvc:LineSeries Values="{Binding SeriesData}"
+                        <lvc:LineSeries Values="{Binding SeriesValues}"
                                         StrokeThickness="2" 
                                         PointGeometrySize="5">
                             
@@ -219,19 +259,18 @@
                 
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Foreground="{StaticResource creditCardPageTextColor}" 
-                                  ShowLabels="True" 
-                                  Labels="{Binding XAxisLabels}"
+                                  LabelFormatter="{Binding XFormatter}"
                                   FontSize="15"
                                   FontFamily="Microsoft Sans Serif">
                             <lvc:Axis.Separator>
-                                <lvc:Separator StrokeThickness="0" Step="6"/>
+                                <lvc:Separator StrokeThickness="0"/>
                             </lvc:Axis.Separator>
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisX>
 
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis Foreground="{StaticResource creditCardPageTextColor}" 
-                                  ShowLabels="True"
+                                  LabelFormatter="{Binding YFormatter}"
                                   MinValue="0"
                                   FontSize="15"
                                   FontFamily="Microsoft Sans Serif">

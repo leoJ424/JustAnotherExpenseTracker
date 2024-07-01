@@ -12,6 +12,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LiveCharts.Wpf;
 
 namespace JustAnotherExpenseTracker.ViewModels
 {
@@ -39,8 +40,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private string _statementTextToBeDisplayed;
 
-        private List<string> _xAxisLabels;
-        private ChartValues<double> _seriesData;
+        private ChartValues<DateTimePoint> _seriesValues;
 
         private List<double> _doughnutChartValues;
         private List<string> _doughnutChartCategoryNames;
@@ -61,6 +61,9 @@ namespace JustAnotherExpenseTracker.ViewModels
         private DateTime latestTransactionDate;
 
         private int currentStatementView;
+
+        public Func<double, string> XFormatter { get; set; }
+        public Func<double, string> YFormatter { get; set; }
 
 
         #region Properties
@@ -261,29 +264,16 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        public List<string> XAxisLabels
+        public ChartValues<DateTimePoint> SeriesValues
         {
             get
             {
-                return _xAxisLabels;
+                return _seriesValues;
             }
             set
             {
-                _xAxisLabels = value;
-                OnPropertyChanged(nameof(XAxisLabels));
-            }
-        }
-
-        public ChartValues<double> SeriesData
-        {
-            get
-            {
-                return _seriesData;
-            }
-            set
-            {
-                _seriesData = value;
-                OnPropertyChanged(nameof(SeriesData));
+                _seriesValues = value;
+                OnPropertyChanged(nameof(SeriesValues));
             }
         }
 
@@ -367,6 +357,9 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
             ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
+
+            XFormatter = val => new DateTime((long)val).ToString("dd MMM");
+            YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
         }
 
         //-> Commands
@@ -501,24 +494,27 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             #region Cartesian Chart Values
 
-            XAxisLabels = new List<string>();
-            SeriesData = new ChartValues<double>();
+            SeriesValues = new ChartValues<DateTimePoint>();
+
             TotalAmounntSpentOnCard = 0; // To be passed to the doughnut chart.
 
             var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
-            
+            amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
+
+            var pos = 0;
+
             for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
             {
-                XAxisLabels.Add(Convert.ToDateTime(day).ToString("dd-MMM", CultureInfo.InvariantCulture));
-                SeriesData.Add(0);
-            }
-
-            amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
-            foreach (var item in amountsByDateList)
-            {
-                int index = (item.Key - date1).Days;
-                SeriesData[index] = Convert.ToDouble(item.Value);
-                TotalAmounntSpentOnCard += Convert.ToDouble(item.Value);
+                if (pos < amountsByDateList.Count && day == amountsByDateList[pos].Key)
+                {
+                    SeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(amountsByDateList[pos].Value)));
+                    TotalAmounntSpentOnCard += Convert.ToDouble(amountsByDateList[pos].Value);
+                    ++pos;
+                }
+                else
+                {
+                    SeriesValues.Add(new DateTimePoint(day, 0));
+                }
             }
 
             #endregion
