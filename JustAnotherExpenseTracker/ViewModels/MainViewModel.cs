@@ -1,6 +1,7 @@
 ﻿using FontAwesome.Sharp;
 using JustAnotherExpenseTracker.Models;
 using JustAnotherExpenseTracker.Repositories;
+using JustAnotherExpenseTracker.Services;
 using JustAnotherExpenseTracker.Views.UserControlsForMainView;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,30 @@ namespace JustAnotherExpenseTracker.ViewModels
 {
     public class MainViewModel:ViewModelBase
     {
+        private INavigationService _navigation;
+
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
 
-        private ViewModelBase _currentChildView;
         private string _caption;
         private IconChar _icon;
         private SolidColorBrush _captionColor;
 
         //Properties
+        public INavigationService Navigation
+        {
+            get
+            {
+                return _navigation;
+            }
+            set
+            {
+                _navigation = value;
+                OnPropertyChanged(nameof(Navigation));
+            }
+
+        }
+
         public UserAccountModel CurrentUserAccount 
         {
             get
@@ -41,23 +57,6 @@ namespace JustAnotherExpenseTracker.ViewModels
                 OnPropertyChanged(nameof(CurrentUserAccount));
             }
          
-        }
-
-        /// <summary>
-        /// Tells us which childview is to be shown on the main view
-        /// </summary>
-
-        public ViewModelBase CurrentChildView 
-        { 
-            get 
-            {
-                return _currentChildView; 
-            } 
-            set 
-            {
-                _currentChildView = value; 
-                OnPropertyChanged(nameof(CurrentChildView));
-            } 
         }
 
         /// <summary>
@@ -108,8 +107,9 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        public MainViewModel()
+        public MainViewModel(INavigationService navService)
         {
+            Navigation = navService;
             userRepository = new UserRepository();
             //TO BE DELETED - Implemented to just make it work without logging in each time
 
@@ -130,14 +130,14 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             if(CurrentUserAccount.CreditCards.Count == 0)
             {
-                CurrentChildView = new CardsNotAvailableViewModel();
+                Navigation.NavigateTo<CardsNotAvailableViewModel>();
                 Caption = "Cards";
                 Icon = IconChar.CreditCard;
                 CaptionColor = (SolidColorBrush) obj;
             }
             else
             {
-                CurrentChildView = new CardsViewModel();
+                Navigation.NavigateTo<CardsViewModel>();
                 Caption = "Cards";
                 Icon = IconChar.CreditCard;
                 CaptionColor = (SolidColorBrush)obj;

@@ -14,20 +14,8 @@
         Background="Transparent"
         AllowsTransparency="True">
 
-    <Window.DataContext>
-        <viewModel:MainViewModel/>
-    </Window.DataContext>
-    
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
-        
-        <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
-            <userControlsMainViews:CardsView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type viewModel:CardsNotAvailableViewModel}">
-            <userControlsMainViews:CardsNotAvailableView/>
-        </DataTemplate>
     </Window.Resources>
     
     
@@ -259,7 +247,7 @@
                     </Grid>
                     
                     <!--#region Row 3 Main Content-->
-                    <ContentControl Content="{Binding CurrentChildView}"
+                    <ContentControl Content="{Binding Navigation.CurrentView}"
                                     Grid.Row="2"
                                     Margin="20"/>
 

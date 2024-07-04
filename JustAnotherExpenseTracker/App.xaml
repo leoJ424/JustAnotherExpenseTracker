@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:JustAnotherExpenseTracker"
+             xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
+             xmlns:userControlsMainViews="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
              Startup="ApplicationStart">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,6 +13,15 @@
                 <ResourceDictionary Source="/Styles/CreditCardStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/GeneralStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
+                <userControlsMainViews:CardsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:CardsNotAvailableViewModel}">
+                <userControlsMainViews:CardsNotAvailableView/>
+            </DataTemplate>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>
