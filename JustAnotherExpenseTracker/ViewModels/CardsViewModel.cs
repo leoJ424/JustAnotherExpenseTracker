@@ -13,11 +13,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LiveCharts.Wpf;
+using JustAnotherExpenseTracker.Services;
 
 namespace JustAnotherExpenseTracker.ViewModels
 {
     public class CardsViewModel:ViewModelBase
     {
+        private INavigationService _navigation;
+
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
         private ICardRepository cardRepository;
@@ -71,6 +74,19 @@ namespace JustAnotherExpenseTracker.ViewModels
 
 
         #region Properties
+        public INavigationService Navigation
+        {
+            get
+            {
+                return _navigation;
+            }
+            set
+            {
+                _navigation = value;
+                OnPropertyChanged(nameof(Navigation));
+            }
+
+        }
 
         public UserAccountModel CurrentUserAccount
         {
@@ -332,8 +348,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         #endregion
 
-        public CardsViewModel()
+        public CardsViewModel(INavigationService navService)
         {
+            Navigation = navService;
+
             userRepository = new UserRepository();
             //TO BE DELETED - Implemented to just make it work without logging in each time
 
@@ -377,6 +395,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             XFormatter = val => new DateTime((long)val).ToString("dd MMM");
             YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
+
+            GoToDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGoToDetailedTransactionDataCommand);
         }
 
         //-> Commands
@@ -388,6 +408,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         public ICommand ShowNextCardStatementCommand { get; }
         public ICommand ShowPreviousCardStatementCommand { get; }
         public ICommand ToggleZoomModeForGraphCommand { get; }
+        public ICommand GoToDetailedTransactionDataCommand { get; }
 
         private void ExecuteHideCardDetailsCommand(object obj)
         {
@@ -494,6 +515,12 @@ namespace JustAnotherExpenseTracker.ViewModels
             else if (timesClickedOnZoomToggle == 3) ZoomingMode = ZoomingOptions.Xy;
         }
 
+        private void ExecuteGoToDetailedTransactionDataCommand(object obj)
+        {
+            var temp = Navigation.CurrentView;
+            Navigation.NavigateTo<DetailedTransactionsViewModel>();
+
+        }
         #endregion
 
         //-> Functions User Defined

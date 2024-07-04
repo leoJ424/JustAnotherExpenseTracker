@@ -26,6 +26,7 @@ namespace JustAnotherExpenseTracker
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<CardsViewModel>();
             services.AddSingleton<CardsNotAvailableViewModel>();
+            services.AddSingleton<DetailedTransactionsViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
 

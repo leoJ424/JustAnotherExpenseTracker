@@ -21,7 +21,11 @@
             <DataTemplate DataType="{x:Type viewModel:CardsNotAvailableViewModel}">
                 <userControlsMainViews:CardsNotAvailableView/>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModel:DetailedTransactionsViewModel}">
+                <userControlsMainViews:DetailedTransactionsView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
