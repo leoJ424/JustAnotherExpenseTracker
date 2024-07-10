@@ -80,6 +80,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             cardDetails.CreditLimit = Convert.ToDouble(reader[11]);
                             cardDetails.StatementGenDate = (int)reader[12];
                             cardDetails.PaymentIn = (int)reader[13];
+                            cardDetails.CardName = reader[14].ToString();
                         }
                     }
                 }
@@ -120,6 +121,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             cardDetails.CreditLimit = Convert.ToDouble(reader[11]);
                             cardDetails.StatementGenDate = (int)reader[12];
                             cardDetails.PaymentIn = (int)reader[13];
+                            cardDetails.CardName = reader[14].ToString();
                         }
                     }
                 }

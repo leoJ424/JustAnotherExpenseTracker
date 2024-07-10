@@ -26,13 +26,23 @@
 
 
         <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" 
+                       Text="{Binding CardName}"
+                       Style="{StaticResource titleText}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+
             <StackPanel x:Name="pnlCardControlsBar"
+                        Grid.Column="1"
                         Orientation="Horizontal"
                         FlowDirection="RightToLeft"
                         Background="Transparent"
                         Margin="10 10">
-
-
                 <Button x:Name="btnNextCard"
                         Style="{StaticResource creditCardButton}"
                         Tag="{StaticResource color4}"
@@ -109,10 +119,7 @@
             <TextBlock Grid.Column="1" 
                        Text="No Data Available"
                        Visibility="{Binding NoDataDisplay, Converter={StaticResource BooleanToVisibility}}"
-                       FontSize="20"
-                       FontFamily="Times New Roman"
-                       FontWeight="Medium"
-                       Foreground="{StaticResource titleColor1}"
+                       Style="{StaticResource titleText}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"/>
 
@@ -316,10 +323,7 @@
         <TextBlock Grid.Row="2" 
                    Text="No Data Available"
                    Visibility="{Binding NoDataDisplay, Converter={StaticResource BooleanToVisibility}}"
-                   FontSize="20"
-                   FontFamily="Times New Roman"
-                   FontWeight="Medium"
-                   Foreground="{StaticResource titleColor1}"
+                   Style="{StaticResource titleText}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"/>
     </Grid>

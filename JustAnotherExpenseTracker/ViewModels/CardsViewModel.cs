@@ -35,6 +35,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private string _cardDisplayAmount;
         private string _cardDisplayText;
+        private string _cardName;
         
         private bool _isMonthlyButtonChecked = true;//By Default true
         private bool _isYearlyButtonChecked = false;//By Default False
@@ -171,6 +172,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 _cardDisplayText = value;
                 OnPropertyChanged(nameof(CardDisplayText));
+            }
+        }
+
+        public string CardName
+        {
+            get
+            {
+                return _cardName;
+            }
+            set
+            {
+                _cardName = value;
+                OnPropertyChanged(nameof(CardName));
             }
         }
 
@@ -567,6 +581,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void displayCard(Guid id)
         {
             CreditCard = cardRepository.ReturnCardDetails(id);
+            CardName = CreditCard.CardName;
             CardDisplayAmount = "$" + (CreditCard.CreditLimit - TotalAmounntSpentOnCard).ToString();
             CardDisplayText = "Available Balance";
 
@@ -577,6 +592,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void displayMaskedCard(Guid id)
         {
             CreditCard = cardRepository.ReturnMaskedCardDetails(id);
+            CardName = CreditCard.CardName;
             CardDisplayAmount = "$" + CreditCard.CreditLimit.ToString();
             CardDisplayText = "Credit Limit";
 

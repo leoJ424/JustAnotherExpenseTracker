@@ -21,6 +21,7 @@ namespace JustAnotherExpenseTracker.Models
         public double CreditLimit { get; set; }
         public int StatementGenDate { get; set; }
         public int PaymentIn { get; set; }
+        public string CardName { get; set; }
 
     }
 }
