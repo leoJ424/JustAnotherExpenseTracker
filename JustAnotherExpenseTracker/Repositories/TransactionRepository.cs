@@ -202,5 +202,44 @@ namespace JustAnotherExpenseTracker.Repositories
             return returnList;
 
         }
+
+        public List<TransactionDetailsCustomModel> ReturnTransactionDetailsForView(DateTime date1, DateTime date2, Guid CardId)
+        {
+            List<TransactionDetailsCustomModel> transactionDetails = new List<TransactionDetailsCustomModel>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getTransactionDetailsForCardsView";
+                    command.Parameters.Add("@Date1", System.Data.SqlDbType.Date).Value = date1;
+                    command.Parameters.Add("@Date2", System.Data.SqlDbType.Date).Value = date2;
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TransactionDetailsCustomModel tempDetails = new TransactionDetailsCustomModel()
+                            {
+                                CategoryName = reader[0].ToString(),
+                                RecipientName = reader[1].ToString(),
+                                Amount = Convert.ToDouble(reader[2]),
+                                TransactionType = reader[3].ToString(),
+                                RewardPoints = Convert.ToDouble(reader[4]),
+                                DateOfTransaction = Convert.ToDateTime(reader[5]),
+                                GeneralComments = reader[6].ToString(),
+                            };
+                        }
+                    }
+                }
+            }
+
+            return transactionDetails;
+        }
     }
 }

@@ -4,21 +4,151 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
+             xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
-    <UserControl.DataContext>
+
+    <!--<UserControl.DataContext>
         <viewModel:DetailedTransactionsViewModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
 
     <Grid>
-        <TextBlock Text="Detailed View of Transactions"
+        <!--<TextBlock Text="Detailed View of Transactions"
                    FontSize="20"
                    FontFamily="Times New Roman"
                    FontWeight="Medium"
                    Foreground="{StaticResource titleColor1}"
                    VerticalAlignment="Center"
-                   HorizontalAlignment="Center"/>
+                   HorizontalAlignment="Center"/>-->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackPanel x:Name="pnlTransactionsControlBar"
+                        Orientation="Horizontal"
+                        FlowDirection="LeftToRight"
+                        Background="Transparent"
+                        Margin="10 10">
+
+                <TextBlock Text="Start Date" Style="{StaticResource titleText}"
+                           VerticalAlignment="Center"/>
+
+                <Border Background="{StaticResource solidBlackColor}"
+                        Width="200"
+                        Height="40"
+                        CornerRadius="20"
+                        HorizontalAlignment="Right"
+                        Margin="15 0 0 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding StartDateDisplay}"
+                                   Style="{StaticResource titleText}"
+                                   FontSize="15"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="10 0 0 0"/>
+                        
+                        <Button x:Name="btnOpenStartCalendar"
+                                Grid.Column="2"
+                                Height="30"
+                                Width="20"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color12}"
+                                Click="btnOpenStartDateCalendar_Click"
+                                Margin="0 0 15 0">
+                            <StackPanel>
+                                <fa:IconImage Icon="CalendarDay" Style="{StaticResource creditCardButtonIcon}"/>
+                                <Popup x:Name="startDateCalendarPopup">
+                                    <Calendar x:Name="startDateCalendar"
+                                              Style="{DynamicResource CalendarStyle1}"
+                                              DisplayDate="{Binding StartDate, Mode=OneWay}"
+                                              SelectedDate="{Binding StartDate}"
+                                              SelectedDatesChanged="startDateCalendar_SelectedDatesChanged"/>
+                                </Popup>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <TextBlock Text="End Date" Style="{StaticResource titleText}"
+                           VerticalAlignment="Center"
+                           Margin="30 0 0 0"/>
+
+                <Border Background="{StaticResource solidBlackColor}"
+                        Width="200"
+                        Height="40"
+                        CornerRadius="20"
+                        HorizontalAlignment="Right"
+                        Margin="15 0 0 0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding EndDateDisplay}"
+                                   Style="{StaticResource titleText}"
+                                   FontSize="15"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="10 0 0 0"/>
+
+                        <Button x:Name="btnOpenEndDateCalendar"
+                                Grid.Column="2"
+                                Height="30"
+                                Width="20"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color12}"
+                                Click="btnOpenEndDateCalendar_Click"
+                                Margin="0 0 15 0">
+                            <StackPanel>
+                                <fa:IconImage Icon="CalendarDay" Style="{StaticResource creditCardButtonIcon}"/>
+                                <Popup x:Name="endDateCalendarPopup">
+                                    <Calendar x:Name="endDateCalendar" 
+                                              Style="{DynamicResource CalendarStyle1}"
+                                              DisplayDate="{Binding EndDate, Mode=OneWay}"
+                                              SelectedDate="{Binding EndDate}"
+                                              SelectedDatesChanged="endDateCalendar_SelectedDatesChanged"
+                                              DisplayDateStart="{Binding StartDate, Mode=OneWay}"/>
+                                </Popup>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Button x:Name="btnViewMoreDetails"
+                        Grid.Column="2"
+                        Height="30"
+                        Width="120"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color12}"
+                        Command="{Binding GetDetailedTransactionDataCommand}"
+                        Margin="30 0 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Get Data"
+                                   Style="{StaticResource titleText}"
+                                   VerticalAlignment="Center"/>
+                        <fa:IconImage Icon="Database" 
+                                      Style="{StaticResource creditCardButtonIcon}"
+                                      Margin="10 0 0 0"/>
+
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
     </Grid>
 </UserControl>

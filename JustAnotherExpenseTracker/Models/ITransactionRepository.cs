@@ -24,6 +24,15 @@ namespace JustAnotherExpenseTracker.Models
         /// <returns></returns>
         List<KeyValuePair<Guid, decimal>> ReturnCardTransactionAmountsGroupByCategory(DateTime date1, DateTime date2, Guid CardId);
 
+        /// <summary>
+        /// Returns the data to be displayed for the Detailed Transactions View
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"></param>
+        /// <param name="CardId"></param>
+        /// <returns></returns>
+        List<TransactionDetailsCustomModel> ReturnTransactionDetailsForView(DateTime date1, DateTime date2, Guid CardId);
+
 
     }
 }

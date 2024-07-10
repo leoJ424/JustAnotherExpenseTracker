@@ -518,7 +518,14 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void ExecuteGoToDetailedTransactionDataCommand(object obj)
         {
             var temp = Navigation.CurrentView;
-            Navigation.NavigateTo<DetailedTransactionsViewModel>();
+            var passObj = new PassDataModel_DetailedTransactionsView()
+            {
+                StartDate = statementDates[currentStatementView].Item1,
+                EndDate = statementDates[currentStatementView].Item2,
+                CurrentCard = CreditCard.CardID,
+                CardIDs = CurrentUserAccount.CreditCards
+            };
+            Navigation.NavigateTo<DetailedTransactionsViewModel>(passObj);
 
         }
         #endregion

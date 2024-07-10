@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/CreditCardStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/GeneralStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/CalendarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
