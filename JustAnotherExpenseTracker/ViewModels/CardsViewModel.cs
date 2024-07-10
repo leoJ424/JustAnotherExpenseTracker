@@ -51,6 +51,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         private List<string> _doughnutChartCategoryNames;
         private double _totalAmountSpentOnCard;
 
+        private bool _chartIsDisplayed = true; //By Default true...if no data then it will be set to false
+        private bool _noDataDisplay = false; // Basically the negation of _chartIsDisplayed
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
@@ -346,6 +348,32 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        public bool ChartIsDisplayed
+        {
+            get
+            {
+                return _chartIsDisplayed;
+            }
+            set
+            {
+                _chartIsDisplayed = value;
+                OnPropertyChanged(nameof(ChartIsDisplayed));
+            }
+        }
+
+        public bool NoDataDisplay
+        {
+            get
+            {
+                return _noDataDisplay;
+            }
+            set
+            {
+                _noDataDisplay = value;
+                OnPropertyChanged(nameof(NoDataDisplay));
+            }
+        }
+
         #endregion
 
         public CardsViewModel(INavigationService navService)
@@ -387,8 +415,11 @@ namespace JustAnotherExpenseTracker.ViewModels
             categoryRepository = new CategoryRepository();
             fillPreRequisiteData();
 
-            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
-
+             if(statementDates.Count != 0)
+            {
+                generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            }
+            
             ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
             ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
             ToggleZoomModeForGraphCommand = new ViewModelCommand(ExecuteToggleZoomModeForGraphCommand);
@@ -613,6 +644,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
             latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
 
+            if(earliestTransactionDate == DateTime.MinValue || latestTransactionDate == DateTime.MinValue)
+            {
+                //Implies no transaction data
+                ChartIsDisplayed = false;
+                NoDataDisplay = true;
+
+                return;
+            }
+            else
+            {
+                ChartIsDisplayed = true;
+                NoDataDisplay = false;
+            }
 
             if(earliestTransactionDate.Day < statementDay)
             {
