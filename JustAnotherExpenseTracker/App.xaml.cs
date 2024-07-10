@@ -23,10 +23,10 @@ namespace JustAnotherExpenseTracker
                 DataContext = provider.GetRequiredService<MainViewModel>()
             });
 
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton<CardsViewModel>();
-            services.AddSingleton<CardsNotAvailableViewModel>();
-            services.AddSingleton<DetailedTransactionsViewModel>();
+            services.AddTransient<MainViewModel>();
+            services.AddTransient<CardsViewModel>();
+            services.AddTransient<CardsNotAvailableViewModel>();
+            services.AddTransient<DetailedTransactionsViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
 
