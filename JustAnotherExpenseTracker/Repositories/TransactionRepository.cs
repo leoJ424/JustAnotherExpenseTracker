@@ -231,9 +231,10 @@ namespace JustAnotherExpenseTracker.Repositories
                                 Amount = Convert.ToDouble(reader[2]),
                                 TransactionType = reader[3].ToString(),
                                 RewardPoints = Convert.ToDouble(reader[4]),
-                                DateOfTransaction = Convert.ToDateTime(reader[5]),
+                                DateOfTransaction = Convert.ToDateTime(reader[5]).ToString("dd-MMM-yy"),
                                 GeneralComments = reader[6].ToString(),
                             };
+                            transactionDetails.Add(tempDetails);
                         }
                     }
                 }

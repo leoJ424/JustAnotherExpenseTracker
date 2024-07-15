@@ -7,12 +7,17 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
              xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+             xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-
+             d:DesignHeight="450" d:DesignWidth="1000"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
     <!--<UserControl.DataContext>
         <viewModel:DetailedTransactionsViewModel/>
     </UserControl.DataContext>-->
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVis"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="inverseBoolToVis"/>
+    </UserControl.Resources>
 
     <Grid>
         <!--<TextBlock Text="Detailed View of Transactions"
@@ -25,10 +30,104 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<TextBlock Text="Card Name" Style="{StaticResource titleText}"
+                       VerticalAlignment="Center"
+                       Margin="10 0 0 0"/>-->
+
+            <Border Grid.Column="0" 
+                    Background="{StaticResource solidBlackColor}"
+                    Width="200"
+                    Height="40"
+                    CornerRadius="20"
+                    HorizontalAlignment="Left"
+                    Margin="10 0 0 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!--<TextBlock Text="{Binding CardName}"
+                                Style="{StaticResource titleText}"
+                                FontSize="15"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Margin="10 0 0 0"/>-->
+                    <TextBox x:Name="txtBoxCardName"
+                             Width="150"
+                             Text="{Binding CardName}"
+                             Foreground="{StaticResource creditCardPageTextColor}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             FontSize="15"
+                             FontFamily="Microsoft Sans Serif"
+                             Margin="10 0 0 0"
+                             TextChanged="txtBoxCardName_TextChanged"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             CaretBrush="{StaticResource creditCardPageTextColor}"/>
+
+
+
+                    <Button x:Name="btnShowAvailableCards"
+                            Grid.Column="2"
+                            Height="30"
+                            Width="20"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Visibility="{Binding ElementName=availableCardsPopup, Path=IsOpen, Converter={StaticResource inverseBoolToVis}}"
+                            Style="{StaticResource creditCardButton}"
+                            Tag="{StaticResource color12}"
+                            Click="btnShowAvailableCards_Click"
+                            Margin="0 0 15 0">
+                        <StackPanel>
+                            <fa:IconImage Icon="CreditCard" Style="{StaticResource creditCardButtonIcon}"/>
+                            <Popup x:Name="availableCardsPopup"
+                                   AllowsTransparency="True">
+                                <ListBox x:Name="cardNamesList"  
+                                         ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle1}"
+                                         Width="200"
+                                         Margin="40 0 0 0"
+                                         Background="{StaticResource solidBlackColor}"
+                                         Opacity="1"
+                                         BorderThickness="0"
+                                         FontSize="15"
+                                         Foreground="{StaticResource creditCardPageTextColor}"
+                                         ItemsSource="{Binding CardNamesForComboBox, Mode=OneWay}"
+                                         SelectedItem="{Binding CardName}"
+                                         SelectionChanged="cardNamesList_SelectionChanged"/>
+                            </Popup>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="btnCloseCardsList"
+                            Grid.Column="2"
+                            Height="30"
+                            Width="20"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource creditCardButton}"
+                            Tag="{StaticResource color11}"
+                            Click="btnCloseCardsList_Click"
+                            Visibility="{Binding ElementName=availableCardsPopup, Path=IsOpen, Converter={StaticResource boolToVis}}"
+                            Margin="0 0 15 0">
+                        <fa:IconImage Icon="Xmark" Style="{StaticResource creditCardButtonIcon}"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
             <StackPanel x:Name="pnlTransactionsControlBar"
                         Orientation="Horizontal"
                         FlowDirection="LeftToRight"
@@ -65,6 +164,7 @@
                                 Style="{StaticResource creditCardButton}"
                                 Tag="{StaticResource color12}"
                                 Click="btnOpenStartDateCalendar_Click"
+                                Visibility="{Binding ElementName=startDateCalendarPopup, Path=IsOpen, Converter={StaticResource inverseBoolToVis}}"
                                 Margin="0 0 15 0">
                             <StackPanel>
                                 <fa:IconImage Icon="CalendarDay" Style="{StaticResource creditCardButtonIcon}"/>
@@ -77,6 +177,20 @@
                                 </Popup>
                             </StackPanel>
                         </Button>
+                        <Button x:Name="btnCloseStartCalendar"
+                                Grid.Column="2"
+                                Height="30"
+                                Width="20"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color11}"
+                                Click="btnCloseStartCalendar_Click"
+                                Visibility="{Binding ElementName=startDateCalendarPopup, Path=IsOpen, Converter={StaticResource boolToVis}}"
+                                Margin="0 0 15 0">
+                            <fa:IconImage Icon="Xmark" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Button>
+
                     </Grid>
                 </Border>
 
@@ -111,6 +225,7 @@
                                 Style="{StaticResource creditCardButton}"
                                 Tag="{StaticResource color12}"
                                 Click="btnOpenEndDateCalendar_Click"
+                                Visibility="{Binding ElementName=endDateCalendarPopup, Path=IsOpen, Converter={StaticResource inverseBoolToVis}}"
                                 Margin="0 0 15 0">
                             <StackPanel>
                                 <fa:IconImage Icon="CalendarDay" Style="{StaticResource creditCardButtonIcon}"/>
@@ -123,6 +238,20 @@
                                               DisplayDateStart="{Binding StartDate, Mode=OneWay}"/>
                                 </Popup>
                             </StackPanel>
+                        </Button>
+
+                        <Button x:Name="btnCloseEndDateCalendar"
+                                Grid.Column="2"
+                                Height="30"
+                                Width="20"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource creditCardButton}"
+                                Tag="{StaticResource color11}"
+                                Click="btnCloseEndDateCalendar_Click"
+                                Visibility="{Binding ElementName=endDateCalendarPopup, Path=IsOpen, Converter={StaticResource boolToVis}}"
+                                Margin="0 0 15 0">
+                            <fa:IconImage Icon="Xmark" Style="{StaticResource creditCardButtonIcon}"/>
                         </Button>
                     </Grid>
                 </Border>
@@ -139,7 +268,7 @@
                         Margin="30 0 0 0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Get Data"
-                                   Style="{StaticResource titleText}"
+                                   Style="{StaticResource textForButton}"
                                    VerticalAlignment="Center"/>
                         <fa:IconImage Icon="Database" 
                                       Style="{StaticResource creditCardButtonIcon}"
@@ -149,6 +278,75 @@
                 </Button>
             </StackPanel>
         </Grid>
+
+
+        <DataGrid x:Name="transactionDataGrid" 
+                  Grid.Row="2"
+                  Style="{DynamicResource DataGridStyle1}" 
+                  CellStyle="{DynamicResource DataGridCellStyle1}" 
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                  RowStyle="{DynamicResource DataGridRowStyle1}"
+                  ItemsSource="{Binding DataForDataGrid}"
+                  Visibility="{Binding NoDataDisplay, Converter={StaticResource inverseBoolToVis}}">
+            <DataGrid.Columns>
+
+                <DataGridCheckBoxColumn CanUserResize="False" Width="auto" ElementStyle="{DynamicResource CheckBoxStyle1}">
+                    <DataGridCheckBoxColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox Style="{StaticResource CheckBoxStyle1}"/>
+                        </DataTemplate>
+                    </DataGridCheckBoxColumn.HeaderTemplate>
+                </DataGridCheckBoxColumn>
+
+                <DataGridTemplateColumn Header="Category" 
+                                        IsReadOnly="True"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+
+                                <fa:IconImage Width="15" Height="15" Style="{StaticResource categoryIconStyle}" Foreground="White"/>
+
+
+                                <TextBlock Text="{Binding CategoryName}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White"
+                                           Margin="10 0 0 0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Recipient" IsReadOnly="True" Width="*" Binding="{Binding RecipientName}"/>
+                <DataGridTextColumn Header="Amount" IsReadOnly="True" Width="*" Binding="{Binding Amount}"/>
+                <DataGridTextColumn Header="Date" IsReadOnly="True" Width="*" Binding="{Binding DateOfTransaction}"/>
+                <DataGridTextColumn Header="Reward Points" IsReadOnly="True" Width="*" Binding="{Binding RewardPoints}"/>
+
+                <!--<DataGridTemplateColumn Header="" 
+                                        IsReadOnly="True"
+                                        Width="0.5*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button></Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>-->
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <TextBlock Grid.Row="2" 
+                   Text="No Data Available"
+                   Visibility="{Binding NoDataDisplay, Converter={StaticResource boolToVis}}"
+                   Style="{StaticResource titleText}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
 
     </Grid>
 </UserControl>

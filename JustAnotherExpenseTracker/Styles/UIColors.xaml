@@ -121,5 +121,7 @@
         <GradientStop Color="Transparent" Offset="0.0"/>
         <GradientStop Color="Transparent" Offset="0.25"/>
     </GradientStopCollection>
-    
+
+    <SolidColorBrush x:Key="dataGridBorderBrush">#282828</SolidColorBrush>
+
 </ResourceDictionary>

@@ -129,5 +129,33 @@ namespace JustAnotherExpenseTracker.Repositories
 
             return cardDetails;
         }
+
+        public string ReturnCardName(Guid cardId)
+        {
+            string cardName = "Invalid";
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getCardName";
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = cardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            cardName = reader[0].ToString();
+                        }
+                    }
+                }
+            }
+
+            return cardName;
+        }
     }
 }

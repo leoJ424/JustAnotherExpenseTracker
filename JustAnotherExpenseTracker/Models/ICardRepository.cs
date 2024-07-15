@@ -12,5 +12,6 @@ namespace JustAnotherExpenseTracker.Models
         List<Guid> ReturnCardIDsofUser(NetworkCredential credential);
         CreditCardModel ReturnCardDetails(Guid cardId);
         CreditCardModel ReturnMaskedCardDetails(Guid cardId);
+        string ReturnCardName(Guid cardId);
     }
 }
