@@ -429,7 +429,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             categoryRepository = new CategoryRepository();
             fillPreRequisiteData();
 
-             if(statementDates.Count != 0)
+            if(statementDates.Count != 0)
             {
                 generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
             }
@@ -481,8 +481,17 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsCardPreviousButtonVisible = true;
             }
-            fillPreRequisiteData();
 
+            statementDates.Clear();
+
+            fillPreRequisiteData();
+            if (statementDates.Count == 0)
+            {
+                NoDataDisplay = true;
+                ChartIsDisplayed = false;
+                return;
+            }
+            else NoDataDisplay = false;
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
         }
 
@@ -502,8 +511,17 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsCardNextButtonVisible = true;
             }
-            fillPreRequisiteData();
 
+            statementDates.Clear();
+
+            fillPreRequisiteData();
+            if (statementDates.Count == 0)
+            {
+                NoDataDisplay = true;
+                ChartIsDisplayed = false;
+                return;
+            }
+            else NoDataDisplay = false;
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
         }
 
@@ -611,6 +629,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
             amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
 
+            if(amountsByDateList.Count() == 0)// No Transaction Data
+            {
+                ChartIsDisplayed = false;
+            }
+            else
+            {
+                ChartIsDisplayed = true;
+            }
+
             var pos = 0;
 
             for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
@@ -670,7 +697,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             else
             {
-                ChartIsDisplayed = true;
+                //ChartIsDisplayed = true;
                 NoDataDisplay = false;
             }
 

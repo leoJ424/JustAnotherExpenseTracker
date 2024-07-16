@@ -15,6 +15,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
         <converters:ZoomingModeCoverter x:Key="ZoomingModeCoverter"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
     </UserControl.Resources>
 
     <Grid>
@@ -117,8 +118,8 @@
                                               totalAmountSpent="{Binding DataContext.TotalAmounntSpentOnCard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"/>
 
             <TextBlock Grid.Column="1" 
-                       Text="No Data Available"
-                       Visibility="{Binding NoDataDisplay, Converter={StaticResource BooleanToVisibility}}"
+                       Text="No Transactions Done"
+                       Visibility="{Binding ChartIsDisplayed, Converter={StaticResource InverseBooleanToVisibility}}"
                        Style="{StaticResource titleText}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"/>
@@ -145,7 +146,7 @@
         <Border Style="{StaticResource contentBorder}" 
                 Grid.Row="2" 
                 Margin="0 10"
-                Visibility="{Binding ChartIsDisplayed, Converter={StaticResource BooleanToVisibility}}">
+                Visibility="{Binding NoDataDisplay, Converter={StaticResource InverseBooleanToVisibility}}">
             <Grid>
                 <!--Title-->
                 <Grid.RowDefinitions>
@@ -268,7 +269,10 @@
                     </StackPanel>
                 </Grid>
 
-                <lvc:CartesianChart Grid.Row="1" LegendLocation="None" Margin="0 25 0 0" Zoom="{Binding ZoomingMode}">
+                <lvc:CartesianChart Grid.Row="1" LegendLocation="None" 
+                                    Margin="0 25 0 0" 
+                                    Zoom="{Binding ZoomingMode}"
+                                    Visibility="{Binding ChartIsDisplayed, Converter={StaticResource BooleanToVisibility}}">
                     <lvc:CartesianChart.DataTooltip>
                         <lvc:DefaultTooltip Background="#101a28"
                                             Foreground="#d5e2ff"/>
@@ -321,6 +325,12 @@
                         </lvc:Axis>
                     </lvc:CartesianChart.AxisY>
                 </lvc:CartesianChart>
+                <TextBlock Grid.Row="1" 
+                           Text="No Transactions Done"
+                           Visibility="{Binding ChartIsDisplayed, Converter={StaticResource InverseBooleanToVisibility}}"
+                           Style="{StaticResource titleText}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
             </Grid>
         </Border>
 
