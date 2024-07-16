@@ -154,7 +154,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0"
-                      Margin="10 5">
+                      Margin="0 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -167,47 +167,58 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"/>
 
-                    <StackPanel Grid.Column="1"
-                                Orientation="Horizontal">
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.15*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.15*"/>
+                        </Grid.ColumnDefinitions>
 
-                        <Button x:Name="btnPreviousStatement"
+                        <Button Grid.Column="0" 
+                                x:Name="btnPreviousStatement"
                                 Style="{StaticResource creditCardStatementNavigationButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Visibility="{Binding IsPreviousStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
                                 VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Margin="0 0 20 0"
+                                HorizontalAlignment="Right"
+                                Margin="0 0 5 0"
                                 Command="{Binding ShowPreviousCardStatementCommand}">
                             <fa:IconImage Icon="LeftLong" Style="{StaticResource creditCardButtonIcon}"/>
                         </Button>
 
-                        <TextBlock Text="{Binding StatementTextToBeDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                               Style="{StaticResource titleText}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" 
+                                   Text="{Binding StatementTextToBeDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                   Style="{StaticResource titleText}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
 
-                        <Button x:Name="btnNextStatement"
+                        <Button Grid.Column="2" 
+                                x:Name="btnNextStatement"
                                 Style="{StaticResource creditCardStatementNavigationButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Visibility="{Binding IsNextStatementButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
                                 VerticalAlignment="Center"
-                                HorizontalAlignment="Right"
-                                Margin="20 0 0 0"
+                                HorizontalAlignment="Left"
+                                Margin="5 0 0 0"
                                 Command="{Binding ShowNextCardStatementCommand}">
                             <fa:IconImage Icon="RightLong" Style="{StaticResource creditCardButtonIcon}"/>
                         </Button>
+                    </Grid>
 
-                    </StackPanel>
+                    <Grid Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="2"
-                                Orientation="Horizontal"
-                                Margin="10 0 0 0">
-
-                        <Button x:Name="btnZoomMode"
+                        <Button Grid.Column="0" 
+                                x:Name="btnZoomMode" 
                                 Style="{StaticResource creditCardStatementZoomModeButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Margin="0 0 0 0"
                                 Width="50"
+                                HorizontalAlignment="Left"
                                 Command="{Binding ToggleZoomModeForGraphCommand}">
                             <StackPanel Orientation="Vertical">
                                 <fa:IconImage Icon="MagnifyingGlassDollar" Style="{StaticResource creditCardButtonIcon}"/>
@@ -220,22 +231,25 @@
                             </StackPanel>
                         </Button>
 
-                        <Button x:Name="btnResetZoomMode"
+                        <Button Grid.Column="1" 
+                                x:Name="btnResetZoomMode"
                                 Style="{StaticResource creditCardStatementZoomModeButton}"
                                 Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
                                 Margin="0 0 0 0"
                                 Width="50"
+                                HorizontalAlignment="Center"
                                 Click="btnResetZoomMode_Click">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Refresh" Style="{StaticResource creditCardButtonIcon}"/>
                             </StackPanel>
                         </Button>
 
-                        <Border Background="{StaticResource solidBlackColor}"
+                        <Border Grid.Column="2" 
+                                Background="{StaticResource solidBlackColor}"
                                 Width="200"
                                 Height="50"
                                 CornerRadius="25"
-                                HorizontalAlignment="Right">
+                                HorizontalAlignment="Center">
 
                             <StackPanel Orientation="Horizontal">
 
@@ -244,7 +258,8 @@
                                              IsChecked="{Binding IsMonthlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              VerticalAlignment="Center"
                                              HorizontalAlignment="Left"
-                                             Margin="10 0 0 0">
+                                             Margin="10 0 0 0"
+                                             Command="{Binding MonthlyButtonClickedCommand}">
 
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Monthly" Style="{StaticResource cardsViewPannelText}"/>
@@ -257,7 +272,8 @@
                                              Width="70"
                                              IsChecked="{Binding IsYearlyButtonChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                              VerticalAlignment="Center"
-                                             Margin="25 0 0 0">
+                                             Margin="25 0 0 0"
+                                             Command="{Binding YearlyButtonClickedCommand}">
 
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Yearly" Style="{StaticResource cardsViewPannelText}"/>
@@ -266,65 +282,130 @@
                             </StackPanel>
 
                         </Border>
-                    </StackPanel>
+                    </Grid>    
                 </Grid>
 
-                <lvc:CartesianChart Grid.Row="1" LegendLocation="None" 
-                                    Margin="0 25 0 0" 
-                                    Zoom="{Binding ZoomingMode}"
-                                    Visibility="{Binding ChartIsDisplayed, Converter={StaticResource BooleanToVisibility}}">
-                    <lvc:CartesianChart.DataTooltip>
-                        <lvc:DefaultTooltip Background="#101a28"
-                                            Foreground="#d5e2ff"/>
-                    </lvc:CartesianChart.DataTooltip>
+                <Border Grid.Row="1"
+                        Background="Transparent"
+                        Visibility="{Binding ChartIsDisplayed, Converter={StaticResource BooleanToVisibility}}">
+                    <Grid>
+                        <lvc:CartesianChart LegendLocation="None" 
+                                            Margin="0 25 0 0" 
+                                            Zoom="{Binding ZoomingMode}"
+                                            Visibility="{Binding IsMonthlyButtonChecked, Converter={StaticResource BooleanToVisibility}}">
+                            <lvc:CartesianChart.DataTooltip>
+                                <lvc:DefaultTooltip Background="#101a28"
+                                                    Foreground="#d5e2ff"/>
+                            </lvc:CartesianChart.DataTooltip>
 
-                    <lvc:CartesianChart.Series>
-                        <lvc:LineSeries Values="{Binding DaywiseSeriesValues}"
-                                        StrokeThickness="2" 
-                                        PointGeometrySize="5">
-                            
-                            <lvc:LineSeries.Stroke>
-                                <LinearGradientBrush>
-                                    <GradientStop Color="{StaticResource CreditBackColor2}" Offset="0"/>
-                                    <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.5"/>
-                                </LinearGradientBrush>
-                            </lvc:LineSeries.Stroke>
-                            
-                            <lvc:LineSeries.Fill>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.1"/>
-                                    <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
-                                    <GradientStop Color="Transparent" Offset="1"/>
-                                </LinearGradientBrush>
-                            </lvc:LineSeries.Fill>
-                        </lvc:LineSeries>
-                    </lvc:CartesianChart.Series>
-                
-                    <lvc:CartesianChart.AxisX>
-                        <lvc:Axis x:Name="X" 
-                                  Foreground="{StaticResource creditCardPageTextColor}" 
-                                  LabelFormatter="{Binding XFormatter}"
-                                  FontSize="15"
-                                  FontFamily="Microsoft Sans Serif">
-                            <lvc:Axis.Separator>
-                                <lvc:Separator StrokeThickness="0"/>
-                            </lvc:Axis.Separator>
-                        </lvc:Axis>
-                    </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="{Binding DaywiseSeriesValues}"
+                                                StrokeThickness="2" 
+                                                PointGeometrySize="5">
 
-                    <lvc:CartesianChart.AxisY>
-                        <lvc:Axis x:Name="Y" 
-                                  Foreground="{StaticResource creditCardPageTextColor}" 
-                                  LabelFormatter="{Binding YFormatter}"
-                                  MinValue="0"
-                                  FontSize="15"
-                                  FontFamily="Microsoft Sans Serif">
-                            <lvc:Axis.Separator>
-                                <lvc:Separator StrokeThickness="0.2" Stroke="#2c3a54"/>
-                            </lvc:Axis.Separator>
-                        </lvc:Axis>
-                    </lvc:CartesianChart.AxisY>
-                </lvc:CartesianChart>
+                                    <lvc:LineSeries.Stroke>
+                                        <LinearGradientBrush>
+                                            <GradientStop Color="{StaticResource CreditBackColor2}" Offset="0"/>
+                                            <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.5"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Stroke>
+
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.1"/>
+                                            <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="X_Monthwise" 
+                                          Foreground="{StaticResource creditCardPageTextColor}" 
+                                          LabelFormatter="{Binding XFormatterMonthwise}"
+                                          FontSize="15"
+                                          FontFamily="Microsoft Sans Serif">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="Y_Monthwise" 
+                                          Foreground="{StaticResource creditCardPageTextColor}" 
+                                          LabelFormatter="{Binding YFormatter}"
+                                          MinValue="0"
+                                          FontSize="15"
+                                          FontFamily="Microsoft Sans Serif">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="0.2" Stroke="#2c3a54"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+
+                        <lvc:CartesianChart LegendLocation="None" 
+                                            Margin="0 25 0 0" 
+                                            Zoom="{Binding ZoomingMode}"
+                                            Visibility="{Binding IsYearlyButtonChecked, Converter={StaticResource BooleanToVisibility}}">
+                            <lvc:CartesianChart.DataTooltip>
+                                <lvc:DefaultTooltip Background="#101a28"
+                                                    Foreground="#d5e2ff"/>
+                            </lvc:CartesianChart.DataTooltip>
+
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries Values="{Binding MonthwiseSeriesValues}"
+                                                StrokeThickness="2" 
+                                                PointGeometrySize="5">
+
+                                    <lvc:LineSeries.Stroke>
+                                        <LinearGradientBrush>
+                                            <GradientStop Color="{StaticResource CreditBackColor2}" Offset="0"/>
+                                            <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.5"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Stroke>
+
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.1"/>
+                                            <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis x:Name="X_Yearwise" 
+                                          Foreground="{StaticResource creditCardPageTextColor}" 
+                                          LabelFormatter="{Binding XFormatterYearwise}"
+                                          FontSize="15"
+                                          FontFamily="Microsoft Sans Serif">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="0"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="Y_Yearwise" 
+                                          Foreground="{StaticResource creditCardPageTextColor}" 
+                                          LabelFormatter="{Binding YFormatter}"
+                                          MinValue="0"
+                                          FontSize="15"
+                                          FontFamily="Microsoft Sans Serif">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator StrokeThickness="0.2" Stroke="#2c3a54"/>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
+                    </Grid>
+                </Border>
+
+
                 <TextBlock Grid.Row="1" 
                            Text="No Transactions Done"
                            Visibility="{Binding ChartIsDisplayed, Converter={StaticResource InverseBooleanToVisibility}}"

@@ -120,6 +120,36 @@ namespace JustAnotherExpenseTracker.Repositories
             return returnList;
 
         }
+        public List<KeyValuePair<int, decimal>> ReturnCardTransactionAmountsGroupByMonth(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var returnList = new List<KeyValuePair<int, decimal>>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getTransactionDetailsBetweenDatesBasedOnCardIDGroupByMonth";
+                    command.Parameters.Add("@Date1", System.Data.SqlDbType.Date).Value = date1;
+                    command.Parameters.Add("@Date2", System.Data.SqlDbType.Date).Value = date2;
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            returnList.Add(new KeyValuePair<int, decimal>(Convert.ToInt32(reader[1]), Convert.ToDecimal(reader[0])));
+                        }
+                    }
+                }
+            }
+
+            return returnList;
+
+        }
 
         public DateTime ReturnEarliestTransactionDateOnCard(Guid CardID)
         {

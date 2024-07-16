@@ -45,6 +45,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private string _statementTextToBeDisplayed;
 
         private ChartValues<DateTimePoint> _daywiseSeriesValues;
+        private ChartValues<DateTimePoint> _monthwiseSeriesValues;
 
         private ZoomingOptions _zoomingMode;
 
@@ -63,7 +64,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private int timesClickedOnZoomToggle;
 
-        public Func<double, string> XFormatter { get; set; }
+        public Func<double, string> XFormatterMonthwise { get; set; }
+        public Func<double, string> XFormatterYearwise { get; set; }
         public Func<double, string> YFormatter { get; set; }
 
 
@@ -304,6 +306,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        public ChartValues<DateTimePoint> MonthwiseSeriesValues
+        {
+            get
+            {
+                return _monthwiseSeriesValues;
+            }
+            set
+            {
+                _monthwiseSeriesValues = value;
+                OnPropertyChanged(nameof(MonthwiseSeriesValues));
+            }
+        }
+
         public List<double> DoughnutChartValues
         {
             get
@@ -420,11 +435,15 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             GoToDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGoToDetailedTransactionDataCommand);
 
+            MonthlyButtonClickedCommand = new ViewModelCommand(ExecuteMonthlyButtonClickedCommand);
+            YearlyButtonClickedCommand = new ViewModelCommand(ExecuteYearlyButtonClickedCommand);
+
             #endregion
 
             #region Formatters for the cartesian graph
 
-            XFormatter = val => new DateTime((long)val).ToString("dd MMM");
+            XFormatterMonthwise = val => new DateTime((long)val).ToString("dd MMM");
+            XFormatterYearwise = val => new DateTime((long)val).ToString("MMM");
             YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
 
             #endregion
@@ -445,10 +464,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             fillPreRequisiteDaywiseData();
 
-            if(statementDates.Count != 0)
-            {
-                generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
-            }
+            generateDataForGraphDaywise();
             
         }
 
@@ -462,6 +478,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         public ICommand ShowPreviousCardStatementCommand { get; }
         public ICommand ToggleZoomModeForGraphCommand { get; }
         public ICommand GoToDetailedTransactionDataCommand { get; }
+        public ICommand MonthlyButtonClickedCommand { get; }
+        public ICommand YearlyButtonClickedCommand { get; }
 
         private void ExecuteHideCardDetailsCommand(object obj)
         {
@@ -490,10 +508,19 @@ namespace JustAnotherExpenseTracker.ViewModels
                 IsCardPreviousButtonVisible = true;
             }
 
-
-            fillPreRequisiteDaywiseData();
-            setChartDisplayStatus();
-            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            if(IsMonthlyButtonChecked)
+            {
+                fillPreRequisiteDaywiseData();
+                setChartDisplayStatus();
+                generateDataForGraphDaywise();
+            }
+            if(IsYearlyButtonChecked)
+            {
+                fillPreRequisiteMonthwiseData();
+                setChartDisplayStatus();                
+                generateDataForGraphMonthwise();       
+            }
+            
         }
 
         private void ExecuteShowPreviousCardCommand(object obj)
@@ -513,9 +540,19 @@ namespace JustAnotherExpenseTracker.ViewModels
                 IsCardNextButtonVisible = true;
             }
 
-            fillPreRequisiteDaywiseData();
-            setChartDisplayStatus();
-            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            if(IsMonthlyButtonChecked)
+            {
+                fillPreRequisiteDaywiseData();
+                setChartDisplayStatus();
+                generateDataForGraphDaywise();                
+            }
+            if(IsYearlyButtonChecked)
+            {
+                fillPreRequisiteMonthwiseData();
+                setChartDisplayStatus();
+                generateDataForGraphMonthwise();
+            }
+            
         }
 
         private void ExecuteShowNextCardStatementCommand(object obj)
@@ -534,8 +571,17 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsPreviousStatementButtonVisible = true;
             }
-            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
-            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            if(IsMonthlyButtonChecked)
+            {
+                setStatementToBeDisplayedProperty();
+                generateDataForGraphDaywise();
+            }
+            if(IsYearlyButtonChecked)
+            {
+                setStatementToBeDisplayedProperty();
+                generateDataForGraphMonthwise();
+            }
+            
             displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
@@ -555,8 +601,16 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsNextStatementButtonVisible = true;
             }
-            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
-            generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
+            if (IsMonthlyButtonChecked)
+            {
+                setStatementToBeDisplayedProperty();
+                generateDataForGraphDaywise();
+            }
+            if (IsYearlyButtonChecked)
+            {
+                setStatementToBeDisplayedProperty();
+                generateDataForGraphMonthwise();
+            }
             displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
@@ -584,6 +638,21 @@ namespace JustAnotherExpenseTracker.ViewModels
             Navigation.NavigateTo<DetailedTransactionsViewModel>(passObj);
 
         }
+
+        private void ExecuteMonthlyButtonClickedCommand(object obj)
+        {
+            fillPreRequisiteDaywiseData();
+
+            generateDataForGraphDaywise();
+        }
+
+        private void ExecuteYearlyButtonClickedCommand(object obj)
+        {
+            fillPreRequisiteMonthwiseData();
+
+            generateDataForGraphMonthwise();
+        }
+
         #endregion
 
         //-> Functions User Defined
@@ -611,18 +680,27 @@ namespace JustAnotherExpenseTracker.ViewModels
             IsHideButtonVisible = false;
         }
 
-        private void generateDataForGraphDaywise(DateTime date1, DateTime date2, Guid id)
+        private void generateDataForGraphDaywise()
         {
+            if (statementDates.Count == 0) //Implies no transaction data at all
+            {
+                return;
+            }
+
+            DateTime date1 = statementDates[currentStatementView].Item1;
+            DateTime date2 = statementDates[currentStatementView].Item2;
+            Guid id = CreditCard.CardID;
+
             #region Cartesian Chart Values
 
             DaywiseSeriesValues = new ChartValues<DateTimePoint>();
 
-            TotalAmounntSpentOnCard = 0; // To be passed to the doughnut chart.
+            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
             var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
             amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
 
-            if(amountsByDateList.Count() == 0)// No Transaction Data
+            if(amountsByDateList.Count() == 0) // No Transaction Data for the current statement period
             {
                 ChartIsDisplayed = false;
             }
@@ -702,7 +780,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             else
             {
-                //ChartIsDisplayed = true;
+                //ChartIsDisplayed = true; //Commented out cause every time a fillPreReqisite function is called a generateDataForGraph function is also called where this property is handled.
                 NoDataDisplay = false;
             }
 
@@ -743,8 +821,126 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 IsPreviousStatementButtonVisible = true;
             }
+            else
+            {
+                IsPreviousStatementButtonVisible = false;
+            }
 
-            StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
+            setStatementToBeDisplayedProperty();
+        }
+
+        private void fillPreRequisiteMonthwiseData()
+        {
+            var earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
+            var latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
+
+            statementDates.Clear(); //Clear any data if existing
+
+            if (earliestTransactionDate == DateTime.MinValue || latestTransactionDate == DateTime.MinValue)
+            {
+                //Implies no transaction data
+                ChartIsDisplayed = false;
+                NoDataDisplay = true;
+
+                return;
+            }
+            else
+            {
+                //ChartIsDisplayed = true; //Commented out cause every time a fillPreReqisite function is called a generateDataForGraph function is also called where this property is handled.
+                NoDataDisplay = false;
+            }
+
+            //Creating the list of years to be displayed.
+            var earliestYear = earliestTransactionDate.Year;
+            var latestYear = latestTransactionDate.Year;
+
+            for (int i = earliestYear; i <= latestYear; ++i)
+            {
+                statementDates.Add(Tuple.Create(new DateTime(i, 1, 1), new DateTime(i, 12, 31)));
+            }
+
+            currentStatementView = statementDates.Count() - 1;
+            IsNextStatementButtonVisible = false;
+            if (currentStatementView > 0)
+            {
+                IsPreviousStatementButtonVisible = true;
+            }
+            else
+            {
+                IsPreviousStatementButtonVisible = false;
+            }
+
+            setStatementToBeDisplayedProperty();
+        }
+
+        private void generateDataForGraphMonthwise()
+        {
+            if(statementDates.Count() == 0) //Implies no transaction data
+            {
+                return;
+            }
+
+            DateTime date1 = statementDates[currentStatementView].Item1;
+            DateTime date2 = statementDates[currentStatementView].Item2;
+            Guid id = CreditCard.CardID;
+
+            #region For Cartesian Chart
+
+            MonthwiseSeriesValues = new ChartValues<DateTimePoint>();
+
+            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
+
+            var amountsByMonthList = new List<KeyValuePair<int, decimal>>();
+            amountsByMonthList = transactionRepository.ReturnCardTransactionAmountsGroupByMonth(date1, date2, id);
+
+            if (amountsByMonthList.Count() == 0) // No Transaction Data for the current statement period
+            {
+                ChartIsDisplayed = false;
+            }
+            else
+            {
+                ChartIsDisplayed = true;
+            }
+
+            var pos = 0;
+
+            for (int month = 1; month <= 12; ++month)
+            {
+                if (pos < amountsByMonthList.Count && month == amountsByMonthList[pos].Key)
+                {
+                    MonthwiseSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(amountsByMonthList[pos].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
+                    TotalAmounntSpentOnCard += Convert.ToDouble(amountsByMonthList[pos].Value);
+                    ++pos;
+                }
+                else
+                {
+                    MonthwiseSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), 0));
+                }
+            }
+
+            #endregion
+
+            #region PieChart Values
+
+            var amountsByCategory = new List<KeyValuePair<Guid, decimal>>();
+            amountsByCategory = transactionRepository.ReturnCardTransactionAmountsGroupByCategory(date1, date2, id);
+
+            var categoryNames = new List<string>();
+            var categoryValues = new List<double>();
+
+
+            foreach (var item in amountsByCategory)
+            {
+                var catName = categoryRepository.GetCategoryName(item.Key);
+                categoryNames.Add(catName);
+
+                categoryValues.Add(Convert.ToDouble(item.Value));
+            }
+
+            DoughnutChartValues = categoryValues;
+            DoughnutChartCategoryNames = categoryNames;
+
+            #endregion
         }
 
         private void setChartDisplayStatus()
@@ -756,6 +952,19 @@ namespace JustAnotherExpenseTracker.ViewModels
                 return;
             }
             else NoDataDisplay = false;
+        }
+
+        private void setStatementToBeDisplayedProperty()
+        {
+            if(IsMonthlyButtonChecked)
+            {
+                StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
+            }
+
+            if(IsYearlyButtonChecked)
+            {
+                StatementTextToBeDisplayed = "Year " + statementDates[currentStatementView].Item1.Year;
+            }
         }
         #endregion
     }

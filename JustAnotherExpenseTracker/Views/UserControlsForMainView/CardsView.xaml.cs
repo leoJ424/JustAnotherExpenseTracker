@@ -27,10 +27,15 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
 
         private void btnResetZoomMode_Click(object sender, RoutedEventArgs e)
         {
-            X.MinValue = double.NaN;
-            X.MaxValue = double.NaN;
-            Y.MinValue = 0;
-            Y.MaxValue = double.NaN;
+            X_Monthwise.MinValue = double.NaN;
+            X_Monthwise.MaxValue = double.NaN;
+            Y_Monthwise.MinValue = 0;
+            Y_Monthwise.MaxValue = double.NaN;
+
+            X_Yearwise.MinValue = double.NaN;
+            X_Yearwise.MaxValue = double.NaN;
+            Y_Yearwise.MinValue = 0;
+            Y_Yearwise.MaxValue = double.NaN;
         }
     }
 }
