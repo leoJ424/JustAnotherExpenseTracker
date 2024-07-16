@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Globalization;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -228,7 +229,7 @@ namespace JustAnotherExpenseTracker.Repositories
                             {
                                 CategoryName = reader[0].ToString(),
                                 RecipientName = reader[1].ToString(),
-                                Amount = Convert.ToDouble(reader[2]),
+                                Amount = Convert.ToDouble(reader[2]).ToString("C", CultureInfo.GetCultureInfo("en-us")),
                                 TransactionType = reader[3].ToString(),
                                 RewardPoints = Convert.ToDouble(reader[4]),
                                 DateOfTransaction = Convert.ToDateTime(reader[5]).ToString("dd-MMM-yy"),

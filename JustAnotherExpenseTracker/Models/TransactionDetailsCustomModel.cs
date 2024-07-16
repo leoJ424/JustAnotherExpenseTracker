@@ -10,7 +10,7 @@ namespace JustAnotherExpenseTracker.Models
     {
         public string CategoryName { get; set; }
         public string RecipientName { get; set; }
-        public double Amount { get; set; }
+        public string Amount { get; set; }
         public string TransactionType { get; set; }
         public double RewardPoints { get; set; }
         public string DateOfTransaction { get; set; }

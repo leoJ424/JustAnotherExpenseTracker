@@ -94,7 +94,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridRow}">
-                    <Border x:Name="DGR_Border" Padding="10" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="5" SnapsToDevicePixels="True">
+                    <Border x:Name="DGR_Border" Padding="10 10 0 10" Background="{TemplateBinding Background}" BorderThickness="0" CornerRadius="5" SnapsToDevicePixels="True">
                         <SelectiveScrollingGrid>
                             <SelectiveScrollingGrid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
