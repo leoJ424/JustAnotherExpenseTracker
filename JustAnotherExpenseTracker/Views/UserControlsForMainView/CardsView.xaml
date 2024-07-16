@@ -279,7 +279,7 @@
                     </lvc:CartesianChart.DataTooltip>
 
                     <lvc:CartesianChart.Series>
-                        <lvc:LineSeries Values="{Binding SeriesValues}"
+                        <lvc:LineSeries Values="{Binding DaywiseSeriesValues}"
                                         StrokeThickness="2" 
                                         PointGeometrySize="5">
                             

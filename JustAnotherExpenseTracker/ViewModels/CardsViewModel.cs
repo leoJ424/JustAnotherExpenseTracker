@@ -44,7 +44,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private string _statementTextToBeDisplayed;
 
-        private ChartValues<DateTimePoint> _seriesValues;
+        private ChartValues<DateTimePoint> _daywiseSeriesValues;
 
         private ZoomingOptions _zoomingMode;
 
@@ -57,16 +57,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
-        private DateTime firstStatementDate1; //To get transaction data;
-        private DateTime firstStatementDate2;
-
         List<Tuple<DateTime, DateTime>> statementDates;
-
-        private DateTime statementDate1;
-        private DateTime statementDate2;
-
-        private DateTime earliestTransactionDate;
-        private DateTime latestTransactionDate;
 
         private int currentStatementView;
 
@@ -300,16 +291,16 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        public ChartValues<DateTimePoint> SeriesValues
+        public ChartValues<DateTimePoint> DaywiseSeriesValues
         {
             get
             {
-                return _seriesValues;
+                return _daywiseSeriesValues;
             }
             set
             {
-                _seriesValues = value;
-                OnPropertyChanged(nameof(SeriesValues));
+                _daywiseSeriesValues = value;
+                OnPropertyChanged(nameof(DaywiseSeriesValues));
             }
         }
 
@@ -394,6 +385,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             Navigation = navService;
 
+            #region Repository Setup
+
             userRepository = new UserRepository();
             //TO BE DELETED - Implemented to just make it work without logging in each time
 
@@ -407,6 +400,35 @@ namespace JustAnotherExpenseTracker.ViewModels
 
 
             cardRepository = new CardRepository();
+            transactionRepository = new TransactionRepository();
+            categoryRepository = new CategoryRepository();
+
+            #endregion
+
+            #region Commands Setup
+
+            HideCardDetailsCommand = new ViewModelCommand(ExecuteHideCardDetailsCommand);
+            ShowCardDetailsCommand = new ViewModelCommand(ExecuteShowCardDetailsCommand);
+
+            ShowNextCardCommand = new ViewModelCommand(ExecuteShowNextCardCommand);
+            ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
+
+            ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
+            ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
+
+            ToggleZoomModeForGraphCommand = new ViewModelCommand(ExecuteToggleZoomModeForGraphCommand);
+
+            GoToDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGoToDetailedTransactionDataCommand);
+
+            #endregion
+
+            #region Formatters for the cartesian graph
+
+            XFormatter = val => new DateTime((long)val).ToString("dd MMM");
+            YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
+
+            #endregion
+
             CurrentUserAccount = new UserAccountModel();
             statementDates = new List<Tuple<DateTime, DateTime>>();
 
@@ -419,29 +441,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
 
-            HideCardDetailsCommand = new ViewModelCommand(ExecuteHideCardDetailsCommand);
-            ShowCardDetailsCommand = new ViewModelCommand(ExecuteShowCardDetailsCommand);
+            //Since, initially when the page is loaded, by default the "monthly" button is checked hence the cartesian chart must show the daywise data
 
-            ShowNextCardCommand = new ViewModelCommand(ExecuteShowNextCardCommand);
-            ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
-
-            transactionRepository = new TransactionRepository();
-            categoryRepository = new CategoryRepository();
-            fillPreRequisiteData();
+            fillPreRequisiteDaywiseData();
 
             if(statementDates.Count != 0)
             {
                 generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
             }
             
-            ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
-            ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
-            ToggleZoomModeForGraphCommand = new ViewModelCommand(ExecuteToggleZoomModeForGraphCommand);
-
-            XFormatter = val => new DateTime((long)val).ToString("dd MMM");
-            YFormatter = val => val.ToString("C", CultureInfo.GetCultureInfo("en-us"));
-
-            GoToDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGoToDetailedTransactionDataCommand);
         }
 
         //-> Commands
@@ -482,16 +490,9 @@ namespace JustAnotherExpenseTracker.ViewModels
                 IsCardPreviousButtonVisible = true;
             }
 
-            statementDates.Clear();
 
-            fillPreRequisiteData();
-            if (statementDates.Count == 0)
-            {
-                NoDataDisplay = true;
-                ChartIsDisplayed = false;
-                return;
-            }
-            else NoDataDisplay = false;
+            fillPreRequisiteDaywiseData();
+            setChartDisplayStatus();
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
         }
 
@@ -512,16 +513,8 @@ namespace JustAnotherExpenseTracker.ViewModels
                 IsCardNextButtonVisible = true;
             }
 
-            statementDates.Clear();
-
-            fillPreRequisiteData();
-            if (statementDates.Count == 0)
-            {
-                NoDataDisplay = true;
-                ChartIsDisplayed = false;
-                return;
-            }
-            else NoDataDisplay = false;
+            fillPreRequisiteDaywiseData();
+            setChartDisplayStatus();
             generateDataForGraphDaywise(statementDates[currentStatementView].Item1, statementDates[currentStatementView].Item2, CreditCard.CardID);
         }
 
@@ -622,7 +615,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             #region Cartesian Chart Values
 
-            SeriesValues = new ChartValues<DateTimePoint>();
+            DaywiseSeriesValues = new ChartValues<DateTimePoint>();
 
             TotalAmounntSpentOnCard = 0; // To be passed to the doughnut chart.
 
@@ -644,13 +637,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 if (pos < amountsByDateList.Count && day == amountsByDateList[pos].Key)
                 {
-                    SeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(amountsByDateList[pos].Value)));
+                    DaywiseSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(amountsByDateList[pos].Value)));
                     TotalAmounntSpentOnCard += Convert.ToDouble(amountsByDateList[pos].Value);
                     ++pos;
                 }
                 else
                 {
-                    SeriesValues.Add(new DateTimePoint(day, 0));
+                    DaywiseSeriesValues.Add(new DateTimePoint(day, 0));
                 }
             }
 
@@ -679,17 +672,29 @@ namespace JustAnotherExpenseTracker.ViewModels
             #endregion
         }
 
-        private void fillPreRequisiteData()
+        /// <summary>
+        /// The function generates first generates a list of statement dates based on the the card's :- statement generation date, earliest and latest transaction dates.
+        /// It then sets the required properties to show the latest statement available. 
+        /// </summary>
+        private void fillPreRequisiteDaywiseData()
         {
-            //Billing Cycle is taken as 30 days
-            var statementDay = CreditCard.StatementGenDate;
+            //Note : Billing Cycle is taken as 30 days. Can make it a custom thing in future versions. Maybe, maybe not. IDK.
 
-            earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
-            latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
+            DateTime statementDate1;
+            DateTime statementDate2;
+
+            DateTime firstStatementDate1;
+            DateTime firstStatementDate2;
+
+            var statementDay = CreditCard.StatementGenDate;
+            statementDates.Clear();
+
+            var earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
+            var latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
 
             if(earliestTransactionDate == DateTime.MinValue || latestTransactionDate == DateTime.MinValue)
             {
-                //Implies no transaction data
+                //Implies no transaction data so charts have nothing to show
                 ChartIsDisplayed = false;
                 NoDataDisplay = true;
 
@@ -701,6 +706,12 @@ namespace JustAnotherExpenseTracker.ViewModels
                 NoDataDisplay = false;
             }
 
+            // If the "day" in the earliest transaction date is before the statement generation day of the card
+            // then the very first statement's end date is going to be a day prior to the statement generation day and
+            // the start date is going to be 30 days prior to the end date.
+            // If that is not the case the first statement is going to start on the statement generation day on the month of when the earliest transaction took place
+            // and end 30 dyas later.
+
             if(earliestTransactionDate.Day < statementDay)
             {
                 firstStatementDate2 = new DateTime(earliestTransactionDate.Year, earliestTransactionDate.Month, statementDay).AddDays(-1);
@@ -711,7 +722,8 @@ namespace JustAnotherExpenseTracker.ViewModels
                 firstStatementDate1 = new DateTime(earliestTransactionDate.Year, earliestTransactionDate.Month, statementDay);
                 firstStatementDate2 = firstStatementDate1.AddDays(30);
             }
-            statementDates = new List<Tuple<DateTime, DateTime>>();
+
+            
 
             statementDates.Add(Tuple.Create(firstStatementDate1, firstStatementDate2));
             statementDate1 = firstStatementDate1;
@@ -723,6 +735,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
                 statementDates.Add(Tuple.Create(statementDate1,statementDate2));
             }
+
+            //Showing the latest statement initially
             currentStatementView = statementDates.Count() - 1;
             IsNextStatementButtonVisible = false;
             if(currentStatementView > 0)
@@ -731,9 +745,18 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
 
             StatementTextToBeDisplayed = statementDates[currentStatementView].Item1.ToString("dd-MMM") + " To " + statementDates[currentStatementView].Item2.ToString("dd-MMM") + " " + statementDates[currentStatementView].Item2.ToString("yyyy");
-
         }
 
+        private void setChartDisplayStatus()
+        {
+            if (statementDates.Count == 0)
+            {
+                NoDataDisplay = true;
+                ChartIsDisplayed = false;
+                return;
+            }
+            else NoDataDisplay = false;
+        }
         #endregion
     }
 }
