@@ -320,7 +320,34 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Recipient" IsReadOnly="True" Width="*" Binding="{Binding RecipientName}"/>
-                <DataGridTextColumn Header="Amount" IsReadOnly="True" Width="*" Binding="{Binding Amount}"/>
+
+                <DataGridTemplateColumn Header="Amount" 
+                                        IsReadOnly="True"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Amount}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{StaticResource creditCardPageTextColor}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TransactionType}" Value="Debit">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding TransactionType}" Value="Credit">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Header="Date" IsReadOnly="True" Width="*" Binding="{Binding DateOfTransaction}"/>
                 <DataGridTextColumn Header="Reward Points" IsReadOnly="True" Width="*" Binding="{Binding RewardPoints}"/>
 
@@ -336,6 +363,7 @@
                     </DataGridTemplateColumn.CellTemplate>
 
                 </DataGridTemplateColumn>-->
+
 
             </DataGrid.Columns>
         </DataGrid>
