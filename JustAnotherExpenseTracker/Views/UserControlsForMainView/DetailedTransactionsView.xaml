@@ -282,7 +282,7 @@
         <Border Grid.Row="2"
                 BorderBrush="{StaticResource dataGridBorderBrush}"
                 BorderThickness="2"
-                CornerRadius="25">
+                CornerRadius="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -338,7 +338,7 @@
                 </Border>
                 
                 <!--Content-->
-                <ScrollViewer Grid.Row="2"
+                <ScrollViewer Grid.Row="1"
                               VerticalScrollBarVisibility="Auto">
                     <ScrollViewer.Content>
                         <ItemsControl x:Name="itemsControl" ItemsSource="{Binding DetailsOfTransactions}">
@@ -352,10 +352,6 @@
                 </ScrollViewer>
             </Grid>
         </Border>
-
-
-        
-                
 
         <TextBlock Grid.Row="2" 
                    Text="No Data Available"

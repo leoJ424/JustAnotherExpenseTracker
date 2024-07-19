@@ -87,6 +87,7 @@
     
 
     <SolidColorBrush x:Key="solidBlackColor" Color="#030304"/>
+    <SolidColorBrush x:Key="navBackColorBrush" Color="#111111"/>
 
     <SolidColorBrush x:Key="creditCardPageTextColor" Color="#FFFFFF"/>
 
