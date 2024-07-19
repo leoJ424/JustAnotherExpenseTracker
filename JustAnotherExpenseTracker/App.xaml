@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="/Styles/GeneralStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/CalendarStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/ListBoxStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/ScrollBarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
