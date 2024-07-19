@@ -13,7 +13,6 @@
                 <ResourceDictionary Source="/Styles/CreditCardStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/GeneralStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/CalendarStyles.xaml"/>
-                <ResourceDictionary Source="/Styles/DataGridStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/ListBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 

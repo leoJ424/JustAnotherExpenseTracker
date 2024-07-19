@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace JustAnotherExpenseTracker.ViewModels
 {
@@ -28,7 +29,6 @@ namespace JustAnotherExpenseTracker.ViewModels
         private List<Guid> _cards;
         private bool _noDataDisplay = false;
 
-
         public DetailedTransactionsViewModel(INavigationService navService)
         {
             Navigation = navService;
@@ -45,8 +45,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             CardName = cardRepository.ReturnCardName(CurrentCard);
 
-            DataForDataGrid = new ObservableCollection<TransactionDetailsCustomModel>();
             CardNamesForComboBox = new ObservableCollection<string>();
+            DetailsOfTransactions = new ObservableCollection<TransactionDetailRowViewModel>();
 
             GetDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGetDetailedTransactionDataCommand);
 
@@ -175,8 +175,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         #endregion
 
         #region Custom Properties
-        public ObservableCollection<TransactionDetailsCustomModel> DataForDataGrid { get; set; }
         public ObservableCollection<string> CardNamesForComboBox { get; set; }
+        public ObservableCollection<TransactionDetailRowViewModel> DetailsOfTransactions { get; set; }
 
         #endregion
 
@@ -185,14 +185,24 @@ namespace JustAnotherExpenseTracker.ViewModels
         #endregion
         private void ExecuteGetDetailedTransactionDataCommand(object obj)
         {
-            DataForDataGrid.Clear();
+            DetailsOfTransactions.Clear();
             var dataFromDB = transactionRepository.ReturnTransactionDetailsForView(StartDate, EndDate, CurrentCard);
             foreach (var row in dataFromDB)
             {
-                DataForDataGrid.Add(row);
+                //For the usercontrol
+                DetailsOfTransactions.Add(new TransactionDetailRowViewModel
+                {
+                    CategoryName = row.CategoryName,
+                    RecipientName = row.RecipientName,
+                    Amount = row.Amount,
+                    TransactionType = row.TransactionType,
+                    RewardPoints = row.RewardPoints,
+                    DateOfTransaction = row.DateOfTransaction,
+                    GeneralComments = row.GeneralComments,
+                });
             }
 
-            if(DataForDataGrid.Count == 0) // No Transaction Data
+            if(DetailsOfTransactions.Count == 0) // No Transaction Data
             {
                 NoDataDisplay = true;
             }

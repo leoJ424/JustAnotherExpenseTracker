@@ -154,7 +154,7 @@
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="10 0 0 0"/>
-                        
+
                         <Button x:Name="btnOpenStartCalendar"
                                 Grid.Column="2"
                                 Height="30"
@@ -279,94 +279,83 @@
             </StackPanel>
         </Grid>
 
+        <Border Grid.Row="2"
+                BorderBrush="{StaticResource dataGridBorderBrush}"
+                BorderThickness="2"
+                CornerRadius="25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <!--Headers-->
 
-        <DataGrid x:Name="transactionDataGrid" 
-                  Grid.Row="2"
-                  Style="{DynamicResource DataGridStyle1}" 
-                  CellStyle="{DynamicResource DataGridCellStyle1}" 
-                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                  RowStyle="{DynamicResource DataGridRowStyle1}"
-                  ItemsSource="{Binding DataForDataGrid}"
-                  Visibility="{Binding NoDataDisplay, Converter={StaticResource inverseBoolToVis}}">
-            <DataGrid.Columns>
+                <Border Grid.Row="0"
+                        Padding="15 10 0 5"
+                        BorderBrush="{StaticResource dataGridBorderBrush}"
+                        BorderThickness="0 0 0 2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.6*"/>
+                        </Grid.ColumnDefinitions>
 
-                <DataGridCheckBoxColumn CanUserResize="False" Width="auto" ElementStyle="{DynamicResource CheckBoxStyle1}">
-                    <DataGridCheckBoxColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <CheckBox Style="{StaticResource CheckBoxStyle1}"/>
-                        </DataTemplate>
-                    </DataGridCheckBoxColumn.HeaderTemplate>
-                </DataGridCheckBoxColumn>
+                        <CheckBox Grid.Column="0" 
+                                  Style="{StaticResource CheckBoxStyle1}"/>
 
-                <DataGridTemplateColumn Header="Category" 
-                                        IsReadOnly="True"
-                                        Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                        <TextBlock Grid.Column="1"
+                                   Text="Category"
+                                   Style="{StaticResource transactionDetailsRowStyle}"
+                                   Margin="20 0 0 0"/>
 
-                                <fa:IconImage Width="15" Height="15" Style="{StaticResource categoryIconStyle}" Foreground="White"/>
+                        <TextBlock Grid.Column="2"
+                                   Text="Recipient"
+                                   Style="{StaticResource transactionDetailsRowStyle}"/>
 
+                        <TextBlock Grid.Column="3"
+                                   Text="Amount Spent"
+                                   Style="{StaticResource transactionDetailsRowStyle}"/>
 
-                                <TextBlock Text="{Binding CategoryName}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"
-                                           Foreground="White"
-                                           Margin="10 0 0 0"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
+                        <TextBlock Grid.Column="4"
+                                   Text="Transaction Date"
+                                   Style="{StaticResource transactionDetailsRowStyle}"/>
 
-                </DataGridTemplateColumn>
+                        <TextBlock Grid.Column="5"
+                                   Text="Reward Points"
+                                   Style="{StaticResource transactionDetailsRowStyle}"/>
 
-                <DataGridTextColumn Header="Recipient" IsReadOnly="True" Width="*" Binding="{Binding RecipientName}"/>
+                        <TextBlock Grid.Column="6"
+                                   Text="More Info"
+                                   Style="{StaticResource transactionDetailsRowStyle}"/>
 
-                <DataGridTemplateColumn Header="Amount" 
-                                        IsReadOnly="True"
-                                        Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Amount}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource creditCardPageTextColor}"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding TransactionType}" Value="Debit">
-                                                <Setter Property="Foreground" Value="Red"/>
-                                            </DataTrigger>
-
-                                            <DataTrigger Binding="{Binding TransactionType}" Value="Credit">
-                                                <Setter Property="Foreground" Value="Green"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                </DataGridTemplateColumn>
-
-                <DataGridTextColumn Header="Date" IsReadOnly="True" Width="*" Binding="{Binding DateOfTransaction}"/>
-                <DataGridTextColumn Header="Reward Points" IsReadOnly="True" Width="*" Binding="{Binding RewardPoints}"/>
-
-                <!--<DataGridTemplateColumn Header="" 
-                                        IsReadOnly="True"
-                                        Width="0.5*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button></Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-
-                </DataGridTemplateColumn>-->
+                    </Grid>
+                </Border>
+                
+                <!--Content-->
+                <ScrollViewer Grid.Row="2"
+                              VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Content>
+                        <ItemsControl x:Name="itemsControl" ItemsSource="{Binding DetailsOfTransactions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <userControls:TransactionDetailRow DataContext="{Binding}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer.Content>
+                </ScrollViewer>
+            </Grid>
+        </Border>
 
 
-            </DataGrid.Columns>
-        </DataGrid>
+        
+                
 
         <TextBlock Grid.Row="2" 
                    Text="No Data Available"
