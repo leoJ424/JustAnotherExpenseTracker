@@ -44,7 +44,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private string _statementTextToBeDisplayed;
 
-        private ChartValues<DateTimePoint> _daywiseSeriesValues;
+        private ChartValues<DateTimePoint> _daywiseDebitSeriesValues;
+        private ChartValues<DateTimePoint> _daywiseCreditSeriesValues;
         private ChartValues<DateTimePoint> _monthwiseSeriesValues;
 
         private ZoomingOptions _zoomingMode;
@@ -55,6 +56,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private bool _chartIsDisplayed = true; //By Default true...if no data then it will be set to false
         private bool _noDataDisplay = false; // Basically the negation of _chartIsDisplayed
+        private bool _viewCreditLineSeries = false;
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
@@ -293,16 +295,29 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        public ChartValues<DateTimePoint> DaywiseSeriesValues
+        public ChartValues<DateTimePoint> DaywiseDebitSeriesValues
         {
             get
             {
-                return _daywiseSeriesValues;
+                return _daywiseDebitSeriesValues;
             }
             set
             {
-                _daywiseSeriesValues = value;
-                OnPropertyChanged(nameof(DaywiseSeriesValues));
+                _daywiseDebitSeriesValues = value;
+                OnPropertyChanged(nameof(DaywiseDebitSeriesValues));
+            }
+        }
+
+        public ChartValues<DateTimePoint> DaywiseCreditSeriesValues
+        {
+            get
+            {
+                return _daywiseCreditSeriesValues;
+            }
+            set
+            {
+                _daywiseCreditSeriesValues = value;
+                OnPropertyChanged(nameof(DaywiseCreditSeriesValues));
             }
         }
 
@@ -391,6 +406,19 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 _noDataDisplay = value;
                 OnPropertyChanged(nameof(NoDataDisplay));
+            }
+        }
+
+        public bool ViewCreditLineSeries 
+        {
+            get
+            {
+                return _viewCreditLineSeries;
+            }
+            set
+            {
+                _viewCreditLineSeries = value;
+                OnPropertyChanged(nameof(ViewCreditLineSeries));
             }
         }
 
@@ -693,14 +721,18 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             #region Cartesian Chart Values
 
-            DaywiseSeriesValues = new ChartValues<DateTimePoint>();
+            DaywiseDebitSeriesValues = new ChartValues<DateTimePoint>();
+            DaywiseCreditSeriesValues = new ChartValues<DateTimePoint>();
 
             TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
-            var amountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
-            amountsByDateList = transactionRepository.ReturnCardTransactionAmountsGroupByDate(date1, date2, id);
+            var debitAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
+            var creditAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
 
-            if(amountsByDateList.Count() == 0) // No Transaction Data for the current statement period
+            debitAmountsByDateList = transactionRepository.ReturnCardDebitTransactionAmountsGroupByDate(date1, date2, id);
+            creditAmountsByDateList = transactionRepository.ReturnCardCreditTransactionAmountsGroupByDate(date1, date2, id);
+
+            if(debitAmountsByDateList.Count() == 0 && creditAmountsByDateList.Count() == 0) // No Transaction Data for the current statement period
             {
                 ChartIsDisplayed = false;
             }
@@ -709,19 +741,40 @@ namespace JustAnotherExpenseTracker.ViewModels
                 ChartIsDisplayed = true;
             }
 
-            var pos = 0;
+            if(creditAmountsByDateList.Count() != 0)
+            {
+                ViewCreditLineSeries = true;
+            }
+            else
+            { 
+                ViewCreditLineSeries = false;
+            }
+
+            var posDebit = 0;
+            var posCredit = 0;
 
             for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
             {
-                if (pos < amountsByDateList.Count && day == amountsByDateList[pos].Key)
+                if (posDebit < debitAmountsByDateList.Count && day == debitAmountsByDateList[posDebit].Key)
                 {
-                    DaywiseSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(amountsByDateList[pos].Value)));
-                    TotalAmounntSpentOnCard += Convert.ToDouble(amountsByDateList[pos].Value);
-                    ++pos;
+                    DaywiseDebitSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(debitAmountsByDateList[posDebit].Value)));
+                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByDateList[posDebit].Value);
+                    ++posDebit;
                 }
                 else
                 {
-                    DaywiseSeriesValues.Add(new DateTimePoint(day, 0));
+                    DaywiseDebitSeriesValues.Add(new DateTimePoint(day, 0));
+                }
+
+                if (posCredit < creditAmountsByDateList.Count && day == creditAmountsByDateList[posCredit].Key)
+                {
+                    DaywiseCreditSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(creditAmountsByDateList[posCredit].Value)));
+                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByDateList[posCredit].Value);
+                    ++posCredit;
+                }
+                else
+                {
+                    DaywiseCreditSeriesValues.Add(new DateTimePoint(day, 0));
                 }
             }
 

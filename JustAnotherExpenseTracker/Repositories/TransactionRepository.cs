@@ -90,7 +90,7 @@ namespace JustAnotherExpenseTracker.Repositories
             return transactionIds;
         }
 
-        public List<KeyValuePair<DateTime, decimal>> ReturnCardTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId)
+        public List<KeyValuePair<DateTime, decimal>> ReturnCardDebitTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId)
         {
             var returnList = new List<KeyValuePair<DateTime, decimal>>();
 
@@ -102,7 +102,7 @@ namespace JustAnotherExpenseTracker.Repositories
                     command.Connection = connection;
                     command.CommandType = CommandType.StoredProcedure;
 
-                    command.CommandText = "sp_getTransactionDetailsBetweenDatesBasedOnCardIDGroupByDate";
+                    command.CommandText = "sp_getDebitTransactionDetailsBetweenDatesBasedOnCardIDGroupByDate";
                     command.Parameters.Add("@Date1", System.Data.SqlDbType.Date).Value = date1;
                     command.Parameters.Add("@Date2", System.Data.SqlDbType.Date).Value = date2;
                     command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardId;
@@ -120,6 +120,38 @@ namespace JustAnotherExpenseTracker.Repositories
             return returnList;
 
         }
+
+        public List<KeyValuePair<DateTime, decimal>> ReturnCardCreditTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var returnList = new List<KeyValuePair<DateTime, decimal>>();
+
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                using (var command = new SqlCommand())
+                {
+                    command.Connection = connection;
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "sp_getCreditTransactionDetailsBetweenDatesBasedOnCardIDGroupByDate";
+                    command.Parameters.Add("@Date1", System.Data.SqlDbType.Date).Value = date1;
+                    command.Parameters.Add("@Date2", System.Data.SqlDbType.Date).Value = date2;
+                    command.Parameters.Add("@CardID", System.Data.SqlDbType.UniqueIdentifier).Value = CardId;
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            returnList.Add(new KeyValuePair<DateTime, decimal>(Convert.ToDateTime(reader[1]), Convert.ToDecimal(reader[0])));
+                        }
+                    }
+                }
+            }
+
+            return returnList;
+
+        }
+
         public List<KeyValuePair<int, decimal>> ReturnCardTransactionAmountsGroupByMonth(DateTime date1, DateTime date2, Guid CardId)
         {
             var returnList = new List<KeyValuePair<int, decimal>>();

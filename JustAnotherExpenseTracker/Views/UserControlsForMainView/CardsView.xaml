@@ -300,7 +300,7 @@
                             </lvc:CartesianChart.DataTooltip>
 
                             <lvc:CartesianChart.Series>
-                                <lvc:LineSeries Values="{Binding DaywiseSeriesValues}"
+                                <lvc:LineSeries Values="{Binding DaywiseDebitSeriesValues}"
                                                 StrokeThickness="2" 
                                                 PointGeometrySize="5">
 
@@ -312,8 +312,29 @@
                                     </lvc:LineSeries.Stroke>
 
                                     <lvc:LineSeries.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.5">
                                             <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.1"/>
+                                            <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
+                                            <GradientStop Color="Transparent" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Fill>
+                                </lvc:LineSeries>
+
+                                <lvc:LineSeries Values="{Binding DaywiseCreditSeriesValues}"
+                                                StrokeThickness="2" 
+                                                PointGeometrySize="5"
+                                                Visibility="{Binding ViewCreditLineSeries, Converter={StaticResource BooleanToVisibility}}">
+
+                                    <lvc:LineSeries.Stroke>
+                                        <LinearGradientBrush>
+                                            <GradientStop Color="{StaticResource CreditBackColor4}" Offset="0"/>
+                                            <GradientStop Color="{StaticResource CreditBackColor3}" Offset="0.5"/>
+                                        </LinearGradientBrush>
+                                    </lvc:LineSeries.Stroke>
+
+                                    <lvc:LineSeries.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.5">
+                                            <GradientStop Color="{StaticResource CreditBackColor3}" Offset="0.1"/>
                                             <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
                                             <GradientStop Color="Transparent" Offset="1"/>
                                         </LinearGradientBrush>
@@ -369,7 +390,7 @@
                                     </lvc:LineSeries.Stroke>
 
                                     <lvc:LineSeries.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.5">
                                             <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0.1"/>
                                             <GradientStop Color="{StaticResource navBackColor}" Offset="1"/>
                                             <GradientStop Color="Transparent" Offset="1"/>
