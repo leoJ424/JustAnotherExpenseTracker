@@ -702,6 +702,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             fillPreRequisiteDaywiseData();
 
             generateDataForGraphDaywise();
+
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         private void ExecuteYearlyButtonClickedCommand(object obj)
@@ -709,6 +711,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             fillPreRequisiteMonthwiseData();
 
             generateDataForGraphMonthwise();
+
+            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         #endregion
