@@ -13,7 +13,8 @@ namespace JustAnotherExpenseTracker.Models
         TransactionDetailsModel ReturnTransactionDetais(Guid TransactionId);
         List<KeyValuePair<DateTime, decimal>> ReturnCardDebitTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId);
         List<KeyValuePair<DateTime, decimal>> ReturnCardCreditTransactionAmountsGroupByDate(DateTime date1, DateTime date2, Guid CardId);
-        List<KeyValuePair<int, decimal>> ReturnCardTransactionAmountsGroupByMonth(DateTime date1, DateTime date2, Guid CardId);
+        List<KeyValuePair<int, decimal>> ReturnCardDebitTransactionAmountsGroupByMonth(DateTime date1, DateTime date2, Guid CardId);
+        List<KeyValuePair<int, decimal>> ReturnCardCreditTransactionAmountsGroupByMonth(DateTime date1, DateTime date2, Guid CardId);
         DateTime ReturnEarliestTransactionDateOnCard(Guid CardID);
         DateTime ReturnLatestTransactionDateOnCard(Guid CardID);
 

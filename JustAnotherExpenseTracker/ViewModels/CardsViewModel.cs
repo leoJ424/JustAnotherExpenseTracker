@@ -46,7 +46,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private ChartValues<DateTimePoint> _daywiseDebitSeriesValues;
         private ChartValues<DateTimePoint> _daywiseCreditSeriesValues;
-        private ChartValues<DateTimePoint> _monthwiseSeriesValues;
+        private ChartValues<DateTimePoint> _monthwiseDebitSeriesValues;
+        private ChartValues<DateTimePoint> _monthwiseCreditSeriesValues;
 
         private ZoomingOptions _zoomingMode;
 
@@ -57,6 +58,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         private bool _chartIsDisplayed = true; //By Default true...if no data then it will be set to false
         private bool _noDataDisplay = false; // Basically the negation of _chartIsDisplayed
         private bool _viewCreditLineSeries = false;
+        private bool _viewCreditMonthylyLineSeries = false;
 
         private int currentCardBeingViewed = 0; // by default user views his/her first card itself
 
@@ -321,16 +323,29 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        public ChartValues<DateTimePoint> MonthwiseSeriesValues
+        public ChartValues<DateTimePoint> MonthwiseDebitSeriesValues
         {
             get
             {
-                return _monthwiseSeriesValues;
+                return _monthwiseDebitSeriesValues;
             }
             set
             {
-                _monthwiseSeriesValues = value;
-                OnPropertyChanged(nameof(MonthwiseSeriesValues));
+                _monthwiseDebitSeriesValues = value;
+                OnPropertyChanged(nameof(MonthwiseDebitSeriesValues));
+            }
+        }
+
+        public ChartValues<DateTimePoint> MonthwiseCreditSeriesValues
+        {
+            get
+            {
+                return _monthwiseCreditSeriesValues;
+            }
+            set
+            {
+                _monthwiseCreditSeriesValues = value;
+                OnPropertyChanged(nameof(MonthwiseCreditSeriesValues));
             }
         }
 
@@ -421,6 +436,21 @@ namespace JustAnotherExpenseTracker.ViewModels
                 OnPropertyChanged(nameof(ViewCreditLineSeries));
             }
         }
+
+        public bool ViewCreditMonthlyLineSeries
+        {
+            get
+            {
+                return _viewCreditMonthylyLineSeries;
+            }
+            set
+            {
+                _viewCreditMonthylyLineSeries = value;
+                OnPropertyChanged(nameof(ViewCreditMonthlyLineSeries));
+            }
+        }
+
+
 
         #endregion
 
@@ -939,14 +969,18 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             #region For Cartesian Chart
 
-            MonthwiseSeriesValues = new ChartValues<DateTimePoint>();
+            MonthwiseDebitSeriesValues = new ChartValues<DateTimePoint>();
+            MonthwiseCreditSeriesValues = new ChartValues<DateTimePoint>();
 
             TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
-            var amountsByMonthList = new List<KeyValuePair<int, decimal>>();
-            amountsByMonthList = transactionRepository.ReturnCardTransactionAmountsGroupByMonth(date1, date2, id);
+            var debitAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
+            var creditAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
 
-            if (amountsByMonthList.Count() == 0) // No Transaction Data for the current statement period
+            debitAmountsByMonthList = transactionRepository.ReturnCardDebitTransactionAmountsGroupByMonth(date1, date2, id);
+            creditAmountsByMonthList = transactionRepository.ReturnCardCreditTransactionAmountsGroupByMonth(date1, date2, id);
+
+            if (debitAmountsByMonthList.Count() == 0 && creditAmountsByMonthList.Count() == 0) // No Transaction Data for the current statement period
             {
                 ChartIsDisplayed = false;
             }
@@ -955,19 +989,40 @@ namespace JustAnotherExpenseTracker.ViewModels
                 ChartIsDisplayed = true;
             }
 
-            var pos = 0;
+            if(creditAmountsByMonthList.Count() != 0)
+            {
+                ViewCreditMonthlyLineSeries = true;
+            }
+            else
+            {
+                ViewCreditMonthlyLineSeries = false;
+            }
+
+            var posDebit = 0;
+            var posCredit = 0;
 
             for (int month = 1; month <= 12; ++month)
             {
-                if (pos < amountsByMonthList.Count && month == amountsByMonthList[pos].Key)
+                if (posDebit < debitAmountsByMonthList.Count && month == debitAmountsByMonthList[posDebit].Key)
                 {
-                    MonthwiseSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(amountsByMonthList[pos].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
-                    TotalAmounntSpentOnCard += Convert.ToDouble(amountsByMonthList[pos].Value);
-                    ++pos;
+                    MonthwiseDebitSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(debitAmountsByMonthList[posDebit].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
+                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByMonthList[posDebit].Value);
+                    ++posDebit;
                 }
                 else
                 {
-                    MonthwiseSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), 0));
+                    MonthwiseDebitSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), 0));
+                }
+
+                if (posCredit < creditAmountsByMonthList.Count && month == creditAmountsByMonthList[posCredit].Key)
+                {
+                    MonthwiseCreditSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(creditAmountsByMonthList[posCredit].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
+                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByMonthList[posCredit].Value);
+                    ++posCredit;
+                }
+                else
+                {
+                    MonthwiseCreditSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), 0));
                 }
             }
 
