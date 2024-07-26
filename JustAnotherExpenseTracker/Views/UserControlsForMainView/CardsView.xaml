@@ -133,7 +133,8 @@
                         Style="{StaticResource creditCardButton}"
                         Tag="{StaticResource color12}"
                         Command="{Binding GoToDetailedTransactionDataCommand}"
-                        Margin="0 10 10 0">
+                        Margin="0 10 10 0"
+                        Visibility="{Binding NoDataDisplay, Converter={StaticResource InverseBooleanToVisibility}}">
                         <fa:IconImage Icon="CircleInfo" Style="{StaticResource creditCardButtonIcon}"/>
                 </Button>
 
