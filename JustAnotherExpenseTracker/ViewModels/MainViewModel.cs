@@ -126,6 +126,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             ShowCardsViewCommand = new ViewModelCommand(ExecuteShowCardsViewCommand);
             ShowStocksViewCommand = new ViewModelCommand(ExecuteShowStocksViewCommand);
             ShowBanksViewCommand = new ViewModelCommand(ExecuteShowBanksViewCommand);
+            ShowDashboardViewCommand = new ViewModelCommand(ExecuteShowDashboardViewCommand);
         }
 
         private void ExecuteShowCardsViewCommand(object obj)
@@ -162,9 +163,18 @@ namespace JustAnotherExpenseTracker.ViewModels
             CaptionColor = (SolidColorBrush)obj;
         }
 
+        private void ExecuteShowDashboardViewCommand(object obj)
+        {
+            Navigation.NavigateTo<DashboardViewModel>();
+            Caption = "Dashboard";
+            Icon = IconChar.Home;
+            CaptionColor = (SolidColorBrush)obj;
+        }
+
         //-> Commands
         public ICommand ShowCardsViewCommand { get; }
         public ICommand ShowStocksViewCommand { get; }
         public ICommand ShowBanksViewCommand { get; }
+        public ICommand ShowDashboardViewCommand { get; }
     }
 }

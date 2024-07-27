@@ -37,6 +37,10 @@
                 <userControlsMainViews:BanksView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
+                <userControlsMainViews:DashboardView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

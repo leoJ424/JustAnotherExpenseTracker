@@ -65,7 +65,9 @@
                     
                     <!--Menu Buttons-->
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color13}">
+                                 Tag="{StaticResource color13}"
+                                 Command="{Binding ShowDashboardViewCommand}"
+                                 CommandParameter="{StaticResource color13}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"

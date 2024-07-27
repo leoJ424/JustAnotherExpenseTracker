@@ -29,6 +29,7 @@ namespace JustAnotherExpenseTracker
             services.AddTransient<DetailedTransactionsViewModel>();
             services.AddTransient<StocksViewModel>();
             services.AddTransient<BanksViewModel>();
+            services.AddTransient<DashboardViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
 
