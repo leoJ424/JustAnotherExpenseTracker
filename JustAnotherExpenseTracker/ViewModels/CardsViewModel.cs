@@ -44,6 +44,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private string _statementTextToBeDisplayed;
 
+        private string _cardNetworkImagePath;
+
         private ChartValues<DateTimePoint> _daywiseDebitSeriesValues;
         private ChartValues<DateTimePoint> _daywiseCreditSeriesValues;
         private ChartValues<DateTimePoint> _monthwiseDebitSeriesValues;
@@ -450,7 +452,18 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-
+        public string CardNetworkImagePath
+        {
+            get
+            {
+                return _cardNetworkImagePath;
+            }
+            set
+            {
+                _cardNetworkImagePath = value;
+                OnPropertyChanged(nameof(CardNetworkImagePath));
+            }
+        }
 
         #endregion
 
@@ -528,8 +541,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         //-> Commands
         #region Commands
-        public ICommand HideCardDetailsCommand { get; }
-        public ICommand ShowCardDetailsCommand { get; }
+        public ICommand HideCardDetailsCommand { get; set; }
+        public ICommand ShowCardDetailsCommand { get; set; }
         public ICommand ShowNextCardCommand { get; }
         public ICommand ShowPreviousCardCommand { get; }
         public ICommand ShowNextCardStatementCommand { get; }
@@ -726,6 +739,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             CardName = CreditCard.CardName;
             CardDisplayAmount = "$" + (CreditCard.CreditLimit - TotalAmounntSpentOnCard).ToString();
             CardDisplayText = "Available Balance";
+            setCardNetworkImage(CreditCard.Network);
 
             IsShowButtonVisible = false;
             IsHideButtonVisible = true;
@@ -737,9 +751,34 @@ namespace JustAnotherExpenseTracker.ViewModels
             CardName = CreditCard.CardName;
             CardDisplayAmount = "$" + CreditCard.CreditLimit.ToString();
             CardDisplayText = "Credit Limit";
+            setCardNetworkImage(CreditCard.Network);
 
             IsShowButtonVisible = true;
             IsHideButtonVisible = false;
+        }
+
+        private void setCardNetworkImage(string network)
+        {
+            if(network == "VISA")
+            {
+                CardNetworkImagePath = "/Images/visa_icon.png";
+            }
+            else if(network == "MasterCard")
+            {
+                CardNetworkImagePath = "/Images/mastercard_icon.png";
+            }
+            else if(network == "American Express")
+            {
+                CardNetworkImagePath = "/Images/amex_icon.png";
+            }
+            else if (network == "Discover")
+            {
+                CardNetworkImagePath = "/Images/discover_icon.png";
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private void generateDataForGraphDaywise()

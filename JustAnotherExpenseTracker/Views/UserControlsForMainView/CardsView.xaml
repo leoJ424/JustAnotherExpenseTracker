@@ -80,31 +80,11 @@
                                      cardholderName="{Binding DataContext.CreditCard.CardholderName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      expDate="{Binding DataContext.CreditCard.ExpDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
                                      cvc="{Binding DataContext.CreditCard.Cvc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"                                
-                                     networkImage="/Images/visa_icon.png"/>
-
-            <Button x:Name="btnViewDetails"
-                    Height="30"
-                    Width="20"
-                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                    Margin="0 15 20 0"
-                    Style="{StaticResource creditCardButton}"
-                    Tag="{StaticResource color11}"
-                    Visibility="{Binding IsShowButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                    Command="{Binding ShowCardDetailsCommand}">
-                <fa:IconImage Icon="Eye" Style="{StaticResource creditCardButtonIcon}"/>
-            </Button>
-
-            <Button x:Name="btnHideDetails"
-                    Height="30"
-                    Width="20"
-                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                    Margin="0 15 20 0"
-                    Style="{StaticResource creditCardButton}"
-                    Tag="{StaticResource color12}"
-                    Visibility="{Binding IsHideButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibility}}"
-                    Command="{Binding HideCardDetailsCommand}">
-                <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
-            </Button>
+                                     networkImage="{Binding DataContext.CardNetworkImagePath, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                     visibilityBtnViewDetails="{Binding DataContext.IsShowButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource= {RelativeSource AncestorType=UserControl}}"
+                                     visibilityBtnHideDetails="{Binding DataContext.IsHideButtonVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                     showDetailsCommand="{Binding DataContext.ShowCardDetailsCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                     hideDetailsCommand="{Binding DataContext.HideCardDetailsCommand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
 
             <userControls:CustomDoughnutChart Grid.Column="1"
                                               Visibility="{Binding ChartIsDisplayed, Converter={StaticResource BooleanToVisibility}}"

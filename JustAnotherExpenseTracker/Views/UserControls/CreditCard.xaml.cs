@@ -104,5 +104,39 @@ namespace JustAnotherExpenseTracker.Views.UserControls
             get { return (string)GetValue(TextDisplayedProperty); }
             set { SetValue(TextDisplayedProperty, value); }
         }
+
+        public static readonly DependencyProperty VisibilityBtnViewDetailsProperty = DependencyProperty.Register("visibilityBtnViewDetails", typeof(bool), typeof(CreditCard));
+
+        public bool visibilityBtnViewDetails
+        {
+            get { return (bool)GetValue(VisibilityBtnViewDetailsProperty); }
+            set { SetValue(VisibilityBtnViewDetailsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowDetailsCommandProperty = DependencyProperty.Register("showDetailsCommand", typeof(ICommand), typeof(CreditCard));
+
+        public ICommand showDetailsCommand
+        {
+            get { return (ICommand)GetValue(ShowDetailsCommandProperty); }
+            set { SetValue(ShowDetailsCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty VisibilityBtnHideDetailsProperty = DependencyProperty.Register("visibilityBtnHideDetails", typeof(bool), typeof(CreditCard));
+
+        public bool visibilityBtnHideDetails
+        {
+            get { return (bool)GetValue(VisibilityBtnHideDetailsProperty); }
+            set { SetValue(VisibilityBtnHideDetailsProperty, value); }
+        }
+
+        public static readonly DependencyProperty HideDetailsCommandProperty = DependencyProperty.Register("hideDetailsCommand", typeof(ICommand), typeof(CreditCard));
+
+        public ICommand hideDetailsCommand
+        {
+            get { return (ICommand)GetValue(HideDetailsCommandProperty); }
+            set { SetValue(HideDetailsCommandProperty, value); }
+        }
+
+
     }
 }

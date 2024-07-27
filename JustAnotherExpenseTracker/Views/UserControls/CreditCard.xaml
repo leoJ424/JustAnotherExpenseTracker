@@ -8,139 +8,155 @@
              mc:Ignorable="d" 
              d:DesignHeight="210" d:DesignWidth="330"
              Name="creditCard">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+    </UserControl.Resources>
+
 
     <Border CornerRadius="20">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource CreditBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
 
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0"/>
-                    <GradientStop Color="{StaticResource CreditBackColor2}" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
+        <Grid Margin="15 20 5 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" 
+                           Text="{Binding ElementName=creditCard, Path=textDisplayed}" 
+                           FontFamily="Courier New"
+                           FontWeight="Bold"
+                           FontSize="20"
+                           Foreground="LimeGreen"
+                           VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="0" Margin="15 20 0 0">
-                    <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding ElementName=creditCard, Path=textDisplayed}" 
-                                   FontFamily="Courier New"
-                                   FontWeight="Bold"
-                                   FontSize="20"
-                                   Foreground="LimeGreen"/>
+                <Button Grid.Column="1" 
+                        x:Name="btnViewDetails"
+                        Height="30"
+                        Width="20"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color11}"
+                        Margin="10 0 15 0"
+                        Command="{Binding ElementName=creditCard, Path=showDetailsCommand}"
+                        Visibility="{Binding ElementName=creditCard, Path=visibilityBtnViewDetails, Converter={StaticResource BooleanToVisibility}}">
+                    <fa:IconImage Icon="Eye" Style="{StaticResource creditCardButtonIcon}"/>
+                </Button>
 
-
-
-                        <TextBlock Text="{Binding ElementName=creditCard, Path=amountShown}"
-                                   FontFamily="Courier New"
-                                   FontWeight="Bold"
-                                   FontSize="20"
-                                   Foreground="LimeGreen"
-                                   Margin="0 5 0 0"/>
-                    </StackPanel>
-                </Grid>
-
-                <Grid Grid.Row="1" Margin="15 5 0 10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <!--Credit Card Number-->
-                            <RowDefinition/>
-                            <!--Holder Name-->
-                            <RowDefinition/>
-                            <!--Expiry and CVC-->
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Row="0"
-                                    Orientation="Horizontal">
-
-                            <TextBlock Text="{Binding ElementName=creditCard, Path=first4Digits}"
-                                       Style="{StaticResource numberStyle}"/>
-
-                            <TextBlock Text="{Binding ElementName=creditCard, Path=second4Digits}"
-                                       Style="{StaticResource numberStyle}"
-                                       Margin="15 0 15 0"/>
-
-                            <TextBlock Text="{Binding ElementName=creditCard, Path=third4Digits}"
-                                       Style="{StaticResource numberStyle}"
-                                       Margin="0 0 15 0"/>
-
-                            <TextBlock Text="{Binding ElementName=creditCard, Path=last4Digits}"
-                                       Style="{StaticResource numberStyle}"/>
-
-                        </StackPanel>
-
-                        <TextBlock Grid.Row="1" 
-                                   Text="{Binding ElementName=creditCard, Path=cardholderName}"
-                                   FontSize="15"
-                                   FontWeight="Bold"
-                                   FontFamily="Times New Roman"
-                                   Foreground="{StaticResource creditCardFont}"
-                                   Margin="0,20,0,20"/>
-
-                        <Grid Grid.Row="2">
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0"
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Center">
-
-                                <TextBlock Text="Valid Thru"
-                                           Width="27"
-                                           FontSize="12"
-                                           FontFamily="Times New Roman"
-                                           FontWeight="Bold"
-                                           TextWrapping="Wrap"
-                                           Foreground="{StaticResource creditCardFont}"/>
-
-                                <TextBlock Text="{Binding ElementName=creditCard, Path=expDate}"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           FontFamily="Times New Roman"
-                                           Foreground="{StaticResource creditCardFont}"
-                                           VerticalAlignment="Center"
-                                           Margin="10 0 40 0"/>
-
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1"
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Center">
-
-                                <TextBlock Text="CVC"
-                                           FontSize="12"
-                                           FontWeight="Bold"
-                                           FontFamily="Times New Roman"
-                                           VerticalAlignment="Center"
-                                           Foreground="{StaticResource creditCardFont}"/>
-
-                                <TextBlock Text="{Binding ElementName=creditCard, Path=cvc}" Style="{StaticResource cvcStyle}" />
-
-                            </StackPanel>
-
-                        </Grid>
-                    </Grid>
-
-                    <Grid Grid.Column="1">
-                        <Image Source="{Binding ElementName=creditCard, Path=networkImage}"
-                               Height="30"
-                               Width="45"
-                               Margin="20 30 20 -30"/>
-                    </Grid>
-
-                </Grid>
+                <Button Grid.Column="1" 
+                        x:Name="btnHideDetails"
+                        Height="30"
+                        Width="20"
+                        Style="{StaticResource creditCardButton}"
+                        Tag="{StaticResource color12}"
+                        Margin="10 0 15 0"
+                        Command="{Binding ElementName=creditCard, Path=hideDetailsCommand}"
+                        Visibility="{Binding ElementName=creditCard, Path=visibilityBtnHideDetails, Converter={StaticResource BooleanToVisibility}}">
+                    <fa:IconImage Icon="EyeSlash" Style="{StaticResource creditCardButtonIcon}"/>
+                </Button>
             </Grid>
-        </Border>
+
+
+            <TextBlock Grid.Row="1" Text="{Binding ElementName=creditCard, Path=amountShown}"
+                       FontFamily="Courier New"
+                       FontWeight="Bold"
+                       FontSize="20"
+                       Foreground="LimeGreen"
+                       Margin="0 5 0 10"/>
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                <TextBlock Text="{Binding ElementName=creditCard, Path=first4Digits}" 
+                           Style="{StaticResource numberStyle}"/>
+
+                <TextBlock Text="{Binding ElementName=creditCard, Path=second4Digits}" 
+                           Style="{StaticResource numberStyle}" 
+                           Margin="15 0 15 0"/>
+
+                <TextBlock Text="{Binding ElementName=creditCard, Path=third4Digits}"
+                           Style="{StaticResource numberStyle}"
+                           Margin="0 0 15 0"/>
+
+                <TextBlock Text="{Binding ElementName=creditCard, Path=last4Digits}"
+                           Style="{StaticResource numberStyle}"/>
+
+            </StackPanel>
+
+            <TextBlock Grid.Row="3" 
+                       Text="{Binding ElementName=creditCard, Path=cardholderName}"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       FontFamily="Times New Roman"
+                       Foreground="{StaticResource creditCardFont}"
+                       VerticalAlignment="Center"/>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    
+                    <TextBlock Text="Valid Thru"
+                               Width="27"
+                               FontSize="12"
+                               FontFamily="Times New Roman"
+                               FontWeight="Bold"
+                               TextWrapping="Wrap"
+                               Foreground="{StaticResource creditCardFont}"/>
+
+                    <TextBlock Text="{Binding ElementName=creditCard, Path=expDate}"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               FontFamily="Times New Roman"
+                               Foreground="{StaticResource creditCardFont}"
+                               VerticalAlignment="Center"
+                               Margin="10 0 40 0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="CVC"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               FontFamily="Times New Roman"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource creditCardFont}"/>
+
+                    <TextBlock Text="{Binding ElementName=creditCard, Path=cvc}" 
+                               Style="{StaticResource cvcStyle}" />
+                    
+
+                </StackPanel>
+
+                <Image Grid.Column="2" 
+                       Source="{Binding ElementName=creditCard, Path=networkImage}"
+                       Height="35"
+                       Width="50"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 10 0"/>
+
+            </Grid>
+        </Grid>
+    </Border>
 </UserControl>
