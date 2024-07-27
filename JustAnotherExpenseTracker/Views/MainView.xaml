@@ -94,7 +94,9 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color16}" >
+                                 Tag="{StaticResource color16}"
+                                 Command="{Binding ShowStocksViewCommand}"
+                                 CommandParameter="{StaticResource color16}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="MagnifyingGlassChart" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Stocks" Style="{StaticResource menuButtonText}"

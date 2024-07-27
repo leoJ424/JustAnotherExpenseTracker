@@ -27,6 +27,7 @@ namespace JustAnotherExpenseTracker
             services.AddTransient<CardsViewModel>();
             services.AddTransient<CardsNotAvailableViewModel>();
             services.AddTransient<DetailedTransactionsViewModel>();
+            services.AddTransient<StocksViewModel>();
 
             services.AddSingleton<INavigationService, NavigationService>();
 

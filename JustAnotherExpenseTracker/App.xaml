@@ -29,6 +29,10 @@
                 <userControlsMainViews:DetailedTransactionsView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:StocksViewModel}">
+                <userControlsMainViews:StocksView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
