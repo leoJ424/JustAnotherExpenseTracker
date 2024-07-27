@@ -783,6 +783,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void generateDataForGraphDaywise()
         {
+            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
+
             if (statementDates.Count == 0) //Implies no transaction data at all
             {
                 return;
@@ -796,8 +798,6 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             DaywiseDebitSeriesValues = new ChartValues<DateTimePoint>();
             DaywiseCreditSeriesValues = new ChartValues<DateTimePoint>();
-
-            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
             var debitAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
             var creditAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
@@ -1001,7 +1001,9 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private void generateDataForGraphMonthwise()
         {
-            if(statementDates.Count() == 0) //Implies no transaction data
+            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
+
+            if (statementDates.Count() == 0) //Implies no transaction data
             {
                 return;
             }
@@ -1014,8 +1016,6 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             MonthwiseDebitSeriesValues = new ChartValues<DateTimePoint>();
             MonthwiseCreditSeriesValues = new ChartValues<DateTimePoint>();
-
-            TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
             var debitAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
             var creditAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
