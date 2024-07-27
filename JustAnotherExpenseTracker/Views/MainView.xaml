@@ -85,7 +85,9 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color15}" >
+                                 Tag="{StaticResource color15}"
+                                 Command="{Binding ShowBanksViewCommand}"
+                                 CommandParameter="{StaticResource color15}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="BuildingColumns" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Banks" Style="{StaticResource menuButtonText}"

@@ -125,6 +125,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
             ShowCardsViewCommand = new ViewModelCommand(ExecuteShowCardsViewCommand);
             ShowStocksViewCommand = new ViewModelCommand(ExecuteShowStocksViewCommand);
+            ShowBanksViewCommand = new ViewModelCommand(ExecuteShowBanksViewCommand);
         }
 
         private void ExecuteShowCardsViewCommand(object obj)
@@ -153,8 +154,17 @@ namespace JustAnotherExpenseTracker.ViewModels
             CaptionColor = (SolidColorBrush)obj;           
         }
 
+        private void ExecuteShowBanksViewCommand(object obj)
+        {
+            Navigation.NavigateTo<BanksViewModel>();
+            Caption = "Banks";
+            Icon = IconChar.BuildingColumns;
+            CaptionColor = (SolidColorBrush)obj;
+        }
+
         //-> Commands
         public ICommand ShowCardsViewCommand { get; }
         public ICommand ShowStocksViewCommand { get; }
+        public ICommand ShowBanksViewCommand { get; }
     }
 }

@@ -33,6 +33,10 @@
                 <userControlsMainViews:StocksView/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModel:BanksViewModel}">
+                <userControlsMainViews:BanksView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
