@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="JustAnotherExpenseTracker.Views.UserControls.TransactionDetailRow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+             xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="1000">
+    <!--<UserControl.DataContext>
+        <viewModel:TransactionDetailRowViewModel/>
+    </UserControl.DataContext>-->
+    <!--Commented out because having this will instantiate a new TransactionDetailRowViewModel each time the view is created therby loosing data recived via the ItemsControl in DetailedTransactionView-->
+    
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="boolToVis"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="inverseBoolToVis"/>
+    </UserControl.Resources>
+    
+    <Border BorderBrush="{StaticResource dataGridBorderBrush}"
+            BorderThickness="0 0 0 2"
+            Padding="15 0 0 0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+        
+            <Grid Grid.Row="0" Margin="0 10 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Grid.Column="0" 
+                          Style="{StaticResource CheckBoxStyle1}"/>
+
+                <StackPanel Grid.Column="1" 
+                            Orientation="Horizontal"
+                            Margin="20 0 0 0">
+
+                    <fa:IconImage Width="15" Height="15" Style="{StaticResource categoryIconStyle}" Foreground="White"/>
+
+
+                    <TextBlock Text="{Binding CategoryName}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource transactionDetailsRowStyle}"
+                               Margin="5 0 0 0"/>
+                </StackPanel>
+
+                <TextBlock Grid.Column="2" 
+                           Text="{Binding RecipientName}"
+                           Style="{StaticResource transactionDetailsRowStyle}"/>
+
+                <TextBlock Grid.Column="3" 
+                           Text="{Binding Amount}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="15"/>
+                            <Setter Property="FontFamily" Value="Microsoft Sans Serif"/>
+                            <Setter Property="Foreground" Value="{StaticResource creditCardPageTextColor}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding TransactionType}" Value="Debit">
+                                    <Setter Property="Foreground" Value="Red"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding TransactionType}" Value="Credit">
+                                    <Setter Property="Foreground" Value="Green"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Grid.Column="4" 
+                           Text="{Binding DateOfTransaction}"
+                           Style="{StaticResource transactionDetailsRowStyle}"/>
+
+                <TextBlock Grid.Column="5" 
+                           Text="{Binding RewardPoints}"
+                           Style="{StaticResource transactionDetailsRowStyle}"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="6">
+                    <Button x:Name="btnShowComments"
+                            Style="{StaticResource creditCardButton}"
+                            Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                            Command="{Binding ShowGeneralCommentsCommand}"
+                            Visibility="{Binding ShowGeneralComments, Converter={StaticResource inverseBoolToVis}}">
+                        <fa:IconImage Icon="EllipsisVertical" Style="{StaticResource creditCardButtonIcon}"/>
+
+                    </Button>
+
+                    <Button x:Name="btnHideComments"
+                            Style="{StaticResource creditCardButton}"
+                            Tag="{StaticResource creditCardPageStatementNavigationButtonColor}"
+                            Command="{Binding HideGeneralCommentsCommand}"
+                            Visibility="{Binding ShowGeneralComments, Converter={StaticResource boolToVis}}">
+                        <Grid>
+                            <fa:IconImage Icon="EllipsisVertical" Style="{StaticResource creditCardButtonIcon}"/>
+                            <fa:IconImage Icon="Slash" Style="{StaticResource creditCardButtonIcon}"/>
+                        </Grid>
+
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Border BorderThickness="0" 
+                        Background="Transparent"
+                        Margin="10"
+                        Visibility="{Binding ShowGeneralComments, Converter={StaticResource boolToVis}}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="General Comments"
+                                   Style="{StaticResource titleText}"
+                                   FontSize="17"
+                                   Margin="20 0 0 0"/>
+
+                        <TextBlock Text="{Binding GeneralComments}"
+                                   Style="{StaticResource titleText}"
+                                   FontSize="15"
+                                   Margin="25 5 0 0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+    
+</UserControl>

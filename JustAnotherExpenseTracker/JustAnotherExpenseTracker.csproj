@@ -9,18 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\amex_icon.png" />
     <None Remove="Images\background.jpg" />
+    <None Remove="Images\discover_icon.png" />
+    <None Remove="Images\mastercard_icon.png" />
     <None Remove="Images\new-logo.png" />
+    <None Remove="Images\visa_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.Sharp" Version="6.3.0" />
+    <PackageReference Include="LiveCharts.NetCore" Version="0.9.8" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\amex_icon.png" />
     <Resource Include="Images\background.jpg" />
+    <Resource Include="Images\discover_icon.png" />
+    <Resource Include="Images\mastercard_icon.png" />
     <Resource Include="Images\new-logo.png" />
+    <Resource Include="Images\visa_icon.png" />
   </ItemGroup>
 
 </Project>

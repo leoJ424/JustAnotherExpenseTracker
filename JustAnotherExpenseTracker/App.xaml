@@ -2,13 +2,45 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:JustAnotherExpenseTracker"
+             xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
+             xmlns:userControlsMainViews="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
              Startup="ApplicationStart">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/UIColors.xaml"/>
                 <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/CreditCardStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/GeneralStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/CalendarStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/ListBoxStyles.xaml"/>
+                <ResourceDictionary Source="/Styles/ScrollBarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:CardsViewModel}">
+                <userControlsMainViews:CardsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:CardsNotAvailableViewModel}">
+                <userControlsMainViews:CardsNotAvailableView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:DetailedTransactionsViewModel}">
+                <userControlsMainViews:DetailedTransactionsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:StocksViewModel}">
+                <userControlsMainViews:StocksView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:BanksViewModel}">
+                <userControlsMainViews:BanksView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:DashboardViewModel}">
+                <userControlsMainViews:DashboardView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

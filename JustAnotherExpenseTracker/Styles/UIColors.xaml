@@ -4,13 +4,24 @@
     <!--Background Colors-->
     <Color x:Key="primaryBackColor1">#0A003A</Color>
     <Color x:Key="primaryBackColor2">#1C0E49</Color>
+    <Color x:Key="primaryBackColor3">#E5E5E5</Color>
+    <Color x:Key="primaryBackColor4">#C9D1D3</Color>
+    <Color x:Key="primaryBackColor5">#D9DFE0</Color>
     <Color x:Key="secondaryBackColor1">#24105F</Color>
     <Color x:Key="secondaryBackColor2">#210F55</Color>
+    <Color x:Key="secondaryBackColor3">#064ACB</Color>
+    <Color x:Key="CreditBackColor1">#6F3BEC</Color>
+    <Color x:Key="CreditBackColor2">#471ECF</Color>
+
+    <Color x:Key="CreditBackColor3">#b8ec3b</Color>
+    <Color x:Key="CreditBackColor4">#A6CF1E</Color>
 
     <!--Window Border Colors-->
     <Color x:Key="winBorderColor1">#6D2FFF</Color>
     <Color x:Key="winBorderColor2">#FB539B</Color>
     <Color x:Key="winBorderColor3">#836EFB</Color>
+    <Color x:Key="winBorderColor4">#025d8f</Color>
+    <Color x:Key="winBorderColor5">#61F2F5</Color>
 
     <!--Color Palatte-->
     <SolidColorBrush x:Key="color1" Color="#E285DE"/>
@@ -23,18 +34,98 @@
     <SolidColorBrush x:Key="color8" Color="#78A3FC"/>
     <SolidColorBrush x:Key="color9" Color="#07F3C0"/>
     <SolidColorBrush x:Key="color10" Color="#FBA1AA"/>
+    <SolidColorBrush x:Key="color11" Color="#C21807"/>
+    <SolidColorBrush x:Key="color12" Color="#33B864"/>
+    <SolidColorBrush x:Key="color13" Color="#79E0EE"/>
+    <SolidColorBrush x:Key="color14" Color="#ACBCFF"/>
+    <SolidColorBrush x:Key="color15" Color="#FAF0D7"/>
+    <SolidColorBrush x:Key="color16" Color="#FFC1F3"/>
+    <SolidColorBrush x:Key="color17" Color="#353e41"/>
+    <SolidColorBrush x:Key="CreditColor1" Color="#6F3BEC"/>
+    <SolidColorBrush x:Key="CreditColor2" Color="#471ECF"/>
 
     <!--Font Colors-->
     <SolidColorBrush x:Key="titleColor1" Color="#E0E1F1"/>
     <SolidColorBrush x:Key="titleColor2" Color="#D5CFF5"/>
     <SolidColorBrush x:Key="titleColor3" Color="#BCBEE0"/>
+    <SolidColorBrush x:Key="titleColor4" Color="#3FC5F0"/>
+    <SolidColorBrush x:Key="titleColor5" Color="#0033FF"/>
     <SolidColorBrush x:Key="plainTextColor1" Color="#9497CD"/>
     <SolidColorBrush x:Key="plainTextColor2" Color="#7C80C2"/>
     <SolidColorBrush x:Key="plainTextColor3" Color="#7376BD"/>
+    <SolidColorBrush x:Key="plainTextColor4" Color="#579BB1"/>
+    <SolidColorBrush x:Key="creditCardFont" Color="#C0C0C0"/>
+    <SolidColorBrush x:Key="creditCardFont2" Color="#001f3f"/>
 
     <!--Panel  Colors-->
     <SolidColorBrush x:Key="panelColor" Color="#200F53"/>
-    <SolidColorBrush x:Key="panelOverColor" Color="#281269"/>
+    <!--<SolidColorBrush x:Key="panelOverColor" Color="#281269"/>-->
+    <SolidColorBrush x:Key="panelOverColor2" Color="#0758f1"/>
     <SolidColorBrush x:Key="panelActiveColor" Color="#2B1372"/>
+    <SolidColorBrush x:Key="panelActiveColor2" Color="#b5bfc3"/>
+
+
+    <SolidColorBrush x:Key="graphPanelColor" Color="#C9D1D3"/>
+    <SolidColorBrush x:Key="creditCardPageColor1" Color="#333333"/>
+
+    <SolidColorBrush x:Key="creditCardPageColor3" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="panelOverColor" Color="#787D7E"/>
+    <SolidColorBrush x:Key="borderColor1" Color="#C9D1D3"/>
+
+
+    <!--Colors Used-->
+    <Color x:Key="mainBackColor">#0A0A0A</Color>
+    <Color x:Key="navBackColor">#111111</Color>
+
+    <Color x:Key="doughnutColor3">#F08F87</Color>
+    <Color x:Key="doughnutColor4">#ED736A</Color>
+    
+    <Color x:Key="doughnutColor5">#528CAF</Color>
+    <Color x:Key="doughnutColor6">#39627A</Color>
+
+    <Color x:Key="doughnutColor7">#999ea0</Color>
+    <Color x:Key="doughnutColor8">#7A8184</Color>
+    
+    
+
+    <SolidColorBrush x:Key="solidBlackColor" Color="#030304"/>
+    <SolidColorBrush x:Key="navBackColorBrush" Color="#111111"/>
+
+    <SolidColorBrush x:Key="creditCardPageTextColor" Color="#FFFFFF"/>
+
+    <SolidColorBrush x:Key="creditCardPageStatementNavigationOGColor" Color="#A0A7A8"/>
+    <SolidColorBrush x:Key="creditCardPageStatementNavigationButtonColor" Color="#404243"/>
+
+    <SolidColorBrush x:Key="creditCardPagePanelColor" Color="#ED736A"/>
+    <SolidColorBrush x:Key="creditCardPagePanelColor2" Color="#111111"/>
+    <SolidColorBrush x:Key="creditCardPagePanelActiveColor" Color="#F29899"/>
+
+    <GradientStopCollection x:Key="GradientFill1">
+        <GradientStop Color="{StaticResource CreditBackColor1}" Offset="0"/>
+        <GradientStop Color="{StaticResource CreditBackColor2}" Offset="0.5"/>
+    </GradientStopCollection>
+
+    <GradientStopCollection x:Key="GradientFill2">
+        <GradientStop Color="{StaticResource doughnutColor3}" Offset="0"/>
+        <GradientStop Color="{StaticResource doughnutColor4}" Offset="0.5"/>
+    </GradientStopCollection>
+
+    <GradientStopCollection x:Key="GradientFill3">
+        <GradientStop Color="{StaticResource doughnutColor5}" Offset="0"/>
+        <GradientStop Color="{StaticResource doughnutColor6}" Offset="0.5"/>
+    </GradientStopCollection>
+
+    <GradientStopCollection x:Key="GradientFill4">
+        <GradientStop Color="{StaticResource doughnutColor7}" Offset="0.0"/>
+        <GradientStop Color="{StaticResource doughnutColor8}" Offset="0.25"/>
+    </GradientStopCollection>
+
+    <GradientStopCollection x:Key="TransparentFill">
+        <GradientStop Color="Transparent" Offset="0.0"/>
+        <GradientStop Color="Transparent" Offset="0.25"/>
+    </GradientStopCollection>
+
+    <SolidColorBrush x:Key="dataGridBorderBrush">#282828</SolidColorBrush>
 
 </ResourceDictionary>

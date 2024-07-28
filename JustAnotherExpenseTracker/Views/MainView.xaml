@@ -6,24 +6,34 @@
         xmlns:local="clr-namespace:JustAnotherExpenseTracker.Views"
         xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
+        xmlns:userControlsMainViews="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
+        xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
         mc:Ignorable="d"
         Title="MainView" Height="700" Width="1300"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True">
 
-    <Window.DataContext>
-        <viewModel:MainViewModel/>
-    </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolean"/>
+    </Window.Resources>
+
+    <Window.Visibility>
+        <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+    </Window.Visibility>
+
 
     <Border CornerRadius="20"
-            BorderThickness="3">
+            BorderThickness="4">
         
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0, 0" EndPoint="1, 1">
-                <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
-                <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.5"/>
-                <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
+                <GradientStop Color="{StaticResource winBorderColor3}" Offset="0"/>
+                <GradientStop Color="{StaticResource winBorderColor5}" Offset="0.5"/>
+                <GradientStop Color="{StaticResource winBorderColor4}" Offset="1"/>
             </LinearGradientBrush>
         </Border.BorderBrush>
 
@@ -35,14 +45,13 @@
 
             <!--Navigation Menu-->
 
-            <Border CornerRadius="20,0,0,20"
+            <Border CornerRadius="18,0,0,18"
                     Grid.Column="0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
-                        <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1"/>
+                        <GradientStop Color="{StaticResource navBackColor}" Offset="0"/>
                     </LinearGradientBrush>
-                </Border.Background>
+                </Border.Background>    
 
                 <StackPanel>
                     <!--Logo-->
@@ -63,10 +72,47 @@
                     
                     <!--Menu Buttons-->
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color1}" >
+                                 Tag="{StaticResource color13}"
+                                 Command="{Binding ShowDashboardViewCommand}"
+                                 CommandParameter="{StaticResource color13}"
+                                 IsChecked="True">
+                        <!--IsChecked is set to true by default as the first view shown to the user when he/she logs in is the Dashboard-->
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"
+                                       Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color14}"
+                                 Command="{Binding ShowCardsViewCommand}"
+                                 CommandParameter="{StaticResource color14}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="CreditCard" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Cards" Style="{StaticResource menuButtonText}"
+                                       Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color15}"
+                                 Command="{Binding ShowBanksViewCommand}"
+                                 CommandParameter="{StaticResource color15}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="BuildingColumns" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Banks" Style="{StaticResource menuButtonText}"
+                                       Margin="0,0,0,0"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color16}"
+                                 Command="{Binding ShowStocksViewCommand}"
+                                 CommandParameter="{StaticResource color16}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="MagnifyingGlassChart" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Stocks" Style="{StaticResource menuButtonText}"
                                        Margin="0,0,0,0"/>
                         </StackPanel>
                     </RadioButton>
@@ -77,12 +123,11 @@
 
             <!--Main Menu-->
 
-            <Border CornerRadius="0,20,20,0"
+            <Border CornerRadius="0,18,18,0"
                     Grid.Column="1">
                 <Border.Background>
-                    <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
-                        <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
-                        <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource mainBackColor}" Offset="0"/>
                     </LinearGradientBrush>
                 </Border.Background>
 
@@ -91,11 +136,12 @@
                         <!--Control Bar-->
                         <RowDefinition Height="30"/>
                         <!--Header/Caption-->
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="auto"/> <!--Was 35 now auto-->
                         <!--Content Section / Child View-->
-                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
+                    <!--#region Row 1 - Control Bar-->
                     <StackPanel x:Name="pnlControlBar"
                                 Grid.Row="0"
                                 Orientation="Horizontal"
@@ -107,20 +153,181 @@
                         
                         <Button x:Name="btnClose"
                                 Style="{StaticResource controlButton}"
-                                Tag="{StaticResource color4}"
+                                Tag="{StaticResource color17}"
                                 Click="btnClose_Click">
                                 <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
                         </Button>
 
+                        <Button x:Name="btnMaximise"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color17}"
+                                Click="btnMaximise_Click">
+                            <fa:IconImage Icon="Square" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
+                        <Button x:Name="btnRestore"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color17}"
+                                Click="btnRestore_Click"
+                                Visibility="Collapsed">
+                            <fa:IconImage Icon="WindowRestore" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
                         <Button x:Name="btnMinimise"
                                 Style="{StaticResource controlButton}"
-                                Tag="{StaticResource color4}"
+                                Tag="{StaticResource color17}"
                                 Click="btnMinimise_Click">
-                                <fa:IconImage Icon="Minus" Style="{StaticResource controlButtonIcon}"/>
+                            <fa:IconImage Icon="WindowMinimize" Width="12" Style="{StaticResource controlButtonIcon}"/>
                         </Button>
 
                     </StackPanel>
+                    <!--#endregion-->
+                    
+                    <!--Header Section / Caption -->
 
+                    <Grid Grid.Row="1" Margin="0 10 0 0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!--Caption-->
+
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            <fa:IconImage Icon="{Binding Icon}" Height="20" Width="20"
+                                          Foreground="{Binding CaptionColor}"
+                                          Margin="20 0 10 0"/>
+
+                            <TextBlock Text="{Binding Caption}"
+                                       Foreground="{Binding CaptionColor}"
+                                       FontSize="16"
+                                       FontFamily="Times New Roman"
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"/>     
+
+                        </StackPanel>
+                        
+                        <!--User-Options-->
+                        <StackPanel Grid.Column="0"
+                                    Orientation="Horizontal"
+                                    FlowDirection="RightToLeft"
+                                    VerticalAlignment="Center"
+                                    Margin="0 0 10 0">
+
+                            <Button x:Name="btnOpenUserOptions" 
+                                    Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color1}"
+                                    Visibility="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibility}}"
+                                    Command="{Binding OpenUserOptionsCommand}">
+                                <StackPanel>
+                                    <fa:IconImage Icon="AngleDown"
+                                                  Height="15" Width="15"
+                                                  Style="{StaticResource userIconButtonIcon}"/>
+                                    <Popup x:Name="popupUserOptions"
+                                           AllowsTransparency="True"
+                                           IsOpen="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource InverseBoolean}}">
+
+                                        <ListBox Background="Black"
+                                                 Foreground="{StaticResource creditCardPageTextColor}"
+                                                 BorderThickness="0"
+                                                 ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle2}"
+                                                 Width="100">
+
+                                            <ListBoxItem HorizontalAlignment="Center"
+                                                         Margin="0 10 0 5">
+                                                <Button Style="{StaticResource userIconButton}"
+                                                        Width="80"
+                                                        Tag="{StaticResource color3}"
+                                                        Command="{Binding ToBeImplementedLaterCommand}"
+                                                        Margin="0 0 10 0">
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <fa:IconImage Icon="Gear" 
+                                                                      Style="{StaticResource userIconButtonIcon}"
+                                                                      Margin="0 0 5 0"/>
+                                                        <TextBlock Text="Settings" 
+                                                                   Style="{StaticResource textForButton}"
+                                                                   FontSize="15"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </ListBoxItem>
+
+                                            <ListBoxItem HorizontalAlignment="Center"
+                                                         Margin="0 10 0 5">
+                                                <Button Style="{StaticResource userIconButton}"
+                                                        Width="80"
+                                                        Tag="{StaticResource color11}"
+                                                        Command="{Binding LogOutCommand}"
+                                                        Margin="0 0 10 0">
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <fa:IconImage Icon="SignOut" 
+                                                                      Style="{StaticResource userIconButtonIcon}"
+                                                                      Margin="0 0 5 0"/>
+                                                        <TextBlock Text="Log Out" 
+                                                                   Style="{StaticResource textForButton}"
+                                                                   FontSize="15"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </ListBoxItem>
+                                        </ListBox>
+                                    </Popup>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="btnCloseUserOptions" 
+                                    Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color1}"
+                                    Visibility="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource InverseBooleanToVisibility}}"
+                                    Command="{Binding CloseUserOptionsCommand}">
+                                <fa:IconImage Icon="AngleUp"
+                                              Height="15" Width="15"
+                                              Style="{StaticResource userIconButtonIcon}"/>
+                            </Button>
+
+                            <TextBlock Text="{Binding CurrentUserAccount.DisplayName}"
+                                       Foreground="{StaticResource titleColor3}"
+                                       FontFamily="Times New Roman"
+                                       FontSize="15"
+                                       VerticalAlignment="Center"/>
+
+                            <Ellipse Height="45" Width="45"
+                                     Stroke="{StaticResource color2}"
+                                     StrokeThickness="2"
+                                     Margin="10 0 10 0">
+                                <Ellipse.Fill>
+                                    <ImageBrush/>
+                                    <!--Task : Need to add something for the profile picture -->
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <Button Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color3}">
+                                <fa:IconImage Icon="Clock" Style="{StaticResource userIconButtonIcon}"/>
+                            </Button>
+
+                            <Button Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color4}">
+                                <fa:IconImage Icon="Envelope" Style="{StaticResource userIconButtonIcon}"/>
+                            </Button>
+
+                            <Button Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color5}">
+                                <fa:IconImage Icon="Bell" Style="{StaticResource userIconButtonIcon}"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!--#region Row 3 Main Content-->
+                    <ContentControl Content="{Binding Navigation.CurrentView}"
+                                    Grid.Row="2"
+                                    Margin="20"/>
+
+                    <!--#endregion-->
+                    
                 </Grid>
             </Border>
 
