@@ -20,8 +20,12 @@
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
         <converters:InverseBoolConverter x:Key="InverseBoolean"/>
     </Window.Resources>
-    
-    
+
+    <Window.Visibility>
+        <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+    </Window.Visibility>
+
+
     <Border CornerRadius="20"
             BorderThickness="4">
         
@@ -70,7 +74,9 @@
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color13}"
                                  Command="{Binding ShowDashboardViewCommand}"
-                                 CommandParameter="{StaticResource color13}">
+                                 CommandParameter="{StaticResource color13}"
+                                 IsChecked="True">
+                        <!--IsChecked is set to true by default as the first view shown to the user when he/she logs in is the Dashboard-->
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"

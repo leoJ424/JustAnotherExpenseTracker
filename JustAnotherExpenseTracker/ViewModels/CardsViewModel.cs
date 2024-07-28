@@ -474,17 +474,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             #region Repository Setup
 
             userRepository = new UserRepository();
-            //TO BE DELETED - Implemented to just make it work without logging in each time
-
-            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential("admin", "admin"));
-            if (isValidUser)
-            {
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("admin"), null);
-            }
-
-            //END
-
-
+            
             cardRepository = new CardRepository();
             transactionRepository = new TransactionRepository();
             categoryRepository = new CategoryRepository();
