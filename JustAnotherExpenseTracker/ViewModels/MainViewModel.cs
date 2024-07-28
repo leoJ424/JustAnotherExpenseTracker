@@ -30,6 +30,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         private IconChar _icon;
         private SolidColorBrush _captionColor;
 
+        private bool _isBtnOpenUserOptionsVisible = true;
+
         //Properties
         public INavigationService Navigation
         {
@@ -107,6 +109,22 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        /// <summary>
+        /// Visibility control for the buttons that can open and close the user options
+        /// </summary>
+        public bool IsBtnOpenUserOptionsVisible
+        {
+            get
+            {
+                return _isBtnOpenUserOptionsVisible;
+            }
+            set
+            {
+                _isBtnOpenUserOptionsVisible = value;
+                OnPropertyChanged(nameof(IsBtnOpenUserOptionsVisible));
+            }
+        }
+
         public MainViewModel(INavigationService navService)
         {
             Navigation = navService;
@@ -127,6 +145,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             ShowStocksViewCommand = new ViewModelCommand(ExecuteShowStocksViewCommand);
             ShowBanksViewCommand = new ViewModelCommand(ExecuteShowBanksViewCommand);
             ShowDashboardViewCommand = new ViewModelCommand(ExecuteShowDashboardViewCommand);
+            OpenUserOptionsCommand = new ViewModelCommand(ExecuteOpenUserOptionsCommand);
+            CloseUserOptionsCommand = new ViewModelCommand(ExecuteCloseUserOptionsCommand);
         }
 
         private void ExecuteShowCardsViewCommand(object obj)
@@ -171,10 +191,23 @@ namespace JustAnotherExpenseTracker.ViewModels
             CaptionColor = (SolidColorBrush)obj;
         }
 
+        private void ExecuteOpenUserOptionsCommand(object obj)
+        {
+            IsBtnOpenUserOptionsVisible = false;
+        }
+
+        private void ExecuteCloseUserOptionsCommand(object obj)
+        {
+            IsBtnOpenUserOptionsVisible = true;
+        }
+
         //-> Commands
         public ICommand ShowCardsViewCommand { get; }
         public ICommand ShowStocksViewCommand { get; }
         public ICommand ShowBanksViewCommand { get; }
         public ICommand ShowDashboardViewCommand { get; }
+        public ICommand OpenUserOptionsCommand { get; }
+        public ICommand CloseUserOptionsCommand { get; }
+        public ICommand LogOutCommand { get; }
     }
 }

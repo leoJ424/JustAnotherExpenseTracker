@@ -8,6 +8,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
         xmlns:userControlsMainViews="clr-namespace:JustAnotherExpenseTracker.Views.UserControlsForMainView"
+        xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
         mc:Ignorable="d"
         Title="MainView" Height="700" Width="1300"
         WindowStyle="None"
@@ -16,6 +17,8 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibility"/>
+        <converters:InverseBoolConverter x:Key="InverseBoolean"/>
     </Window.Resources>
     
     
@@ -180,7 +183,7 @@
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         
                         <!--Caption-->
@@ -202,15 +205,79 @@
                         </StackPanel>
                         
                         <!--User-Options-->
-                        <StackPanel Grid.Column="1"
+                        <StackPanel Grid.Column="0"
                                     Orientation="Horizontal"
                                     FlowDirection="RightToLeft"
                                     VerticalAlignment="Center"
                                     Margin="0 0 10 0">
 
-                            <Button Style="{StaticResource userIconButton}"
-                                Tag="{StaticResource color1}">
-                                <fa:IconImage Icon="AngleDown"
+                            <Button x:Name="btnOpenUserOptions" 
+                                    Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color1}"
+                                    Visibility="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibility}}"
+                                    Command="{Binding OpenUserOptionsCommand}">
+                                <StackPanel>
+                                    <fa:IconImage Icon="AngleDown"
+                                                  Height="15" Width="15"
+                                                  Style="{StaticResource userIconButtonIcon}"/>
+                                    <Popup x:Name="popupUserOptions"
+                                           AllowsTransparency="True"
+                                           IsOpen="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource InverseBoolean}}">
+
+                                        <ListBox Background="Black"
+                                                 Foreground="{StaticResource creditCardPageTextColor}"
+                                                 BorderThickness="0"
+                                                 ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle2}"
+                                                 Width="100">
+
+                                            <ListBoxItem HorizontalAlignment="Center"
+                                                         Margin="0 10 0 5">
+                                                <Button Style="{StaticResource userIconButton}"
+                                                        Width="80"
+                                                        Tag="{StaticResource color3}"
+                                                        Command="{Binding ToBeImplementedLaterCommand}"
+                                                        Margin="0 0 10 0">
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <fa:IconImage Icon="Gear" 
+                                                                      Style="{StaticResource userIconButtonIcon}"
+                                                                      Margin="0 0 5 0"/>
+                                                        <TextBlock Text="Settings" 
+                                                                   Style="{StaticResource textForButton}"
+                                                                   FontSize="15"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </ListBoxItem>
+
+                                            <ListBoxItem HorizontalAlignment="Center"
+                                                         Margin="0 10 0 5">
+                                                <Button Style="{StaticResource userIconButton}"
+                                                        Width="80"
+                                                        Tag="{StaticResource color11}"
+                                                        Command="{Binding LogOutCommand}"
+                                                        Margin="0 0 10 0">
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <fa:IconImage Icon="SignOut" 
+                                                                      Style="{StaticResource userIconButtonIcon}"
+                                                                      Margin="0 0 5 0"/>
+                                                        <TextBlock Text="Log Out" 
+                                                                   Style="{StaticResource textForButton}"
+                                                                   FontSize="15"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </ListBoxItem>
+                                        </ListBox>
+                                    </Popup>
+                                </StackPanel>
+                            </Button>
+
+                            <Button x:Name="btnCloseUserOptions" 
+                                    Style="{StaticResource userIconButton}"
+                                    Tag="{StaticResource color1}"
+                                    Visibility="{Binding IsBtnOpenUserOptionsVisible, Mode=TwoWay, Converter={StaticResource InverseBooleanToVisibility}}"
+                                    Command="{Binding CloseUserOptionsCommand}">
+                                <fa:IconImage Icon="AngleUp"
                                               Height="15" Width="15"
                                               Style="{StaticResource userIconButtonIcon}"/>
                             </Button>
@@ -226,30 +293,26 @@
                                      StrokeThickness="2"
                                      Margin="10 0 10 0">
                                 <Ellipse.Fill>
-                                    <ImageBrush/> <!--Task : Need to add something for the profile picture -->
+                                    <ImageBrush/>
+                                    <!--Task : Need to add something for the profile picture -->
                                 </Ellipse.Fill>
                             </Ellipse>
 
                             <Button Style="{StaticResource userIconButton}"
-                                Tag="{StaticResource color3}">
+                                    Tag="{StaticResource color3}">
                                 <fa:IconImage Icon="Clock" Style="{StaticResource userIconButtonIcon}"/>
                             </Button>
 
                             <Button Style="{StaticResource userIconButton}"
-                                Tag="{StaticResource color4}">
+                                    Tag="{StaticResource color4}">
                                 <fa:IconImage Icon="Envelope" Style="{StaticResource userIconButtonIcon}"/>
                             </Button>
-                            
+
                             <Button Style="{StaticResource userIconButton}"
-                                Tag="{StaticResource color5}">
+                                    Tag="{StaticResource color5}">
                                 <fa:IconImage Icon="Bell" Style="{StaticResource userIconButtonIcon}"/>
                             </Button>
-                            
-
                         </StackPanel>
-
-
-                        
                     </Grid>
                     
                     <!--#region Row 3 Main Content-->
