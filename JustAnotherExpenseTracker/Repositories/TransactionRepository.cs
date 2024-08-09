@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Globalization;
+using JustAnotherExpenseTracker.Models.API_Models;
+using System.Net.Http;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -336,5 +338,45 @@ namespace JustAnotherExpenseTracker.Repositories
 
             return transactionDetails;
         }
+
+        //APIs
+        public async Task<DateTime> GetEarliestTransactionDateOnCard_API(Guid CardID)
+        {
+            string url = $"api/Transaction/TransactionDetailsEarliestDate?CreditCardId={CardID}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    DateTime earliestTransactionDateFromAPI = await response.Content.ReadAsAsync<DateTime>();
+
+                    return earliestTransactionDateFromAPI;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<DateTime> GetLatestTransactionDateOnCard_API(Guid CardID)
+        {
+            string url = $"api/Transaction/TransactionDetailsLatestDate?CreditCardId={CardID}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    DateTime latestTransactionDateFromAPI = await response.Content.ReadAsAsync<DateTime>();
+
+                    return latestTransactionDateFromAPI;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
     }
 }

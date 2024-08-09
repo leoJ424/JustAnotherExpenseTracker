@@ -573,13 +573,13 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             if(IsMonthlyButtonChecked)
             {
-                fillPreRequisiteDaywiseData();
+                await fillPreRequisiteDaywiseData();
                 setChartDisplayStatus();
                 generateDataForGraphDaywise();
             }
             if(IsYearlyButtonChecked)
             {
-                fillPreRequisiteMonthwiseData();
+                await fillPreRequisiteMonthwiseData();
                 setChartDisplayStatus();                
                 generateDataForGraphMonthwise();       
             }
@@ -605,13 +605,13 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             if(IsMonthlyButtonChecked)
             {
-                fillPreRequisiteDaywiseData();
+                await fillPreRequisiteDaywiseData();
                 setChartDisplayStatus();
                 generateDataForGraphDaywise();                
             }
             if(IsYearlyButtonChecked)
             {
-                fillPreRequisiteMonthwiseData();
+                await fillPreRequisiteMonthwiseData();
                 setChartDisplayStatus();
                 generateDataForGraphMonthwise();
             }
@@ -704,7 +704,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private async Task ExecuteMonthlyButtonClickedCommand(object obj)
         {
-            fillPreRequisiteDaywiseData();
+            await fillPreRequisiteDaywiseData();
 
             generateDataForGraphDaywise();
 
@@ -713,7 +713,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private async Task ExecuteYearlyButtonClickedCommand(object obj)
         {
-            fillPreRequisiteMonthwiseData();
+            await fillPreRequisiteMonthwiseData();
 
             generateDataForGraphMonthwise();
 
@@ -732,7 +732,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             //Since, initially when the page is loaded, by default the "monthly" button is checked hence the cartesian chart must show the daywise data
 
-            fillPreRequisiteDaywiseData();
+            await fillPreRequisiteDaywiseData();
 
             generateDataForGraphDaywise();
 
@@ -892,7 +892,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         /// The function generates first generates a list of statement dates based on the the card's :- statement generation date, earliest and latest transaction dates.
         /// It then sets the required properties to show the latest statement available. 
         /// </summary>
-        private void fillPreRequisiteDaywiseData()
+        private async Task fillPreRequisiteDaywiseData()
         {
             //Note : Billing Cycle is taken as 30 days. Can make it a custom thing in future versions. Maybe, maybe not. IDK.
 
@@ -905,8 +905,8 @@ namespace JustAnotherExpenseTracker.ViewModels
             var statementDay = CreditCard.StatementGenDate;
             statementDates.Clear();
 
-            var earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
-            var latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
+            var earliestTransactionDate = await transactionRepository.GetEarliestTransactionDateOnCard_API(CreditCard.CardID);
+            var latestTransactionDate = await transactionRepository.GetLatestTransactionDateOnCard_API(CreditCard.CardID);
 
             if(earliestTransactionDate == DateTime.MinValue || latestTransactionDate == DateTime.MinValue)
             {
@@ -967,10 +967,10 @@ namespace JustAnotherExpenseTracker.ViewModels
             setStatementToBeDisplayedProperty();
         }
 
-        private void fillPreRequisiteMonthwiseData()
+        private async Task fillPreRequisiteMonthwiseData()
         {
-            var earliestTransactionDate = transactionRepository.ReturnEarliestTransactionDateOnCard(CreditCard.CardID);
-            var latestTransactionDate = transactionRepository.ReturnLatestTransactionDateOnCard(CreditCard.CardID);
+            var earliestTransactionDate = await transactionRepository.GetEarliestTransactionDateOnCard_API(CreditCard.CardID);
+            var latestTransactionDate = await transactionRepository.GetLatestTransactionDateOnCard_API(CreditCard.CardID);
 
             statementDates.Clear(); //Clear any data if existing
 

@@ -36,6 +36,9 @@ namespace JustAnotherExpenseTracker.Models
         /// <returns></returns>
         List<TransactionDetailsCustomModel> ReturnTransactionDetailsForView(DateTime date1, DateTime date2, Guid CardId);
 
+        //APIs
+        Task<DateTime> GetEarliestTransactionDateOnCard_API(Guid CardID);
+        Task<DateTime> GetLatestTransactionDateOnCard_API(Guid CardID);
 
     }
 }
