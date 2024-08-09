@@ -11,6 +11,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Globalization;
 using JustAnotherExpenseTracker.Models.API_Models;
 using System.Net.Http;
+using ExpenseTrackerWebAPI_Mk2.Dto;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -370,6 +371,106 @@ namespace JustAnotherExpenseTracker.Repositories
                     DateTime latestTransactionDateFromAPI = await response.Content.ReadAsAsync<DateTime>();
 
                     return latestTransactionDateFromAPI;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TransactionDate_AmountPairs>> GetCardDebitTransactionAmountsGroupByDate_API(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/Debit_TransactionDetails_Datewise?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using(HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    List<TransactionDate_AmountPairs> transactionsDate_AmountPairs = await response.Content.ReadAsAsync<List<TransactionDate_AmountPairs>>();
+                    return transactionsDate_AmountPairs;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TransactionDate_AmountPairs>> GetCardCreditTransactionAmountsGroupByDate_API(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/Credit_TransactionDetails_Datewise?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<TransactionDate_AmountPairs> transactionsDate_AmountPairs = await response.Content.ReadAsAsync<List<TransactionDate_AmountPairs>>();
+                    return transactionsDate_AmountPairs;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TransactionCategory_AmountPairs>> GetCardTransactionAmountsGroupByCategory_API(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/TransactionDetailsByCategory?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<TransactionCategory_AmountPairs> transactionCategory_AmountPairs = await response.Content.ReadAsAsync<List<TransactionCategory_AmountPairs>>();
+                    return transactionCategory_AmountPairs;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TransactionMonth_AmountPairs>> GetCardDebitTransactionAmountsGroupByMonth_API(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/Debit_TransactionDetails_Monthwise?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<TransactionMonth_AmountPairs> transactionMonth_AmountPairs = await response.Content.ReadAsAsync<List<TransactionMonth_AmountPairs>>();
+                    return transactionMonth_AmountPairs;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<TransactionMonth_AmountPairs>> GetCardCreditTransactionAmountsGroupByMonth_API(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/Credit_TransactionDetails_Monthwise?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<TransactionMonth_AmountPairs> transactionMonth_AmountPairs = await response.Content.ReadAsAsync<List<TransactionMonth_AmountPairs>>();
+                    return transactionMonth_AmountPairs;
                 }
                 else
                 {

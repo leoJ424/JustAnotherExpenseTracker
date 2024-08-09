@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LiveCharts.Wpf;
 using JustAnotherExpenseTracker.Services;
+using ExpenseTrackerWebAPI_Mk2.Dto;
 
 namespace JustAnotherExpenseTracker.ViewModels
 {
@@ -575,13 +576,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 await fillPreRequisiteDaywiseData();
                 setChartDisplayStatus();
-                generateDataForGraphDaywise();
+                await generateDataForGraphDaywise();
             }
             if(IsYearlyButtonChecked)
             {
                 await fillPreRequisiteMonthwiseData();
                 setChartDisplayStatus();                
-                generateDataForGraphMonthwise();       
+                await generateDataForGraphMonthwise();       
             }
             
         }
@@ -607,13 +608,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             {
                 await fillPreRequisiteDaywiseData();
                 setChartDisplayStatus();
-                generateDataForGraphDaywise();                
+                await generateDataForGraphDaywise();                
             }
             if(IsYearlyButtonChecked)
             {
                 await fillPreRequisiteMonthwiseData();
                 setChartDisplayStatus();
-                generateDataForGraphMonthwise();
+                await generateDataForGraphMonthwise();
             }
             
         }
@@ -637,12 +638,12 @@ namespace JustAnotherExpenseTracker.ViewModels
             if(IsMonthlyButtonChecked)
             {
                 setStatementToBeDisplayedProperty();
-                generateDataForGraphDaywise();
+                await generateDataForGraphDaywise();
             }
             if(IsYearlyButtonChecked)
             {
                 setStatementToBeDisplayedProperty();
-                generateDataForGraphMonthwise();
+                await generateDataForGraphMonthwise();
             }
             
             await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
@@ -667,12 +668,12 @@ namespace JustAnotherExpenseTracker.ViewModels
             if (IsMonthlyButtonChecked)
             {
                 setStatementToBeDisplayedProperty();
-                generateDataForGraphDaywise();
+                await generateDataForGraphDaywise();
             }
             if (IsYearlyButtonChecked)
             {
                 setStatementToBeDisplayedProperty();
-                generateDataForGraphMonthwise();
+                await generateDataForGraphMonthwise();
             }
             await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
@@ -706,7 +707,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             await fillPreRequisiteDaywiseData();
 
-            generateDataForGraphDaywise();
+            await generateDataForGraphDaywise();
 
             await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
@@ -715,7 +716,7 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             await fillPreRequisiteMonthwiseData();
 
-            generateDataForGraphMonthwise();
+            await generateDataForGraphMonthwise();
 
             await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
@@ -734,7 +735,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             await fillPreRequisiteDaywiseData();
 
-            generateDataForGraphDaywise();
+            await generateDataForGraphDaywise();
 
         }
         private async Task displayCard(Guid id)
@@ -793,7 +794,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        private void generateDataForGraphDaywise()
+        private async Task generateDataForGraphDaywise()
         {
             TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
@@ -811,11 +812,11 @@ namespace JustAnotherExpenseTracker.ViewModels
             DaywiseDebitSeriesValues = new ChartValues<DateTimePoint>();
             DaywiseCreditSeriesValues = new ChartValues<DateTimePoint>();
 
-            var debitAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
-            var creditAmountsByDateList = new List<KeyValuePair<DateTime, decimal>>();
+            var debitAmountsByDateList = new List<TransactionDate_AmountPairs>();
+            var creditAmountsByDateList = new List<TransactionDate_AmountPairs>();
 
-            debitAmountsByDateList = transactionRepository.ReturnCardDebitTransactionAmountsGroupByDate(date1, date2, id);
-            creditAmountsByDateList = transactionRepository.ReturnCardCreditTransactionAmountsGroupByDate(date1, date2, id);
+            debitAmountsByDateList = await transactionRepository.GetCardDebitTransactionAmountsGroupByDate_API(date1, date2, id);
+            creditAmountsByDateList = await transactionRepository.GetCardCreditTransactionAmountsGroupByDate_API(date1, date2, id);
 
             if(debitAmountsByDateList.Count() == 0 && creditAmountsByDateList.Count() == 0) // No Transaction Data for the current statement period
             {
@@ -840,10 +841,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             for (var day = date1.Date; day <= date2.Date; day = day.AddDays(1))
             {
-                if (posDebit < debitAmountsByDateList.Count && day == debitAmountsByDateList[posDebit].Key)
+                if (posDebit < debitAmountsByDateList.Count && day == debitAmountsByDateList[posDebit].Date)
                 {
-                    DaywiseDebitSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(debitAmountsByDateList[posDebit].Value)));
-                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByDateList[posDebit].Value);
+                    DaywiseDebitSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(debitAmountsByDateList[posDebit].Amount)));
+                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByDateList[posDebit].Amount);
                     ++posDebit;
                 }
                 else
@@ -851,10 +852,10 @@ namespace JustAnotherExpenseTracker.ViewModels
                     DaywiseDebitSeriesValues.Add(new DateTimePoint(day, 0));
                 }
 
-                if (posCredit < creditAmountsByDateList.Count && day == creditAmountsByDateList[posCredit].Key)
+                if (posCredit < creditAmountsByDateList.Count && day == creditAmountsByDateList[posCredit].Date)
                 {
-                    DaywiseCreditSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(creditAmountsByDateList[posCredit].Value)));
-                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByDateList[posCredit].Value);
+                    DaywiseCreditSeriesValues.Add(new DateTimePoint(day, Convert.ToDouble(creditAmountsByDateList[posCredit].Amount)));
+                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByDateList[posCredit].Amount);
                     ++posCredit;
                 }
                 else
@@ -867,8 +868,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             #region PieChart Values
 
-            var amountsByCategory = new List<KeyValuePair<Guid, decimal>>();
-            amountsByCategory = transactionRepository.ReturnCardTransactionAmountsGroupByCategory(date1, date2, id);
+            var amountsByCategory = new List<TransactionCategory_AmountPairs>();
+            amountsByCategory = await transactionRepository.GetCardTransactionAmountsGroupByCategory_API(date1, date2, id);
 
             var categoryNames = new List<string>();
             var categoryValues = new List<double>();
@@ -876,10 +877,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             foreach (var item in amountsByCategory)
             {
-                var catName = categoryRepository.GetCategoryName(item.Key);
+                var catName = categoryRepository.GetCategoryName(item.CategoryId);
                 categoryNames.Add(catName);
 
-                categoryValues.Add(Convert.ToDouble(item.Value));
+                categoryValues.Add(Math.Round(Convert.ToDouble(item.Amount), 2));
             }
 
             DoughnutChartValues = categoryValues;
@@ -1011,7 +1012,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             setStatementToBeDisplayedProperty();
         }
 
-        private void generateDataForGraphMonthwise()
+        private async Task generateDataForGraphMonthwise()
         {
             TotalAmounntSpentOnCard = 0; // To be used by the doughnut chart.
 
@@ -1029,11 +1030,11 @@ namespace JustAnotherExpenseTracker.ViewModels
             MonthwiseDebitSeriesValues = new ChartValues<DateTimePoint>();
             MonthwiseCreditSeriesValues = new ChartValues<DateTimePoint>();
 
-            var debitAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
-            var creditAmountsByMonthList = new List<KeyValuePair<int, decimal>>();
+            var debitAmountsByMonthList = new List<TransactionMonth_AmountPairs>();
+            var creditAmountsByMonthList = new List<TransactionMonth_AmountPairs>();
 
-            debitAmountsByMonthList = transactionRepository.ReturnCardDebitTransactionAmountsGroupByMonth(date1, date2, id);
-            creditAmountsByMonthList = transactionRepository.ReturnCardCreditTransactionAmountsGroupByMonth(date1, date2, id);
+            debitAmountsByMonthList = await transactionRepository.GetCardDebitTransactionAmountsGroupByMonth_API(date1, date2, id);
+            creditAmountsByMonthList = await transactionRepository.GetCardCreditTransactionAmountsGroupByMonth_API(date1, date2, id);
 
             if (debitAmountsByMonthList.Count() == 0 && creditAmountsByMonthList.Count() == 0) // No Transaction Data for the current statement period
             {
@@ -1058,10 +1059,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             for (int month = 1; month <= 12; ++month)
             {
-                if (posDebit < debitAmountsByMonthList.Count && month == debitAmountsByMonthList[posDebit].Key)
+                if (posDebit < debitAmountsByMonthList.Count && month == debitAmountsByMonthList[posDebit].Month)
                 {
-                    MonthwiseDebitSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(debitAmountsByMonthList[posDebit].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
-                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByMonthList[posDebit].Value);
+                    MonthwiseDebitSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(debitAmountsByMonthList[posDebit].Amount))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
+                    TotalAmounntSpentOnCard += Convert.ToDouble(debitAmountsByMonthList[posDebit].Amount);
                     ++posDebit;
                 }
                 else
@@ -1069,10 +1070,10 @@ namespace JustAnotherExpenseTracker.ViewModels
                     MonthwiseDebitSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), 0));
                 }
 
-                if (posCredit < creditAmountsByMonthList.Count && month == creditAmountsByMonthList[posCredit].Key)
+                if (posCredit < creditAmountsByMonthList.Count && month == creditAmountsByMonthList[posCredit].Month)
                 {
-                    MonthwiseCreditSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(creditAmountsByMonthList[posCredit].Value))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
-                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByMonthList[posCredit].Value);
+                    MonthwiseCreditSeriesValues.Add(new DateTimePoint(new DateTime(date1.Year, month, 1), Convert.ToDouble(creditAmountsByMonthList[posCredit].Amount))); // Setting the date to the first of every month. When displaying in the chart we can make sure the month is only displayed.
+                    TotalAmounntSpentOnCard -= Convert.ToDouble(creditAmountsByMonthList[posCredit].Amount);
                     ++posCredit;
                 }
                 else
@@ -1085,8 +1086,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             #region PieChart Values
 
-            var amountsByCategory = new List<KeyValuePair<Guid, decimal>>();
-            amountsByCategory = transactionRepository.ReturnCardTransactionAmountsGroupByCategory(date1, date2, id);
+            var amountsByCategory = new List<TransactionCategory_AmountPairs>();
+            amountsByCategory = await transactionRepository.GetCardTransactionAmountsGroupByCategory_API(date1, date2, id);
 
             var categoryNames = new List<string>();
             var categoryValues = new List<double>();
@@ -1094,10 +1095,10 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             foreach (var item in amountsByCategory)
             {
-                var catName = categoryRepository.GetCategoryName(item.Key);
+                var catName = categoryRepository.GetCategoryName(item.CategoryId);
                 categoryNames.Add(catName);
 
-                categoryValues.Add(Convert.ToDouble(item.Value));
+                categoryValues.Add(Convert.ToDouble(item.Amount));
             }
 
             DoughnutChartValues = categoryValues;
