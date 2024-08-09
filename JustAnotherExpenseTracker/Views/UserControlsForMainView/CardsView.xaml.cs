@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JustAnotherExpenseTracker.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,6 +37,12 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
             X_Yearwise.MaxValue = double.NaN;
             Y_Yearwise.MinValue = 0;
             Y_Yearwise.MaxValue = double.NaN;
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (CardsViewModel)DataContext;
+            await viewModel.Initialize();
         }
     }
 }

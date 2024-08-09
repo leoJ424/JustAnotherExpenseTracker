@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using JustAnotherExpenseTracker.Models.API_Models;
+using System.Net.Http;
 
 namespace JustAnotherExpenseTracker.Repositories
 {
@@ -156,6 +158,65 @@ namespace JustAnotherExpenseTracker.Repositories
             }
 
             return cardName;
+        }
+
+        public async Task<CreditCardModel> getMaskedCard_API(Guid cardId)
+        {
+            string url = $"api/CreditCard/cardDetails/0?cardId={cardId}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    CreditCardModelAPI creditCardFromAPI = await response.Content.ReadAsAsync<CreditCardModelAPI>();
+
+                    return convertCardFromAPI(creditCardFromAPI);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<CreditCardModel> getCard_API(Guid cardId)
+        {
+            string url = $"api/CreditCard/cardDetails/101?cardId={cardId}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    CreditCardModelAPI creditCardFromAPI = await response.Content.ReadAsAsync<CreditCardModelAPI>();
+
+                    return convertCardFromAPI(creditCardFromAPI);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        private CreditCardModel convertCardFromAPI(CreditCardModelAPI creditCardFromAPI)
+        {
+            return new CreditCardModel()
+            {
+                CardID = creditCardFromAPI.CreditCardID,
+                First4Digits = creditCardFromAPI.First4Digits,
+                Second4Digits = creditCardFromAPI.Second4Digits,
+                Third4Digits = creditCardFromAPI.Third4Digits,
+                Last4Digits = creditCardFromAPI.Last4Digits,
+                CardholderName = creditCardFromAPI.CardholderName,
+                ExpDate = creditCardFromAPI.ExpDate.ToString("MM/yy", CultureInfo.InvariantCulture),
+                Cvc = creditCardFromAPI.CVC == 0 ? "..." : creditCardFromAPI.CVC.ToString(),
+                Network = creditCardFromAPI.Network.ToString(),
+                Bank = creditCardFromAPI.BankName,
+                CreditLimit = creditCardFromAPI.CreditLimit,
+                StatementGenDate = creditCardFromAPI.StatementGenDay,
+                PaymentIn = creditCardFromAPI.PaymentDueIn,
+                CardName = creditCardFromAPI.CardName,
+            };
         }
     }
 }

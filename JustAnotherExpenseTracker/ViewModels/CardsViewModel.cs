@@ -385,7 +385,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
             set
             {
-                _totalAmountSpentOnCard = value;
+                _totalAmountSpentOnCard = Math.Round(value, 2);
                 OnPropertyChanged(nameof(TotalAmounntSpentOnCard));
             }
         }
@@ -493,21 +493,21 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             #region Commands Setup
 
-            HideCardDetailsCommand = new ViewModelCommand(ExecuteHideCardDetailsCommand);
-            ShowCardDetailsCommand = new ViewModelCommand(ExecuteShowCardDetailsCommand);
+            HideCardDetailsCommand = new ViewModelAsyncCommand(ExecuteHideCardDetailsCommand);
+            ShowCardDetailsCommand = new ViewModelAsyncCommand(ExecuteShowCardDetailsCommand);
 
-            ShowNextCardCommand = new ViewModelCommand(ExecuteShowNextCardCommand);
-            ShowPreviousCardCommand = new ViewModelCommand(ExecuteShowPreviousCardCommand);
+            ShowNextCardCommand = new ViewModelAsyncCommand(ExecuteShowNextCardCommand);
+            ShowPreviousCardCommand = new ViewModelAsyncCommand(ExecuteShowPreviousCardCommand);
 
-            ShowNextCardStatementCommand = new ViewModelCommand(ExecuteShowNextCardStatementCommand); ;
-            ShowPreviousCardStatementCommand = new ViewModelCommand(ExecuteShowPreviousCardStatementCommand);
+            ShowNextCardStatementCommand = new ViewModelAsyncCommand(ExecuteShowNextCardStatementCommand); ;
+            ShowPreviousCardStatementCommand = new ViewModelAsyncCommand(ExecuteShowPreviousCardStatementCommand);
 
             ToggleZoomModeForGraphCommand = new ViewModelCommand(ExecuteToggleZoomModeForGraphCommand);
 
             GoToDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGoToDetailedTransactionDataCommand);
 
-            MonthlyButtonClickedCommand = new ViewModelCommand(ExecuteMonthlyButtonClickedCommand);
-            YearlyButtonClickedCommand = new ViewModelCommand(ExecuteYearlyButtonClickedCommand);
+            MonthlyButtonClickedCommand = new ViewModelAsyncCommand(ExecuteMonthlyButtonClickedCommand);
+            YearlyButtonClickedCommand = new ViewModelAsyncCommand(ExecuteYearlyButtonClickedCommand);
 
             #endregion
 
@@ -528,15 +528,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             if(CurrentUserAccount.CreditCards.Count > 1)
             {
                 IsCardNextButtonVisible = true;
-            }
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
-
-            //Since, initially when the page is loaded, by default the "monthly" button is checked hence the cartesian chart must show the daywise data
-
-            fillPreRequisiteDaywiseData();
-
-            generateDataForGraphDaywise();
-            
+            }            
         }
 
         //-> Commands
@@ -552,23 +544,23 @@ namespace JustAnotherExpenseTracker.ViewModels
         public ICommand MonthlyButtonClickedCommand { get; }
         public ICommand YearlyButtonClickedCommand { get; }
 
-        private void ExecuteHideCardDetailsCommand(object obj)
+        private async Task ExecuteHideCardDetailsCommand(object obj)
         {
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
-        private void ExecuteShowCardDetailsCommand(object obj)
+        private async Task ExecuteShowCardDetailsCommand(object obj)
         {
-            displayCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
-        private void ExecuteShowNextCardCommand(object obj)
+        private async Task ExecuteShowNextCardCommand(object obj)
         {
 
             if (currentCardBeingViewed + 1 < CurrentUserAccount.CreditCards.Count)
             {
                 ++currentCardBeingViewed;
-                displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+                await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
             }
             if (currentCardBeingViewed == CurrentUserAccount.CreditCards.Count - 1)
             {
@@ -594,13 +586,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             
         }
 
-        private void ExecuteShowPreviousCardCommand(object obj)
+        private async Task ExecuteShowPreviousCardCommand(object obj)
         {
 
             if (currentCardBeingViewed - 1 >= 0)
             {
                 --currentCardBeingViewed;
-                displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+                await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
             }
             if (currentCardBeingViewed == 0)
             {
@@ -626,7 +618,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             
         }
 
-        private void ExecuteShowNextCardStatementCommand(object obj)
+        private async Task ExecuteShowNextCardStatementCommand(object obj)
         {
             if(currentStatementView + 1 < statementDates.Count())
             {
@@ -653,10 +645,10 @@ namespace JustAnotherExpenseTracker.ViewModels
                 generateDataForGraphMonthwise();
             }
             
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
-        private void ExecuteShowPreviousCardStatementCommand(object obj)
+        private async Task ExecuteShowPreviousCardStatementCommand(object obj)
         {
             if(currentStatementView - 1 >= 0)
             {
@@ -682,7 +674,7 @@ namespace JustAnotherExpenseTracker.ViewModels
                 setStatementToBeDisplayedProperty();
                 generateDataForGraphMonthwise();
             }
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         private void ExecuteToggleZoomModeForGraphCommand(object obj)
@@ -710,22 +702,22 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         }
 
-        private void ExecuteMonthlyButtonClickedCommand(object obj)
+        private async Task ExecuteMonthlyButtonClickedCommand(object obj)
         {
             fillPreRequisiteDaywiseData();
 
             generateDataForGraphDaywise();
 
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
-        private void ExecuteYearlyButtonClickedCommand(object obj)
+        private async Task ExecuteYearlyButtonClickedCommand(object obj)
         {
             fillPreRequisiteMonthwiseData();
 
             generateDataForGraphMonthwise();
 
-            displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
         }
 
         #endregion
@@ -733,21 +725,41 @@ namespace JustAnotherExpenseTracker.ViewModels
         //-> Functions User Defined
 
         #region User Defined Functions
-        private void displayCard(Guid id)
+
+        public async Task Initialize()
         {
-            CreditCard = cardRepository.ReturnCardDetails(id);
+            await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
+
+            //Since, initially when the page is loaded, by default the "monthly" button is checked hence the cartesian chart must show the daywise data
+
+            fillPreRequisiteDaywiseData();
+
+            generateDataForGraphDaywise();
+
+        }
+        private async Task displayCard(Guid id)
+        {
+            CreditCard = await cardRepository.getCard_API(id);
             CardName = CreditCard.CardName;
-            CardDisplayAmount = "$" + (CreditCard.CreditLimit - TotalAmounntSpentOnCard).ToString();
-            CardDisplayText = "Available Balance";
+            if(IsMonthlyButtonChecked)
+            {
+                CardDisplayAmount = "$" + (CreditCard.CreditLimit - TotalAmounntSpentOnCard).ToString("F2");
+                CardDisplayText = "Available Balance";
+            }
+            else
+            {
+                CardDisplayAmount = "$" + CreditCard.CreditLimit.ToString();
+                CardDisplayText = "Credit Limit";
+            }            
             setCardNetworkImage(CreditCard.Network);
 
             IsShowButtonVisible = false;
             IsHideButtonVisible = true;
         }
 
-        private void displayMaskedCard(Guid id)
+        private async Task displayMaskedCard(Guid id)
         {
-            CreditCard = cardRepository.ReturnMaskedCardDetails(id);
+            CreditCard = await cardRepository.getMaskedCard_API(id);
             CardName = CreditCard.CardName;
             CardDisplayAmount = "$" + CreditCard.CreditLimit.ToString();
             CardDisplayText = "Credit Limit";

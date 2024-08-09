@@ -10,6 +10,7 @@
              xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
              d:DesignHeight="650" d:DesignWidth="1000">
     
     <UserControl.Resources>

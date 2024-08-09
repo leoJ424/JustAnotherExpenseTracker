@@ -129,6 +129,8 @@ namespace JustAnotherExpenseTracker.ViewModels
         {
             Navigation = navService;
             userRepository = new UserRepository();
+            ApiHelper.InitializeClient();
+
             //TO BE DELETED - Implemented to just make it work without logging in each time
 
             var isValidUser = userRepository.AuthenticateUser(new NetworkCredential("admin", "admin"));
