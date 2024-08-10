@@ -48,7 +48,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             CardNamesForComboBox = new ObservableCollection<string>();
             DetailsOfTransactions = new ObservableCollection<TransactionDetailRowViewModel>();
 
-            GetDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGetDetailedTransactionDataCommand);
+            GetDetailedTransactionDataCommand = new ViewModelAsyncCommand(ExecuteGetDetailedTransactionDataCommand);
 
             //Getting the card names to be displayed in the combo box
             GetCardNames();
@@ -183,10 +183,10 @@ namespace JustAnotherExpenseTracker.ViewModels
         #region Commands
         public ICommand GetDetailedTransactionDataCommand { get; }
         #endregion
-        private void ExecuteGetDetailedTransactionDataCommand(object obj)
+        private async Task ExecuteGetDetailedTransactionDataCommand(object obj)
         {
             DetailsOfTransactions.Clear();
-            var dataFromDB = transactionRepository.ReturnTransactionDetailsForView(StartDate, EndDate, CurrentCard);
+            var dataFromDB = await transactionRepository.GetTransactionDetailsForView(StartDate, EndDate, CurrentCard);
             foreach (var row in dataFromDB)
             {
                 //For the usercontrol

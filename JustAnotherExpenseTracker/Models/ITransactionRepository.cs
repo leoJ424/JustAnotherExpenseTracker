@@ -47,6 +47,7 @@ namespace JustAnotherExpenseTracker.Models
         Task<List<TransactionCategory_AmountPairs>> GetCardTransactionAmountsGroupByCategory_API(DateTime date1, DateTime date2, Guid CardId);
         Task<List<TransactionMonth_AmountPairs>> GetCardDebitTransactionAmountsGroupByMonth_API(DateTime date1, DateTime date2, Guid CardId);
         Task<List<TransactionMonth_AmountPairs>> GetCardCreditTransactionAmountsGroupByMonth_API(DateTime date1, DateTime date2, Guid CardId);
+        Task<List<TransactionDetailsCustomModel>> GetTransactionDetailsForView(DateTime date1, DateTime date2, Guid CardId);
 
     }
 }

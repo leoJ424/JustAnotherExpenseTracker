@@ -479,5 +479,45 @@ namespace JustAnotherExpenseTracker.Repositories
             }
         }
 
+        public async Task<List<TransactionDetailsCustomModel>> GetTransactionDetailsForView(DateTime date1, DateTime date2, Guid CardId)
+        {
+            var newDate1 = date1.ToString("yyyy-MM-dd");
+            var newDate2 = date2.ToString("yyyy-MM-dd");
+
+            string url = $"api/Transaction/TransactionDetailsDetailed?date1={newDate1}&date2={newDate2}&CreditCardId={CardId}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    List<TransactionDetailsModelAPI> transactionDetails = await response.Content.ReadAsAsync<List<TransactionDetailsModelAPI>>();
+                    return convertTransactionDetailsFromAPI(transactionDetails);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        private List<TransactionDetailsCustomModel> convertTransactionDetailsFromAPI(List<TransactionDetailsModelAPI> transactionDetailsAPI)
+        {
+            List<TransactionDetailsCustomModel> transactionDetails = new List<TransactionDetailsCustomModel>();
+            foreach(var transaction_API in  transactionDetailsAPI)
+            {
+                TransactionDetailsCustomModel transaction = new TransactionDetailsCustomModel
+                {
+                    CategoryName = transaction_API.CategoryName,
+                    RecipientName = transaction_API.RecipientName,
+                    Amount = transaction_API.Amount.ToString("F2"),
+                    TransactionType = transaction_API.TransactionMode.ToString(),
+                    RewardPoints = transaction_API.RewardPoints,
+                    DateOfTransaction = transaction_API.Date.ToString("dd-MMM-yy"),
+                    GeneralComments = transaction_API.GeneralComments
+                };
+                transactionDetails.Add(transaction);
+            }
+            return transactionDetails;
+        }
+
     }
 }
