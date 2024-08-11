@@ -23,6 +23,8 @@ namespace JustAnotherExpenseTracker.ViewModels
     {
         private INavigationService _navigation;
 
+        private bool _isViewVisible = true;
+
         private UserAccountModel _currentUserAccount;
         private IUserRepository userRepository;
 
@@ -45,6 +47,19 @@ namespace JustAnotherExpenseTracker.ViewModels
                 OnPropertyChanged(nameof(Navigation));
             }
 
+        }
+
+        public bool IsViewVisible
+        {
+            get
+            {
+                return _isViewVisible;
+            }
+            set
+            {
+                _isViewVisible = value;
+                OnPropertyChanged(nameof(IsViewVisible));
+            }
         }
 
         public UserAccountModel CurrentUserAccount 
@@ -131,15 +146,14 @@ namespace JustAnotherExpenseTracker.ViewModels
             userRepository = new UserRepository();
             ApiHelper.InitializeClient();
 
-            //TO BE DELETED - Implemented to just make it work without logging in each time
+            #region Execute by default to show the dashboard
 
-            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential("admin", "admin"));
-            if (isValidUser)
-            {
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("admin"), null);
-            }
+            Navigation.NavigateTo<DashboardViewModel>();
+            Caption = "Dashboard";
+            Icon = IconChar.Home;
+            CaptionColor = (SolidColorBrush)Application.Current.FindResource("color13");
 
-            //END
+            #endregion
 
             CurrentUserAccount = new UserAccountModel();
             CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
@@ -149,6 +163,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             ShowDashboardViewCommand = new ViewModelCommand(ExecuteShowDashboardViewCommand);
             OpenUserOptionsCommand = new ViewModelCommand(ExecuteOpenUserOptionsCommand);
             CloseUserOptionsCommand = new ViewModelCommand(ExecuteCloseUserOptionsCommand);
+            LogOutCommand = new ViewModelCommand(ExecuteLogOutCommand);
         }
 
         private void ExecuteShowCardsViewCommand(object obj)
@@ -201,6 +216,12 @@ namespace JustAnotherExpenseTracker.ViewModels
         private void ExecuteCloseUserOptionsCommand(object obj)
         {
             IsBtnOpenUserOptionsVisible = true;
+        }
+
+        private void ExecuteLogOutCommand(object obj)
+        {
+            IsBtnOpenUserOptionsVisible = true;
+            IsViewVisible = false;
         }
 
         //-> Commands
