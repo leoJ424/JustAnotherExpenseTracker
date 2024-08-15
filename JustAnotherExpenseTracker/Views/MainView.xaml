@@ -13,6 +13,7 @@
         Title="MainView" Height="700" Width="1300"
         WindowStyle="None"
         Background="Transparent"
+        Loaded="Window_Loaded"
         AllowsTransparency="True">
 
     <Window.Resources>

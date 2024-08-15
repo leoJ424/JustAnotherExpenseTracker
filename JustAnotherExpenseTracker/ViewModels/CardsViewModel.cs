@@ -475,6 +475,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             #region Repository Setup
 
             userRepository = new UserRepository();
+            //TO BE DELETED - Implemented to just make it work without logging in each time
+
+            //var isValidUser = userRepository.AuthenticateUser(new NetworkCredential("user1", "user1"));
+            //if (isValidUser)
+            //{
+            //    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("user1"), null);
+            //}
+
+            //END
 
             cardRepository = new CardRepository();
             transactionRepository = new TransactionRepository();
@@ -515,11 +524,11 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             timesClickedOnZoomToggle = 0; // Based on the number of times this button is clicked we set a particular zoom mode
 
-            CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
-            if(CurrentUserAccount.CreditCards.Count > 1)
-            {
-                IsCardNextButtonVisible = true;
-            }            
+            //CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
+            //if(CurrentUserAccount.CreditCards.Count > 1)
+            //{
+            //    IsCardNextButtonVisible = true;
+            //}            
         }
 
         //-> Commands
@@ -719,6 +728,12 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         public async Task Initialize()
         {
+            CurrentUserAccount = await LoadCurrentUserData_API();
+            if (CurrentUserAccount.CreditCards.Count > 1)
+            {
+                IsCardNextButtonVisible = true;
+            }
+
             await displayMaskedCard(CurrentUserAccount.CreditCards[currentCardBeingViewed]);
 
             //Since, initially when the page is loaded, by default the "monthly" button is checked hence the cartesian chart must show the daywise data

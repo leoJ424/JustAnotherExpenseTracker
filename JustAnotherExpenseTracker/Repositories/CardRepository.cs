@@ -198,6 +198,23 @@ namespace JustAnotherExpenseTracker.Repositories
             }
         }
 
+        public async Task<List<Guid>> getCardIdsOfCurrentUser_API()
+        {
+            string url = "api/CreditCard";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    List<Guid> cardIds = await response.Content.ReadAsAsync <List<Guid>>();
+                    return cardIds;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         private CreditCardModel convertCardFromAPI(CreditCardModelAPI creditCardFromAPI)
         {
             return new CreditCardModel()
@@ -218,5 +235,7 @@ namespace JustAnotherExpenseTracker.Repositories
                 CardName = creditCardFromAPI.CardName,
             };
         }
+
+        
     }
 }

@@ -15,5 +15,6 @@ namespace JustAnotherExpenseTracker.Models
         string ReturnCardName(Guid cardId);
         Task<CreditCardModel> getMaskedCard_API(Guid cardId);
         Task<CreditCardModel> getCard_API(Guid cardId);
+        Task<List<Guid>> getCardIdsOfCurrentUser_API();
     }
 }
