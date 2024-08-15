@@ -43,7 +43,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             StartDateDisplay = StartDate.ToString("dd-MMM-yyyy");
             EndDateDisplay = EndDate.ToString("dd-MMM-yyyy");
 
-            CardName = cardRepository.ReturnCardName(CurrentCard);
+            //CardName = cardRepository.ReturnCardName(CurrentCard);
 
             CardNamesForComboBox = new ObservableCollection<string>();
             DetailsOfTransactions = new ObservableCollection<TransactionDetailRowViewModel>();
@@ -51,7 +51,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             GetDetailedTransactionDataCommand = new ViewModelAsyncCommand(ExecuteGetDetailedTransactionDataCommand);
 
             //Getting the card names to be displayed in the combo box
-            GetCardNames();
+            //GetCardNames();
         }
 
         #region Properties
@@ -183,6 +183,12 @@ namespace JustAnotherExpenseTracker.ViewModels
         #region Commands
         public ICommand GetDetailedTransactionDataCommand { get; }
         #endregion
+
+        public async Task Initialize()
+        {
+            CardName = await cardRepository.getCardName_API(CurrentCard);
+            await GetCardNames();
+        }
         private async Task ExecuteGetDetailedTransactionDataCommand(object obj)
         {
             DetailsOfTransactions.Clear();
@@ -212,11 +218,12 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        private void GetCardNames()
+        private async Task GetCardNames()
         {
             foreach (var cardID in Cards)
             {
-                CardNamesForComboBox.Add(cardRepository.ReturnCardName(cardID));
+                var cardName = await cardRepository.getCardName_API(cardID);
+                CardNamesForComboBox.Add(cardName);
             }
         }
     }

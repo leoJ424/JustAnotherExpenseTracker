@@ -34,7 +34,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private bool _isBtnOpenUserOptionsVisible = true;
 
-        //Properties
+        #region Properties
         public INavigationService Navigation
         {
             get
@@ -139,6 +139,8 @@ namespace JustAnotherExpenseTracker.ViewModels
                 OnPropertyChanged(nameof(IsBtnOpenUserOptionsVisible));
             }
         }
+
+        #endregion
 
         public MainViewModel(INavigationService navService)
         {

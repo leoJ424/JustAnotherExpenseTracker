@@ -215,6 +215,23 @@ namespace JustAnotherExpenseTracker.Repositories
             }
         }
 
+        public async Task<string> getCardName_API(Guid cardId)
+        {
+            string url = $"api/CreditCard/cardName?cardId={cardId}";
+            using(HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    string cardName = await response.Content.ReadAsAsync<string>(); // if ReadAsStringAsync is used the "" are also read. i.e the card name returned will be "Card 1" insted of Card 1
+                    return cardName;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         private CreditCardModel convertCardFromAPI(CreditCardModelAPI creditCardFromAPI)
         {
             return new CreditCardModel()

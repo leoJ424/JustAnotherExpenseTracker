@@ -91,7 +91,7 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
 
         private void cardNamesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            availableCardsPopup.IsOpen = false;
+           availableCardsPopup.IsOpen = false;
 
             var viewModel = (DetailedTransactionsViewModel)DataContext;
             if (viewModel != null && _items != null)
@@ -126,6 +126,13 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
             }
 
             availableCardsPopup.IsOpen = true;
+
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (DetailedTransactionsViewModel)DataContext;
+            await viewModel.Initialize();
 
         }
     }
