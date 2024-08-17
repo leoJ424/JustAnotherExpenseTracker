@@ -106,7 +106,7 @@ namespace JustAnotherExpenseTracker.Views.UserControlsForMainView
 
         private void txtBoxCardName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (_items == null) _items = (ObservableCollection<string>)cardNamesList.ItemsSource;
+           if (_items == null) _items = (ObservableCollection<string>)cardNamesList.ItemsSource;
             string filterText = txtBoxCardName.Text;
             if (_items == null) return;
             if (!string.IsNullOrEmpty(filterText))

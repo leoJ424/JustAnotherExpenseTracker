@@ -186,8 +186,8 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         public async Task Initialize()
         {
+            await GetCardNames_API();
             CardName = await cardRepository.getCardName_API(CurrentCard);
-            await GetCardNames();
         }
         private async Task ExecuteGetDetailedTransactionDataCommand(object obj)
         {
@@ -218,7 +218,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
-        private async Task GetCardNames()
+        private void GetCardNames()
+        {
+            foreach (var cardID in Cards)
+            {
+                CardNamesForComboBox.Add(cardRepository.ReturnCardName(cardID));
+            }
+        }
+
+        private async Task GetCardNames_API()
         {
             foreach (var cardID in Cards)
             {
