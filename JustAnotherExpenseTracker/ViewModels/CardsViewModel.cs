@@ -882,7 +882,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             foreach (var item in amountsByCategory)
             {
-                var catName = categoryRepository.GetCategoryName(item.CategoryId);
+                var catName = await categoryRepository.GetCategoryName_API(item.CategoryId);
                 categoryNames.Add(catName);
 
                 categoryValues.Add(Math.Round(Convert.ToDouble(item.Amount), 2));
@@ -1100,7 +1100,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             foreach (var item in amountsByCategory)
             {
-                var catName = categoryRepository.GetCategoryName(item.CategoryId);
+                var catName = await categoryRepository.GetCategoryName_API(item.CategoryId);
                 categoryNames.Add(catName);
 
                 categoryValues.Add(Convert.ToDouble(item.Amount));
