@@ -1,10 +1,12 @@
 ﻿using JustAnotherExpenseTracker.Models;
+using JustAnotherExpenseTracker.Models.API_Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
@@ -97,6 +99,24 @@ namespace JustAnotherExpenseTracker.Repositories
         public void Remove(int id)
         {
             throw new NotImplementedException();
+        }
+
+        //API Calls
+        public async Task<UserModel_API> GetCurrentUserData_API()
+        {
+            string url = "api/User";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    UserModel_API user = await response.Content.ReadAsAsync<UserModel_API>();
+                    return user;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
         }
     }
 }

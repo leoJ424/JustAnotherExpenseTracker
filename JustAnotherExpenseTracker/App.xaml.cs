@@ -18,7 +18,6 @@ namespace JustAnotherExpenseTracker
         public App()
         {
             IServiceCollection services = new ServiceCollection();
-
             services.AddSingleton<LoginView>(provider => new LoginView
             {
                 DataContext = provider.GetRequiredService<LoginViewModel>()
@@ -47,7 +46,7 @@ namespace JustAnotherExpenseTracker
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             var loginView = _serviceProvider.GetService<LoginView>();
-            
+
             loginView.Show();
 
             loginView.IsVisibleChanged += (s, ev) =>

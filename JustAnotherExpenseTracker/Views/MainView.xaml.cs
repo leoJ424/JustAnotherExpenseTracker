@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using System.Windows.Automation;
 using System.Windows.Interop;
+using JustAnotherExpenseTracker.ViewModels;
 
 namespace JustAnotherExpenseTracker.Views
 {
@@ -69,6 +70,12 @@ namespace JustAnotherExpenseTracker.Views
                 btnMaximise.Visibility = Visibility.Visible;
                 btnRestore.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = (MainViewModel)DataContext;
+            await viewModel.Initialize();
         }
     }
 }

@@ -45,5 +45,24 @@ namespace JustAnotherExpenseTracker.ViewModels
 
             return _currentUserAccount;
         }
+
+        protected async Task<UserAccountModel> LoadCurrentUserData_API()
+        {
+            var user = await userRepository.GetCurrentUserData_API();
+            if (user != null)
+            {
+                _currentUserAccount.Username = user.UserName;
+                _currentUserAccount.DisplayName = $"{user.FirstName} {user.LastName}";
+                _currentUserAccount.ProfilePicture = null;
+
+                _currentUserAccount.CreditCards = await cardRepository.getCardIdsOfCurrentUser_API();
+            }
+            else
+            {
+                _currentUserAccount.DisplayName = "Invalid User, not logged in";
+            }
+
+            return _currentUserAccount;
+        }
     }
 }

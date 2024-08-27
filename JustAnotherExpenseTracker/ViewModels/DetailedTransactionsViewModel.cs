@@ -43,15 +43,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             StartDateDisplay = StartDate.ToString("dd-MMM-yyyy");
             EndDateDisplay = EndDate.ToString("dd-MMM-yyyy");
 
-            CardName = cardRepository.ReturnCardName(CurrentCard);
+            //CardName = cardRepository.ReturnCardName(CurrentCard);
 
             CardNamesForComboBox = new ObservableCollection<string>();
             DetailsOfTransactions = new ObservableCollection<TransactionDetailRowViewModel>();
 
-            GetDetailedTransactionDataCommand = new ViewModelCommand(ExecuteGetDetailedTransactionDataCommand);
+            GetDetailedTransactionDataCommand = new ViewModelAsyncCommand(ExecuteGetDetailedTransactionDataCommand);
 
             //Getting the card names to be displayed in the combo box
-            GetCardNames();
+            //GetCardNames();
         }
 
         #region Properties
@@ -183,10 +183,16 @@ namespace JustAnotherExpenseTracker.ViewModels
         #region Commands
         public ICommand GetDetailedTransactionDataCommand { get; }
         #endregion
-        private void ExecuteGetDetailedTransactionDataCommand(object obj)
+
+        public async Task Initialize()
+        {
+            await GetCardNames_API();
+            CardName = await cardRepository.getCardName_API(CurrentCard);
+        }
+        private async Task ExecuteGetDetailedTransactionDataCommand(object obj)
         {
             DetailsOfTransactions.Clear();
-            var dataFromDB = transactionRepository.ReturnTransactionDetailsForView(StartDate, EndDate, CurrentCard);
+            var dataFromDB = await transactionRepository.GetTransactionDetailsForView(StartDate, EndDate, CurrentCard);
             foreach (var row in dataFromDB)
             {
                 //For the usercontrol
@@ -217,6 +223,15 @@ namespace JustAnotherExpenseTracker.ViewModels
             foreach (var cardID in Cards)
             {
                 CardNamesForComboBox.Add(cardRepository.ReturnCardName(cardID));
+            }
+        }
+
+        private async Task GetCardNames_API()
+        {
+            foreach (var cardID in Cards)
+            {
+                var cardName = await cardRepository.getCardName_API(cardID);
+                CardNamesForComboBox.Add(cardName);
             }
         }
     }

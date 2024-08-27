@@ -34,7 +34,7 @@ namespace JustAnotherExpenseTracker.ViewModels
 
         private bool _isBtnOpenUserOptionsVisible = true;
 
-        //Properties
+        #region Properties
         public INavigationService Navigation
         {
             get
@@ -140,10 +140,13 @@ namespace JustAnotherExpenseTracker.ViewModels
             }
         }
 
+        #endregion
+
         public MainViewModel(INavigationService navService)
         {
             Navigation = navService;
             userRepository = new UserRepository();
+            //ApiHelper.InitializeClient();
 
             #region Execute by default to show the dashboard
 
@@ -155,7 +158,7 @@ namespace JustAnotherExpenseTracker.ViewModels
             #endregion
 
             CurrentUserAccount = new UserAccountModel();
-            CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
+            //CurrentUserAccount = LoadCurrentUserData(Thread.CurrentPrincipal.Identity.Name);
             ShowCardsViewCommand = new ViewModelCommand(ExecuteShowCardsViewCommand);
             ShowStocksViewCommand = new ViewModelCommand(ExecuteShowStocksViewCommand);
             ShowBanksViewCommand = new ViewModelCommand(ExecuteShowBanksViewCommand);
@@ -163,6 +166,11 @@ namespace JustAnotherExpenseTracker.ViewModels
             OpenUserOptionsCommand = new ViewModelCommand(ExecuteOpenUserOptionsCommand);
             CloseUserOptionsCommand = new ViewModelCommand(ExecuteCloseUserOptionsCommand);
             LogOutCommand = new ViewModelCommand(ExecuteLogOutCommand);
+        }
+
+        public async Task Initialize()
+        {
+            CurrentUserAccount = await LoadCurrentUserData_API();
         }
 
         private void ExecuteShowCardsViewCommand(object obj)

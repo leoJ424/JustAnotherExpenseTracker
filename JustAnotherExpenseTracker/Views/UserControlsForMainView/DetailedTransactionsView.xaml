@@ -8,6 +8,7 @@
              xmlns:viewModel="clr-namespace:JustAnotherExpenseTracker.ViewModels"
              xmlns:userControls="clr-namespace:JustAnotherExpenseTracker.Views.UserControls"
              xmlns:converters="clr-namespace:JustAnotherExpenseTracker.Converters"
+             Loaded="UserControl_Loaded"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000"
     xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">

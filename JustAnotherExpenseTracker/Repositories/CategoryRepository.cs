@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,6 +37,24 @@ namespace JustAnotherExpenseTracker.Repositories
                 }
             }
             return categoryName;
+
+        }
+
+        public async Task<string> GetCategoryName_API(Guid CategoryID)
+        {
+            string url = $"api/Category/{CategoryID}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    string categoryName = await response.Content.ReadAsAsync<string>();
+                    return categoryName;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
 
         }
     }

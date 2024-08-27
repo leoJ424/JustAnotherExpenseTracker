@@ -9,5 +9,6 @@ namespace JustAnotherExpenseTracker.Models
     public interface ICategoryRepository
     {
         string GetCategoryName(Guid CategoryID);
+        Task<string> GetCategoryName_API(Guid CategoryID);
     }
 }
