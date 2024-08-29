@@ -19,3 +19,7 @@ Take a look at the [video](https://drive.google.com/file/d/1ksRjRKZD9lmJK9bU0dWT
 * The API side of the project involves the use of RESTful APIs and also used JSON Web Tokens for authentications and role-based authorizations.
 
 * The companion flutter app was created so that I could get my hands dirty with flutter and seemed like the best way to learn a new framework.
+
+## Future
+* Add the functionality to display bank transactions and stock market tranactions
+* Improve API calls by  adding api caching among other things
